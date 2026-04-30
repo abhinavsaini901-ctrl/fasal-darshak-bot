@@ -29,11 +29,11 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Kisan Mitra — फसल का AI डॉक्टर | Crop Disease Scanner" },
+      { name: "description", content: "Scan your crop with your phone camera. Instantly detect disease, get treatment & advice in your language. किसानों के लिए AI ऐप।" },
+      { name: "author", content: "Kisan Mitra" },
+      { property: "og:title", content: "Kisan Mitra — फसल का AI डॉक्टर" },
+      { property: "og:description", content: "Scan crops, detect disease, get treatment in Hindi, English, Marathi, Punjabi & more." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
@@ -64,6 +64,14 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+import { LanguageProvider } from "@/hooks/use-language";
+import { Toaster } from "@/components/ui/sonner";
+
 function RootComponent() {
-  return <Outlet />;
+  return (
+    <LanguageProvider>
+      <Outlet />
+      <Toaster position="top-center" richColors />
+    </LanguageProvider>
+  );
 }
