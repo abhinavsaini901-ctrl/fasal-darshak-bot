@@ -1,3 +1,4 @@
+import type { ReactElement } from "react";
 import { Mic, Volume2, MicOff, Headphones } from "lucide-react";
 import {
   Select,
@@ -13,7 +14,7 @@ export function VoiceModeSelector({ compact = false }: { compact?: boolean }) {
   const { mode, setMode } = useVoiceMode();
   const { t } = useLanguage();
 
-  const options: { value: VoiceMode; label: string; icon: JSX.Element }[] = [
+  const options: { value: VoiceMode; label: string; icon: ReactElement }[] = [
     { value: "both", label: t("voiceBoth"), icon: <Headphones className="h-4 w-4" /> },
     { value: "tts", label: t("voiceTtsOnly"), icon: <Volume2 className="h-4 w-4" /> },
     { value: "stt", label: t("voiceSttOnly"), icon: <Mic className="h-4 w-4" /> },
