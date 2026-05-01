@@ -24,8 +24,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { CameraCapture } from "@/components/CameraCapture";
 import { VoiceInputButton } from "@/components/VoiceInputButton";
+import { VoiceModeSelector } from "@/components/VoiceModeSelector";
 import { useLanguage } from "@/hooks/use-language";
 import { useSpeak } from "@/hooks/use-voice";
+import { useVoiceMode } from "@/hooks/use-voice-mode";
 import { LANG_NAME_FOR_AI, type LangCode } from "@/lib/i18n";
 import { scanCrop, chatCrop } from "@/server/crop.functions";
 
@@ -39,6 +41,7 @@ type View = "home" | "camera" | "result" | "chat";
 
 function HomePage() {
   const { lang, t, speechCode } = useLanguage();
+  const { ttsEnabled } = useVoiceMode();
   const [view, setView] = useState<View>("home");
   const [analyzing, setAnalyzing] = useState(false);
   const [imageData, setImageData] = useState<string | null>(null);
@@ -48,7 +51,13 @@ function HomePage() {
   const [sending, setSending] = useState(false);
   const scanFn = useServerFn(scanCrop);
   const chatFn = useServerFn(chatCrop);
-  const { speak, stop, speaking } = useSpeak(speechCode);
+  const { speak: speakRaw, stop, speaking } = useSpeak(speechCode);
+  const speak = useCallback(
+    (text: string) => {
+      if (ttsEnabled) speakRaw(text);
+    },
+    [ttsEnabled, speakRaw]
+  );
   const chatScrollRef = useRef<HTMLDivElement>(null);
 
   // Stop voice on view change
@@ -214,7 +223,10 @@ function HomePage() {
             <p className="text-xs text-muted-foreground">{t("tagline")}</p>
           </div>
         </div>
-        <LanguageSelector compact />
+        <div className="flex items-center gap-2">
+          <VoiceModeSelector compact />
+          <LanguageSelector compact />
+        </div>
       </header>
 
       {/* Hero */}
@@ -486,7 +498,10 @@ function ChatView({
             <p className="text-[11px] text-muted-foreground">{t("tagline")}</p>
           </div>
         </div>
-        <LanguageSelector compact />
+        <div className="flex items-center gap-2">
+          <VoiceModeSelector compact />
+          <LanguageSelector compact />
+        </div>
       </header>
 
       <ScrollArea className="flex-1">

@@ -65,13 +65,16 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 import { LanguageProvider } from "@/hooks/use-language";
+import { VoiceModeProvider } from "@/hooks/use-voice-mode";
 import { Toaster } from "@/components/ui/sonner";
 
 function RootComponent() {
   return (
     <LanguageProvider>
-      <Outlet />
-      <Toaster position="top-center" richColors />
+      <VoiceModeProvider>
+        <Outlet />
+        <Toaster position="top-center" richColors />
+      </VoiceModeProvider>
     </LanguageProvider>
   );
 }

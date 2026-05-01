@@ -62,6 +62,11 @@ const HI: Dict = {
   askFollowUp: "इस फसल के बारे में और पूछें",
   rateLimited: "अभी बहुत requests हैं, थोड़ी देर बाद कोशिश करें।",
   paymentRequired: "AI credits खत्म हो गए। कृपया Workspace settings में credits जोड़ें।",
+  voiceMode: "आवाज़ सेटिंग",
+  voiceBoth: "बोलें + सुनें",
+  voiceTtsOnly: "केवल सुनें",
+  voiceSttOnly: "केवल बोलें",
+  voiceOff: "आवाज़ बंद",
 };
 
 const EN: Dict = {
@@ -102,6 +107,11 @@ const EN: Dict = {
   askFollowUp: "Ask more about this crop",
   rateLimited: "Too many requests, please try again later.",
   paymentRequired: "AI credits exhausted. Please add credits in Workspace settings.",
+  voiceMode: "Voice Mode",
+  voiceBoth: "Speak + Listen",
+  voiceTtsOnly: "Listen Only",
+  voiceSttOnly: "Speak Only",
+  voiceOff: "Voice Off",
 };
 
 // For other languages, fall back to Hindi keys but override displayed strings.
