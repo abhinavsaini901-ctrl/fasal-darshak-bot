@@ -3,6 +3,7 @@ import { Mic, MicOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useListen } from "@/hooks/use-voice";
 import { useLanguage } from "@/hooks/use-language";
+import { useVoiceMode } from "@/hooks/use-voice-mode";
 
 export function VoiceInputButton({
   onText,
@@ -12,12 +13,13 @@ export function VoiceInputButton({
   className?: string;
 }) {
   const { speechCode, t } = useLanguage();
+  const { sttEnabled } = useVoiceMode();
   const [hint, setHint] = useState(false);
   const { start, stop, listening, supported } = useListen(speechCode, (text) => {
     onText(text);
   });
 
-  if (!supported) return null;
+  if (!supported || !sttEnabled) return null;
 
   return (
     <Button
