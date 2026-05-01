@@ -223,7 +223,10 @@ function HomePage() {
             <p className="text-xs text-muted-foreground">{t("tagline")}</p>
           </div>
         </div>
-        <LanguageSelector compact />
+        <div className="flex items-center gap-2">
+          <VoiceModeSelector compact />
+          <LanguageSelector compact />
+        </div>
       </header>
 
       {/* Hero */}
@@ -495,7 +498,10 @@ function ChatView({
             <p className="text-[11px] text-muted-foreground">{t("tagline")}</p>
           </div>
         </div>
-        <LanguageSelector compact />
+        <div className="flex items-center gap-2">
+          <VoiceModeSelector compact />
+          <LanguageSelector compact />
+        </div>
       </header>
 
       <ScrollArea className="flex-1">
