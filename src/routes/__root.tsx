@@ -32,11 +32,15 @@ export const Route = createRootRoute({
       { title: "Kisan Mitra — फसल का AI डॉक्टर | Crop Disease Scanner" },
       { name: "description", content: "Scan your crop with your phone camera. Instantly detect disease, get treatment & advice in your language. किसानों के लिए AI ऐप।" },
       { name: "author", content: "Kisan Mitra" },
-      { property: "og:title", content: "Kisan Mitra — फसल का AI डॉक्टर" },
-      { property: "og:description", content: "Scan crops, detect disease, get treatment in Hindi, English, Marathi, Punjabi & more." },
+      { property: "og:title", content: "Kisan Mitra — फसल का AI डॉक्टर | Crop Disease Scanner" },
+      { property: "og:description", content: "Scan your crop with your phone camera. Instantly detect disease, get treatment & advice in your language. किसानों के लिए AI ऐप।" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Kisan Mitra — फसल का AI डॉक्टर | Crop Disease Scanner" },
+      { name: "twitter:description", content: "Scan your crop with your phone camera. Instantly detect disease, get treatment & advice in your language. किसानों के लिए AI ऐप।" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9ba37112-6ae5-43b8-8da9-a5fcef37648d/id-preview-226c977f--8a0e629e-76fb-4e57-afa1-60231f26ed7e.lovable.app-1777643664782.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9ba37112-6ae5-43b8-8da9-a5fcef37648d/id-preview-226c977f--8a0e629e-76fb-4e57-afa1-60231f26ed7e.lovable.app-1777643664782.png" },
     ],
     links: [
       {
