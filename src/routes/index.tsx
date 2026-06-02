@@ -39,6 +39,148 @@ type ScanResult = Awaited<ReturnType<typeof scanCrop>>;
 type ChatMsg = { role: "user" | "assistant"; content: string };
 type View = "home" | "camera" | "result" | "chat";
 
+const MAIN_TOPICS: string[] = [
+  "💰 मुनाफा बढ़ाएं",
+  "🌾 कौनसी फसल बोएं",
+  "☀️ फसल का पूरा प्लान",
+  "🪴 पौधा सूखना",
+  "🐛 इल्ली का हमला",
+  "🪰 सफेद मक्खी",
+  "🪲 थ्रिप्स",
+  "🐜 माइट",
+  "💧 कितना पानी दें",
+  "🌱 सही बीज चुनें",
+  "💨 स्प्रे कब करें",
+];
+
+const TOPIC_CATEGORIES: { title: string; items: string[] }[] = [
+  {
+    title: "📊 बाजार और कमाई",
+    items: ["⏰ कटाई का समय", "📈 फसल का भाव", "📦 भंडारण कैसे करें"],
+  },
+  {
+    title: "🍂 फसल बीमारियां",
+    items: [
+      "🍂 पत्ते पीले होना",
+      "🍃 पत्ते मुड़ना",
+      "🍁 पत्तों पर धब्बे",
+      "🥀 पत्ते सूखना",
+      "🌾 तना सड़ना",
+      "🌱 जड़ सड़ना",
+    ],
+  },
+  {
+    title: "🐛 कीट समस्याएं",
+    items: [
+      "🐛 इल्ली का हमला",
+      "🪰 सफेद मक्खी",
+      "🪲 थ्रिप्स",
+      "🐜 माइट",
+      "🦗 तना छेदक",
+      "🐞 फल छेदक",
+      "🪰 पत्ते खाने वाले कीट",
+    ],
+  },
+  {
+    title: "💧 पानी / सिंचाई",
+    items: [
+      "💧 कितना पानी दें",
+      "⛈️ बारिश के बाद क्या करें",
+      "☀️ फसल में पानी कम",
+      "💦 फसल में पानी ज्यादा",
+      "🪵 ड्रिप सिंचाई",
+      "☁️ मौसम के हिसाब से सिंचाई",
+    ],
+  },
+  {
+    title: "🌱 बीज और फसल चयन",
+    items: [
+      "🌾 कौनसी फसल बोएं",
+      "🌱 सही बीज चुनें",
+      "💰 ज्यादा मुनाफे वाली फसल",
+      "🌤️ मौसम के हिसाब से फसल",
+      "🌾 नकदी फसल",
+    ],
+  },
+  {
+    title: "🥬 फसल जानकारी",
+    items: [
+      "🥬 सब्ज़ी फसलें",
+      "🍎 फल फसलें",
+      "🌾 अनाज फसलें",
+      "🫘 दाल फसलें",
+      "🪙 नकदी फसलें",
+      "🌶️ मसाला फसलें",
+      "🌿 चारा फसलें",
+    ],
+  },
+  {
+    title: "📉 पैदावार कम होना",
+    items: [
+      "📉 फसल की बढ़वार रुकना",
+      "🌸 फूल गिरना",
+      "🍅 फल कम लगना",
+      "🌱 फसल छोटी रहना",
+      "🪴 पौधा कमजोर होना",
+    ],
+  },
+  {
+    title: "🧪 खाद और पोषण",
+    items: [
+      "🌿 कौनसी खाद दें",
+      "⚖️ खाद की सही मात्रा",
+      "💨 स्प्रे कब करें",
+      "🪱 वर्मी कम्पोस्ट कैसे बनाएं",
+      "🪵 गोबर खाद",
+      "🧪 माइक्रो न्यूट्रिएंट कमी",
+      "🔬 जिंक की कमी",
+      "📦 नाइट्रोजन की कमी",
+    ],
+  },
+  {
+    title: "🛖 मौसम और पॉलीहाउस / हाई-टेक खेती",
+    items: [
+      "⛈️ बारिश से नुकसान",
+      "❄️ ठंड से फसल बचाएं",
+      "🔥 गर्मी से कैसे बचाएं",
+      "🧊 ओले पड़ना",
+      "🛖 पॉलीहाउस कैसे लगाएं",
+      "🏡 ग्रीनहाउस खेती",
+      "🪵 ड्रिप सिंचाई",
+      "📋 मल्चिंग तकनीक",
+      "🫑 शिमला मिर्च पॉलीहाउस",
+      "🥒 खीरा पॉलीहाउस",
+      "🤖 हाई-टेक सब्जी खेती",
+    ],
+  },
+  {
+    title: "💰 ज्यादा मुनाफे वाली खेती",
+    items: [
+      "🪷 ड्रैगन फ्रूट",
+      "🍄 मशरूम",
+      "🍓 स्ट्रॉबेरी",
+      "🥑 एवोकाडो",
+      "🍎 अनार",
+      "🪻 सफेद मूसली",
+      "🪵 बांस",
+      "🪵 चंदन",
+      "🌸 केसर",
+      "🌾 इसबगोल",
+    ],
+  },
+  {
+    title: "🌱 नर्सरी और पौधे",
+    items: [
+      "🌱 पौधा नर्सरी व्यवसाय",
+      "✂️ ग्राफ्टिंग कैसे करें",
+      "🪴 पौधे तैयार करना",
+      "🏪 पौधा बिक्री व्यवसाय",
+    ],
+  },
+];
+
+
+
 function HomePage() {
   const { lang, t, speechCode } = useLanguage();
   const { ttsEnabled } = useVoiceMode();
@@ -142,6 +284,36 @@ function HomePage() {
       }
     },
     [chatFn, lang, messages, sending, t, imageData, speak]
+  );
+
+  const askPreset = useCallback(
+    async (topic: string) => {
+      stop();
+      const userMsg: ChatMsg = { role: "user", content: topic };
+      setMessages([userMsg]);
+      setView("chat");
+      setSending(true);
+      try {
+        const res = await chatFn({
+          data: {
+            language: lang,
+            languageName: LANG_NAME_FOR_AI[lang as LangCode],
+            history: [userMsg],
+          },
+        });
+        const reply = res.reply || t("error");
+        setMessages((m) => [...m, { role: "assistant", content: reply }]);
+        speak(reply);
+      } catch (e) {
+        const msg = (e as Error).message;
+        if (msg === "RATE_LIMITED") toast.error(t("rateLimited"));
+        else if (msg === "PAYMENT_REQUIRED") toast.error(t("paymentRequired"));
+        else toast.error(t("error"));
+      } finally {
+        setSending(false);
+      }
+    },
+    [chatFn, lang, t, speak, stop]
   );
 
   // ---------- VIEWS ----------
@@ -283,6 +455,47 @@ function HomePage() {
           <p className="text-[11px] text-muted-foreground">{t("askDesc")}</p>
         </button>
       </section>
+
+      {/* Main topic grid */}
+      <section className="px-5 pt-6">
+        <h2 className="mb-3 text-base font-bold text-foreground">किसान भाई से बात करें</h2>
+        <div className="grid grid-cols-3 gap-2.5">
+          {MAIN_TOPICS.map((topic) => (
+            <button
+              key={topic}
+              onClick={() => askPreset(topic)}
+              className="flex min-h-[78px] flex-col items-center justify-center gap-1 rounded-2xl bg-card p-2 text-center shadow-soft transition-smooth hover:-translate-y-0.5 hover:shadow-strong active:scale-95"
+            >
+              <span className="text-2xl leading-none">{topic.split(" ")[0]}</span>
+              <span className="text-[11px] font-semibold leading-tight text-foreground">
+                {topic.split(" ").slice(1).join(" ")}
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Categorized sections */}
+      <section className="space-y-5 px-5 pt-6">
+        {TOPIC_CATEGORIES.map((cat) => (
+          <div key={cat.title}>
+            <h3 className="mb-2 text-sm font-bold text-foreground">{cat.title}</h3>
+            <div className="flex flex-wrap gap-2">
+              {cat.items.map((item) => (
+                <button
+                  key={item}
+                  onClick={() => askPreset(item)}
+                  className="rounded-full border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground shadow-soft transition-smooth hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-strong active:scale-95"
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+      </section>
+
+
 
       {/* Tips */}
       <section className="px-5 pt-5">
