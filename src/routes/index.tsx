@@ -314,6 +314,47 @@ function HomePage() {
         </button>
       </section>
 
+      {/* Main topic grid */}
+      <section className="px-5 pt-6">
+        <h2 className="mb-3 text-base font-bold text-foreground">किसान भाई से बात करें</h2>
+        <div className="grid grid-cols-3 gap-2.5">
+          {MAIN_TOPICS.map((topic) => (
+            <button
+              key={topic}
+              onClick={() => askPreset(topic)}
+              className="flex min-h-[78px] flex-col items-center justify-center gap-1 rounded-2xl bg-card p-2 text-center shadow-soft transition-smooth hover:-translate-y-0.5 hover:shadow-strong active:scale-95"
+            >
+              <span className="text-2xl leading-none">{topic.split(" ")[0]}</span>
+              <span className="text-[11px] font-semibold leading-tight text-foreground">
+                {topic.split(" ").slice(1).join(" ")}
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Categorized sections */}
+      <section className="space-y-5 px-5 pt-6">
+        {TOPIC_CATEGORIES.map((cat) => (
+          <div key={cat.title}>
+            <h3 className="mb-2 text-sm font-bold text-foreground">{cat.title}</h3>
+            <div className="flex flex-wrap gap-2">
+              {cat.items.map((item) => (
+                <button
+                  key={item}
+                  onClick={() => askPreset(item)}
+                  className="rounded-full border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground shadow-soft transition-smooth hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-strong active:scale-95"
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+      </section>
+
+
+
       {/* Tips */}
       <section className="px-5 pt-5">
         <Card className="border-0 bg-card/80 p-4 shadow-soft">
