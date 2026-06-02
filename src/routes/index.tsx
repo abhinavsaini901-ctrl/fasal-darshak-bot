@@ -456,7 +456,7 @@ function HomePage() {
         </button>
       </section>
 
-      {/* All topics in one box */}
+      {/* Main topics box */}
       <section className="px-5 pt-6">
         <Card className="border-0 bg-card p-4 shadow-soft">
           <h2 className="mb-3 text-base font-bold text-foreground">किसान भाई से बात करें</h2>
@@ -474,26 +474,27 @@ function HomePage() {
               </button>
             ))}
           </div>
-
-          <div className="mt-5 space-y-4">
-            {TOPIC_CATEGORIES.map((cat) => (
-              <div key={cat.title} className="border-t border-border pt-4">
-                <h3 className="mb-2 text-sm font-bold text-foreground">{cat.title}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {cat.items.map((item) => (
-                    <button
-                      key={item}
-                      onClick={() => askPreset(item)}
-                      className="rounded-full border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground shadow-soft transition-smooth hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-strong active:scale-95"
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
         </Card>
+      </section>
+
+      {/* Each category in its own box */}
+      <section className="space-y-4 px-5 pt-4">
+        {TOPIC_CATEGORIES.map((cat) => (
+          <Card key={cat.title} className="border-0 bg-card p-4 shadow-soft">
+            <h3 className="mb-3 text-sm font-bold text-foreground">{cat.title}</h3>
+            <div className="flex flex-wrap gap-2">
+              {cat.items.map((item) => (
+                <button
+                  key={item}
+                  onClick={() => askPreset(item)}
+                  className="rounded-full border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground shadow-soft transition-smooth hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-strong active:scale-95"
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </Card>
+        ))}
       </section>
 
 
