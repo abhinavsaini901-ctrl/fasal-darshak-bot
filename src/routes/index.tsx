@@ -144,6 +144,36 @@ function HomePage() {
     [chatFn, lang, messages, sending, t, imageData, speak]
   );
 
+  const askPreset = useCallback(
+    async (topic: string) => {
+      stop();
+      const userMsg: ChatMsg = { role: "user", content: topic };
+      setMessages([userMsg]);
+      setView("chat");
+      setSending(true);
+      try {
+        const res = await chatFn({
+          data: {
+            language: lang,
+            languageName: LANG_NAME_FOR_AI[lang as LangCode],
+            history: [userMsg],
+          },
+        });
+        const reply = res.reply || t("error");
+        setMessages((m) => [...m, { role: "assistant", content: reply }]);
+        speak(reply);
+      } catch (e) {
+        const msg = (e as Error).message;
+        if (msg === "RATE_LIMITED") toast.error(t("rateLimited"));
+        else if (msg === "PAYMENT_REQUIRED") toast.error(t("paymentRequired"));
+        else toast.error(t("error"));
+      } finally {
+        setSending(false);
+      }
+    },
+    [chatFn, lang, t, speak, stop]
+  );
+
   // ---------- VIEWS ----------
   if (view === "camera") {
     return (
