@@ -79,7 +79,7 @@ function BlogPage() {
           })}
         </div>
 
-        <AdSlot className="mt-8" minHeight={120} />
+        
 
         <div className="mt-8">
           {filtered.length === 0 ? (
