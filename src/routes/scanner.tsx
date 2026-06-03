@@ -39,9 +39,9 @@ export const Route = createFileRoute("/scanner")({
       { name: "description", content: "अपनी फसल की फोटो लें और AI से तुरंत जानें — कौन सी बीमारी है, क्या इलाज है, और कैसे बचाव करें। हिंदी में, मुफ्त।" },
       { property: "og:title", content: "AI फसल डॉक्टर | किसान मित्र" },
       { property: "og:description", content: "फसल की फोटो से रोग पहचान और AI सलाह।" },
-      { property: "og:url", content: "https://fasal-darshak-bot.lovable.app/scanner" },
+      { property: "og:url", content: "https://kisanlens.com/scanner" },
     ],
-    links: [{ rel: "canonical", href: "https://fasal-darshak-bot.lovable.app/scanner" }],
+    links: [{ rel: "canonical", href: "https://kisanlens.com/scanner" }],
   }),
 });
 

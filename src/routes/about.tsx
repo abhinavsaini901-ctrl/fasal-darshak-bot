@@ -13,9 +13,9 @@ export const Route = createFileRoute("/about")({
       { name: "description", content: "किसान मित्र भारतीय किसानों के लिए बना AI-आधारित कृषि पोर्टल है। हमारा मिशन, टीम और मूल्यों के बारे में जानें।" },
       { property: "og:title", content: "हमारे बारे में | किसान मित्र" },
       { property: "og:description", content: "किसानों के लिए AI-आधारित कृषि सहायक।" },
-      { property: "og:url", content: "https://fasal-darshak-bot.lovable.app/about" },
+      { property: "og:url", content: "https://kisanlens.com/about" },
     ],
-    links: [{ rel: "canonical", href: "https://fasal-darshak-bot.lovable.app/about" }],
+    links: [{ rel: "canonical", href: "https://kisanlens.com/about" }],
   }),
 });
 

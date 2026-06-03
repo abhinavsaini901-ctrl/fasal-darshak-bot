@@ -10,9 +10,9 @@ export const Route = createFileRoute("/terms")({
       { name: "description", content: "किसान मित्र वेबसाइट के उपयोग की नियम और शर्तें।" },
       { property: "og:title", content: "नियम और शर्तें | किसान मित्र" },
       { property: "og:description", content: "उपयोग की शर्तें।" },
-      { property: "og:url", content: "https://fasal-darshak-bot.lovable.app/terms" },
+      { property: "og:url", content: "https://kisanlens.com/terms" },
     ],
-    links: [{ rel: "canonical", href: "https://fasal-darshak-bot.lovable.app/terms" }],
+    links: [{ rel: "canonical", href: "https://kisanlens.com/terms" }],
   }),
 });
 
@@ -103,8 +103,8 @@ function TermsPage() {
           <h2 className="text-xl font-bold">12. संपर्क</h2>
           <p>
             प्रश्नों के लिए:{" "}
-            <a href="mailto:support@kisanmitra.in" className="text-primary hover:underline">
-              support@kisanmitra.in
+            <a href="mailto:support@kisanlens.com" className="text-primary hover:underline">
+              support@kisanlens.com
             </a>
           </p>
         </div>

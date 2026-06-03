@@ -9,9 +9,9 @@ export const Route = createFileRoute("/crop-diseases")({
       { name: "description", content: "गेहूं, धान, सब्जियों की प्रमुख बीमारियां — रतुआ, ब्लास्ट, ब्लाइट, मोज़ेक — पहचान के तरीके, फफूंदनाशक और जैविक उपचार।" },
       { property: "og:title", content: "फसल रोग — पहचान और इलाज | किसान मित्र" },
       { property: "og:description", content: "प्रमुख फसल बीमारियों की जानकारी।" },
-      { property: "og:url", content: "https://fasal-darshak-bot.lovable.app/crop-diseases" },
+      { property: "og:url", content: "https://kisanlens.com/crop-diseases" },
     ],
-    links: [{ rel: "canonical", href: "https://fasal-darshak-bot.lovable.app/crop-diseases" }],
+    links: [{ rel: "canonical", href: "https://kisanlens.com/crop-diseases" }],
   }),
 });
 

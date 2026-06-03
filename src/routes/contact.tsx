@@ -18,9 +18,9 @@ export const Route = createFileRoute("/contact")({
       { name: "description", content: "कोई सवाल, सुझाव या साझेदारी? किसान मित्र की टीम से सीधे संपर्क करें।" },
       { property: "og:title", content: "संपर्क करें | किसान मित्र" },
       { property: "og:description", content: "किसान मित्र से जुड़ें।" },
-      { property: "og:url", content: "https://fasal-darshak-bot.lovable.app/contact" },
+      { property: "og:url", content: "https://kisanlens.com/contact" },
     ],
-    links: [{ rel: "canonical", href: "https://fasal-darshak-bot.lovable.app/contact" }],
+    links: [{ rel: "canonical", href: "https://kisanlens.com/contact" }],
   }),
 });
 
@@ -64,8 +64,8 @@ function ContactPage() {
             <Card className="border border-border bg-card p-5">
               <Mail className="h-5 w-5 text-primary" />
               <p className="mt-2 text-sm font-bold">ईमेल</p>
-              <a href="mailto:support@kisanmitra.in" className="mt-1 block text-sm text-muted-foreground hover:text-primary">
-                support@kisanmitra.in
+              <a href="mailto:support@kisanlens.com" className="mt-1 block text-sm text-muted-foreground hover:text-primary">
+                support@kisanlens.com
               </a>
             </Card>
             <Card className="border border-border bg-card p-5">

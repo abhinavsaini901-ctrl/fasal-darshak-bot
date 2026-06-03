@@ -15,9 +15,9 @@ export const Route = createFileRoute("/market-prices")({
       { name: "description", content: "गेहूं, धान, सरसों, प्याज, टमाटर के मंडी भाव, MSP, eNAM और राज्यवार APMC रेट कैसे चेक करें।" },
       { property: "og:title", content: "मंडी भाव और MSP | किसान मित्र" },
       { property: "og:description", content: "बाज़ार रेट चेक करने की पूरी जानकारी।" },
-      { property: "og:url", content: "https://fasal-darshak-bot.lovable.app/market-prices" },
+      { property: "og:url", content: "https://kisanlens.com/market-prices" },
     ],
-    links: [{ rel: "canonical", href: "https://fasal-darshak-bot.lovable.app/market-prices" }],
+    links: [{ rel: "canonical", href: "https://kisanlens.com/market-prices" }],
   }),
 });
 

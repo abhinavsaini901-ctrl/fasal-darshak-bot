@@ -30,9 +30,9 @@ export const Route = createFileRoute("/blog")({
       },
       { property: "og:title", content: "कृषि ब्लॉग | किसान मित्र" },
       { property: "og:description", content: "हिंदी में किसानों के लिए विस्तृत कृषि लेख।" },
-      { property: "og:url", content: "https://fasal-darshak-bot.lovable.app/blog" },
+      { property: "og:url", content: "https://kisanlens.com/blog" },
     ],
-    links: [{ rel: "canonical", href: "https://fasal-darshak-bot.lovable.app/blog" }],
+    links: [{ rel: "canonical", href: "https://kisanlens.com/blog" }],
   }),
 });
 

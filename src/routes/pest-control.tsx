@@ -9,9 +9,9 @@ export const Route = createFileRoute("/pest-control")({
       { name: "description", content: "फसलों के प्रमुख कीटों — सफेद मक्खी, थ्रिप्स, माइट, इल्ली, तना छेदक — की पहचान और नियंत्रण की पूरी जानकारी।" },
       { property: "og:title", content: "कीट नियंत्रण | किसान मित्र" },
       { property: "og:description", content: "कीटों की पहचान और जैविक/रासायनिक नियंत्रण।" },
-      { property: "og:url", content: "https://fasal-darshak-bot.lovable.app/pest-control" },
+      { property: "og:url", content: "https://kisanlens.com/pest-control" },
     ],
-    links: [{ rel: "canonical", href: "https://fasal-darshak-bot.lovable.app/pest-control" }],
+    links: [{ rel: "canonical", href: "https://kisanlens.com/pest-control" }],
   }),
 });
 

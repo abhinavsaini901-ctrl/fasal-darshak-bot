@@ -36,10 +36,10 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:title", content: "किसान मित्र — AI कृषि पोर्टल" },
       { property: "og:description", content: "फसल स्कैन, मंडी भाव, योजनाएं — एक ही जगह।" },
-      { property: "og:url", content: "https://fasal-darshak-bot.lovable.app/" },
+      { property: "og:url", content: "https://kisanlens.com/" },
       { property: "og:type", content: "website" },
     ],
-    links: [{ rel: "canonical", href: "https://fasal-darshak-bot.lovable.app/" }],
+    links: [{ rel: "canonical", href: "https://kisanlens.com/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -47,7 +47,7 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: "किसान मित्र",
-          url: "https://fasal-darshak-bot.lovable.app/",
+          url: "https://kisanlens.com/",
           inLanguage: "hi-IN",
           description:
             "AI-संचालित भारतीय कृषि पोर्टल — फसल रोग पहचान, मंडी भाव, सरकारी योजनाएं और किसानों के लिए विस्तृत लेख।",

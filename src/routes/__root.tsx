@@ -56,7 +56,7 @@ export const Route = createRootRoute({
           "@context": "https://schema.org",
           "@type": "Organization",
           name: "किसान मित्र",
-          url: "https://fasal-darshak-bot.lovable.app",
+          url: "https://kisanlens.com",
           description: "भारतीय किसानों के लिए AI-आधारित कृषि पोर्टल",
           sameAs: [],
         }),

@@ -15,9 +15,9 @@ export const Route = createFileRoute("/government-schemes")({
       { name: "description", content: "PM-KISAN, PMFBY फसल बीमा, किसान क्रेडिट कार्ड, PMKSY, PM कुसुम, मृदा स्वास्थ्य कार्ड — सरकारी योजनाओं की पूरी जानकारी।" },
       { property: "og:title", content: "कृषि सरकारी योजनाएं | किसान मित्र" },
       { property: "og:description", content: "किसानों के लिए सब्सिडी और लाभ।" },
-      { property: "og:url", content: "https://fasal-darshak-bot.lovable.app/government-schemes" },
+      { property: "og:url", content: "https://kisanlens.com/government-schemes" },
     ],
-    links: [{ rel: "canonical", href: "https://fasal-darshak-bot.lovable.app/government-schemes" }],
+    links: [{ rel: "canonical", href: "https://kisanlens.com/government-schemes" }],
   }),
 });
 
