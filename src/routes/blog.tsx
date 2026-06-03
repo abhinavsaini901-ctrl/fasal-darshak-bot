@@ -86,10 +86,11 @@ function BlogPage() {
               !cat ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:border-primary/40"
             }`}
           >
-            सभी ({ARTICLES.length})
+            सभी ({allArticles.length})
           </Link>
           {BLOG_CATEGORIES.map((c) => {
-            const count = ARTICLES.filter((a) => a.category === c.name).length;
+            const count = allArticles.filter((a) => a.category === c.name).length;
+
             if (count === 0) return null;
             return (
               <Link
