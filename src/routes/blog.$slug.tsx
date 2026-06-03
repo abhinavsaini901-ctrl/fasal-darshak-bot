@@ -149,6 +149,11 @@ function ArticlePage() {
           ))}
         </div>
 
+        {/* AD SLOT — end of article body */}
+        <AdSlot className="mt-10" minHeight={120} />
+
+
+
         {/* Tags */}
         {a.tags.length > 0 && (
           <div className="mt-10 flex flex-wrap items-center gap-2 border-t border-border pt-6">
