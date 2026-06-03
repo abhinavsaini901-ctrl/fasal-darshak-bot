@@ -6,7 +6,7 @@ import { FAQSection } from "@/components/FAQSection";
 import { ArticleCard } from "@/components/ArticleCard";
 import { Card } from "@/components/ui/card";
 import { getArticleBySlug, getRelatedArticles, type Article } from "@/data/articles";
-import { AdSlot } from "@/components/AdSlot";
+
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {
