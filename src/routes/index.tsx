@@ -18,11 +18,10 @@ import heroImg from "@/assets/hero-crop.jpg";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArticleCard } from "@/components/ArticleCard";
 import { FAQSection } from "@/components/FAQSection";
 import { Newsletter } from "@/components/Newsletter";
 
-import { ARTICLES } from "@/data/articles";
+
 
 export const Route = createFileRoute("/")({
   component: HomePage,
