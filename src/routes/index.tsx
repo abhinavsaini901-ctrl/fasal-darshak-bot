@@ -204,34 +204,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* LATEST ARTICLES */}
-      <section className="mx-auto max-w-6xl px-4 py-6">
-        <div className="mb-6 flex items-end justify-between">
-          <div>
-            <h2 className="text-2xl font-bold text-foreground md:text-3xl">ताज़ा कृषि लेख</h2>
-            <p className="mt-1 text-sm text-muted-foreground">किसानों के लिए विशेषज्ञों द्वारा लिखे गए लेख</p>
-          </div>
-          <Link to="/blog" className="hidden text-sm font-semibold text-primary hover:underline sm:inline-flex sm:items-center sm:gap-1">
-            सभी लेख <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-        {latestArticles.length === 0 ? (
-          <Card className="p-8 text-center text-sm text-muted-foreground">
-            लेख जल्द आ रहे हैं। हमारी टीम ताज़ा कृषि सामग्री तैयार कर रही है।
-          </Card>
-        ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {latestArticles.map((a) => (
-              <ArticleCard key={a.slug} article={a} />
-            ))}
-          </div>
-        )}
-        <div className="mt-6 text-center sm:hidden">
-          <Link to="/blog" className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
-            सभी लेख देखें <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-      </section>
 
 
       {/* TIPS */}
