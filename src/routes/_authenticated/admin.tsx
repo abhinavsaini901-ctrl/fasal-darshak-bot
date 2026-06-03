@@ -28,7 +28,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 });
 
 function AdminPage() {
-  const router = useRouter();
+  
   const qc = useQueryClient();
   const checkAdminFn = useServerFn(checkIsAdmin);
   const claimFn = useServerFn(claimAdminIfFirst);
