@@ -38,11 +38,35 @@ export const Route = createFileRoute("/blog")({
 
 function BlogPage() {
   const { cat } = useSearch({ from: "/blog" });
+  const listFn = useServerFn(listPublishedArticles);
+  const dbQuery = useQuery({ queryKey: ["publishedArticles"], queryFn: () => listFn() });
+
+  const allArticles: Article[] = useMemo(() => {
+    const dbItems: Article[] = (dbQuery.data ?? []).map((r: any) => ({
+      slug: r.slug,
+      title: r.title,
+      category: r.category,
+      metaDescription: r.meta_description ?? "",
+      excerpt: r.excerpt ?? "",
+      tableOfContents: r.table_of_contents ?? [],
+      sections: r.sections ?? [],
+      faqs: r.faqs ?? [],
+      tags: r.tags ?? [],
+      publishedAt: (r.published_at ?? r.updated_at ?? new Date().toISOString()).slice(0, 10),
+      updatedAt: (r.updated_at ?? r.published_at ?? new Date().toISOString()).slice(0, 10),
+      readMinutes: r.read_minutes ?? 5,
+      author: r.author ?? "किसान मित्र संपादकीय टीम",
+    }));
+    const seen = new Set(dbItems.map((a) => a.slug));
+    const staticItems = ARTICLES.filter((a) => !seen.has(a.slug));
+    return [...dbItems, ...staticItems];
+  }, [dbQuery.data]);
 
   const filtered = useMemo(() => {
-    if (!cat) return ARTICLES;
-    return ARTICLES.filter((a) => a.category === cat);
-  }, [cat]);
+    if (!cat) return allArticles;
+    return allArticles.filter((a) => a.category === cat);
+  }, [cat, allArticles]);
+
 
   return (
     <PageShell>
