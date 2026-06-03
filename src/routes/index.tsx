@@ -233,6 +233,11 @@ function HomePage() {
         </div>
       </section>
 
+      {/* AD SLOT — in-feed after latest articles */}
+      <section className="mx-auto max-w-6xl px-4 pb-6">
+        <AdSlot className="my-2" minHeight={120} />
+      </section>
+
       {/* TIPS */}
       <section className="mx-auto max-w-6xl px-4 py-12">
         <h2 className="mb-6 text-2xl font-bold text-foreground md:text-3xl">खेती की उपयोगी टिप्स</h2>
