@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { ARTICLES } from "@/data/articles";
 
-const BASE_URL = "https://fasal-darshak-bot.lovable.app";
+const BASE_URL = "https://kisanlens.com";
 
 interface Entry {
   path: string;

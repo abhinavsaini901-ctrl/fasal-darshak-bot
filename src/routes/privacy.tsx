@@ -10,9 +10,9 @@ export const Route = createFileRoute("/privacy")({
       { name: "description", content: "किसान मित्र की गोपनीयता नीति — हम आपका डेटा कैसे एकत्र, उपयोग और सुरक्षित रखते हैं।" },
       { property: "og:title", content: "गोपनीयता नीति | किसान मित्र" },
       { property: "og:description", content: "हमारी डेटा प्रथाएं।" },
-      { property: "og:url", content: "https://fasal-darshak-bot.lovable.app/privacy" },
+      { property: "og:url", content: "https://kisanlens.com/privacy" },
     ],
-    links: [{ rel: "canonical", href: "https://fasal-darshak-bot.lovable.app/privacy" }],
+    links: [{ rel: "canonical", href: "https://kisanlens.com/privacy" }],
   }),
 });
 
@@ -99,8 +99,8 @@ function PrivacyPage() {
           <h2 className="text-xl font-bold">10. संपर्क</h2>
           <p>
             गोपनीयता से संबंधित किसी भी प्रश्न के लिए हमें{" "}
-            <a href="mailto:support@kisanmitra.in" className="text-primary hover:underline">
-              support@kisanmitra.in
+            <a href="mailto:support@kisanlens.com" className="text-primary hover:underline">
+              support@kisanlens.com
             </a>{" "}
             पर लिखें।
           </p>

@@ -44,12 +44,12 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "og:title", content: a.title },
         { property: "og:description", content: a.metaDescription },
         { property: "og:type", content: "article" },
-        { property: "og:url", content: `https://fasal-darshak-bot.lovable.app/blog/${params.slug}` },
+        { property: "og:url", content: `https://kisanlens.com/blog/${params.slug}` },
         { property: "article:published_time", content: a.publishedAt },
         { property: "article:author", content: a.author },
         { property: "article:section", content: a.category },
       ],
-      links: [{ rel: "canonical", href: `https://fasal-darshak-bot.lovable.app/blog/${params.slug}` }],
+      links: [{ rel: "canonical", href: `https://kisanlens.com/blog/${params.slug}` }],
       scripts: [
         {
           type: "application/ld+json",
@@ -65,9 +65,9 @@ export const Route = createFileRoute("/blog/$slug")({
             publisher: {
               "@type": "Organization",
               name: "किसान मित्र",
-              url: "https://fasal-darshak-bot.lovable.app",
+              url: "https://kisanlens.com",
             },
-            mainEntityOfPage: `https://fasal-darshak-bot.lovable.app/blog/${params.slug}`,
+            mainEntityOfPage: `https://kisanlens.com/blog/${params.slug}`,
             articleSection: a.category,
             keywords: a.tags.join(", "),
           }),

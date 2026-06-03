@@ -12,9 +12,9 @@ export const Route = createFileRoute("/disclaimer")({
       { name: "description", content: "किसान मित्र वेबसाइट पर प्रदान की गई जानकारी का अस्वीकरण।" },
       { property: "og:title", content: "अस्वीकरण | किसान मित्र" },
       { property: "og:description", content: "महत्वपूर्ण अस्वीकरण।" },
-      { property: "og:url", content: "https://fasal-darshak-bot.lovable.app/disclaimer" },
+      { property: "og:url", content: "https://kisanlens.com/disclaimer" },
     ],
-    links: [{ rel: "canonical", href: "https://fasal-darshak-bot.lovable.app/disclaimer" }],
+    links: [{ rel: "canonical", href: "https://kisanlens.com/disclaimer" }],
   }),
 });
 
