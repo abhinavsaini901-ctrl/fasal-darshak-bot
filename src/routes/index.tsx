@@ -271,7 +271,7 @@ function HomePage() {
 
       {/* FAQ */}
       <section className="mx-auto max-w-6xl px-4 py-12">
-        <AdSlot className="mb-10" minHeight={120} />
+        
         <FAQSection items={HOME_FAQ} />
       </section>
 
