@@ -29,7 +29,7 @@ import { useLanguage } from "@/hooks/use-language";
 import { useSpeak } from "@/hooks/use-voice";
 import { useVoiceMode } from "@/hooks/use-voice-mode";
 import { LANG_NAME_FOR_AI, type LangCode } from "@/lib/i18n";
-import { scanCrop, chatCrop } from "@/server/crop.functions";
+import { scanCrop, chatCrop } from "@/lib/crop.functions";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
