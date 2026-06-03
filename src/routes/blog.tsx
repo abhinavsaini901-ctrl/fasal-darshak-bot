@@ -1,11 +1,16 @@
 import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
 import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { PageShell } from "@/components/PageShell";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ArticleCard } from "@/components/ArticleCard";
-import { ARTICLES } from "@/data/articles";
+import { ARTICLES, type Article } from "@/data/articles";
 import { BLOG_CATEGORIES } from "@/data/categories";
+import { listPublishedArticles } from "@/lib/articles.functions";
+
+
 
 
 const searchSchema = z.object({
