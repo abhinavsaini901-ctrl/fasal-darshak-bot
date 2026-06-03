@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fasal-darshak-bot.lovable.app/sitemap.xml
