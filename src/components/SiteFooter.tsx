@@ -66,7 +66,7 @@ export function SiteFooter() {
             <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
               <Mail className="h-3.5 w-3.5" />
               <a href="mailto:support@fasal-darshak-bot.lovable.app" className="hover:text-primary">
-                support@kisanmitra.in
+                support@fasal-darshak-bot.lovable.app
               </a>
             </div>
           </div>
