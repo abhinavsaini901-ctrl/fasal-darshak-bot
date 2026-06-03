@@ -147,8 +147,6 @@ function ArticlePage() {
           ))}
         </div>
 
-        {/* AD SLOT — end of article body */}
-        <AdSlot className="mt-10" minHeight={120} />
 
 
 
