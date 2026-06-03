@@ -6,14 +6,34 @@ import { FAQSection } from "@/components/FAQSection";
 import { ArticleCard } from "@/components/ArticleCard";
 import { Card } from "@/components/ui/card";
 import { getArticleBySlug, getRelatedArticles, type Article } from "@/data/articles";
+import { getPublishedArticle } from "@/lib/articles.functions";
 
 
 export const Route = createFileRoute("/blog/$slug")({
-  loader: ({ params }) => {
-    const article = getArticleBySlug(params.slug);
-    if (!article) throw notFound();
+  loader: async ({ params }) => {
+    const staticArticle = getArticleBySlug(params.slug);
+    if (staticArticle) return { article: staticArticle };
+    const row = await getPublishedArticle({ data: { slug: params.slug } });
+    if (!row) throw notFound();
+    const article: Article = {
+      slug: row.slug,
+      title: row.title,
+      category: row.category,
+      metaDescription: row.meta_description ?? "",
+      excerpt: row.excerpt ?? "",
+      tableOfContents: (row.table_of_contents as string[]) ?? [],
+      sections: (row.sections as any) ?? [],
+      faqs: (row.faqs as any) ?? [],
+      tags: (row.tags as string[]) ?? [],
+
+      publishedAt: (row.published_at ?? row.updated_at ?? new Date().toISOString()).slice(0, 10),
+      updatedAt: (row.updated_at ?? row.published_at ?? new Date().toISOString()).slice(0, 10),
+      readMinutes: row.read_minutes ?? 5,
+      author: row.author ?? "किसान मित्र संपादकीय टीम",
+    };
     return { article };
   },
+
   head: ({ loaderData, params }) => {
     if (!loaderData) return {};
     const a = loaderData.article;

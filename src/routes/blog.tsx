@@ -1,11 +1,16 @@
 import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
 import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { PageShell } from "@/components/PageShell";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ArticleCard } from "@/components/ArticleCard";
-import { ARTICLES } from "@/data/articles";
+import { ARTICLES, type Article } from "@/data/articles";
 import { BLOG_CATEGORIES } from "@/data/categories";
+import { listPublishedArticles } from "@/lib/articles.functions";
+
+
 
 
 const searchSchema = z.object({
@@ -33,11 +38,35 @@ export const Route = createFileRoute("/blog")({
 
 function BlogPage() {
   const { cat } = useSearch({ from: "/blog" });
+  const listFn = useServerFn(listPublishedArticles);
+  const dbQuery = useQuery({ queryKey: ["publishedArticles"], queryFn: () => listFn() });
+
+  const allArticles: Article[] = useMemo(() => {
+    const dbItems: Article[] = (dbQuery.data ?? []).map((r: any) => ({
+      slug: r.slug,
+      title: r.title,
+      category: r.category,
+      metaDescription: r.meta_description ?? "",
+      excerpt: r.excerpt ?? "",
+      tableOfContents: r.table_of_contents ?? [],
+      sections: r.sections ?? [],
+      faqs: r.faqs ?? [],
+      tags: r.tags ?? [],
+      publishedAt: (r.published_at ?? r.updated_at ?? new Date().toISOString()).slice(0, 10),
+      updatedAt: (r.updated_at ?? r.published_at ?? new Date().toISOString()).slice(0, 10),
+      readMinutes: r.read_minutes ?? 5,
+      author: r.author ?? "किसान मित्र संपादकीय टीम",
+    }));
+    const seen = new Set(dbItems.map((a) => a.slug));
+    const staticItems = ARTICLES.filter((a) => !seen.has(a.slug));
+    return [...dbItems, ...staticItems];
+  }, [dbQuery.data]);
 
   const filtered = useMemo(() => {
-    if (!cat) return ARTICLES;
-    return ARTICLES.filter((a) => a.category === cat);
-  }, [cat]);
+    if (!cat) return allArticles;
+    return allArticles.filter((a) => a.category === cat);
+  }, [cat, allArticles]);
+
 
   return (
     <PageShell>
@@ -57,10 +86,11 @@ function BlogPage() {
               !cat ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:border-primary/40"
             }`}
           >
-            सभी ({ARTICLES.length})
+            सभी ({allArticles.length})
           </Link>
           {BLOG_CATEGORIES.map((c) => {
-            const count = ARTICLES.filter((a) => a.category === c.name).length;
+            const count = allArticles.filter((a) => a.category === c.name).length;
+
             if (count === 0) return null;
             return (
               <Link
