@@ -85,14 +85,21 @@ function RootShell({ children }: { children: React.ReactNode }) {
 import { LanguageProvider } from "@/hooks/use-language";
 import { VoiceModeProvider } from "@/hooks/use-voice-mode";
 import { Toaster } from "@/components/ui/sonner";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
 
 function RootComponent() {
+  const [queryClient] = useState(
+    () => new QueryClient({ defaultOptions: { queries: { staleTime: 60_000, retry: 1 } } }),
+  );
   return (
-    <LanguageProvider>
-      <VoiceModeProvider>
-        <Outlet />
-        <Toaster position="top-center" richColors />
-      </VoiceModeProvider>
-    </LanguageProvider>
+    <QueryClientProvider client={queryClient}>
+      <LanguageProvider>
+        <VoiceModeProvider>
+          <Outlet />
+          <Toaster position="top-center" richColors />
+        </VoiceModeProvider>
+      </LanguageProvider>
+    </QueryClientProvider>
   );
 }
