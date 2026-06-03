@@ -115,9 +115,8 @@ const TIPS = [
 ];
 
 function HomePage() {
-  const latestArticles = ARTICLES.slice(0, 6);
-
   return (
+
     <PageShell>
       {/* HERO */}
       <section className="relative overflow-hidden bg-gradient-hero">
