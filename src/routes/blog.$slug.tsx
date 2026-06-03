@@ -125,8 +125,6 @@ function ArticlePage() {
           </Card>
         )}
 
-        {/* AD SLOT — after TOC, before body */}
-        <AdSlot className="my-6" minHeight={120} />
 
         {/* Body */}
         <div className="prose-content space-y-8">
