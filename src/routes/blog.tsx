@@ -6,6 +6,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ArticleCard } from "@/components/ArticleCard";
 import { ARTICLES } from "@/data/articles";
 import { BLOG_CATEGORIES } from "@/data/categories";
+import { AdSlot } from "@/components/AdSlot";
 
 const searchSchema = z.object({
   cat: z.string().optional(),
@@ -77,6 +78,8 @@ function BlogPage() {
             );
           })}
         </div>
+
+        <AdSlot className="mt-8" minHeight={120} />
 
         <div className="mt-8">
           {filtered.length === 0 ? (

@@ -6,6 +6,7 @@ import { FAQSection } from "@/components/FAQSection";
 import { ArticleCard } from "@/components/ArticleCard";
 import { Card } from "@/components/ui/card";
 import { getArticleBySlug, getRelatedArticles, type Article } from "@/data/articles";
+import { AdSlot } from "@/components/AdSlot";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {
@@ -124,6 +125,9 @@ function ArticlePage() {
           </Card>
         )}
 
+        {/* AD SLOT — after TOC, before body */}
+        <AdSlot className="my-6" minHeight={120} />
+
         {/* Body */}
         <div className="prose-content space-y-8">
           {a.sections.map((s, i) => (
@@ -144,6 +148,11 @@ function ArticlePage() {
             </section>
           ))}
         </div>
+
+        {/* AD SLOT — end of article body */}
+        <AdSlot className="mt-10" minHeight={120} />
+
+
 
         {/* Tags */}
         {a.tags.length > 0 && (
