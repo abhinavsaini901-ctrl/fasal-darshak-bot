@@ -21,6 +21,7 @@ import { Card } from "@/components/ui/card";
 import { ArticleCard } from "@/components/ArticleCard";
 import { FAQSection } from "@/components/FAQSection";
 import { Newsletter } from "@/components/Newsletter";
+import { AdSlot } from "@/components/AdSlot";
 import { ARTICLES } from "@/data/articles";
 
 export const Route = createFileRoute("/")({
