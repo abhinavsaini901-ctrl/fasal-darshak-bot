@@ -482,8 +482,8 @@ function HomePage() {
         {TOPIC_CATEGORIES.map((cat) => (
           <Card key={cat.title} className="border border-border/60 bg-card p-4 shadow-soft">
             <h3 className="text-base font-bold text-foreground">{cat.title}</h3>
-            <div className="mt-2 mb-3 h-px w-full bg-border" />
-            <div className="flex flex-wrap gap-2">
+            <div className="my-3 h-px w-full bg-border" />
+            <div className="flex flex-wrap gap-2.5">
               {cat.items.map((item) => (
                 <button
                   key={item}
