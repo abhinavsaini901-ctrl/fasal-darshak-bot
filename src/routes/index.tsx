@@ -21,7 +21,7 @@ import { Card } from "@/components/ui/card";
 import { ArticleCard } from "@/components/ArticleCard";
 import { FAQSection } from "@/components/FAQSection";
 import { Newsletter } from "@/components/Newsletter";
-import { AdSlot } from "@/components/AdSlot";
+
 import { ARTICLES } from "@/data/articles";
 
 export const Route = createFileRoute("/")({
@@ -233,10 +233,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* AD SLOT — in-feed after latest articles */}
-      <section className="mx-auto max-w-6xl px-4 pb-6">
-        <AdSlot className="my-2" minHeight={120} />
-      </section>
 
       {/* TIPS */}
       <section className="mx-auto max-w-6xl px-4 py-12">
@@ -275,7 +271,7 @@ function HomePage() {
 
       {/* FAQ */}
       <section className="mx-auto max-w-6xl px-4 py-12">
-        <AdSlot className="mb-10" minHeight={120} />
+        
         <FAQSection items={HOME_FAQ} />
       </section>
 
