@@ -215,8 +215,14 @@ function ArticlePage() {
   );
 }
 
+const HINDI_MONTHS = [
+  "जनवरी", "फरवरी", "मार्च", "अप्रैल", "मई", "जून",
+  "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर",
+];
+
 function formatDate(iso: string): string {
   const d = new Date(iso);
-  return d.toLocaleDateString("hi-IN", { year: "numeric", month: "long", day: "numeric" });
+  if (isNaN(d.getTime())) return iso;
+  return `${d.getUTCDate()} ${HINDI_MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
 }
 
