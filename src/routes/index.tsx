@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { FAQSection } from "@/components/FAQSection";
 import { Newsletter } from "@/components/Newsletter";
+import { WeatherLocationCard } from "@/components/WeatherLocationCard";
 
 
 
