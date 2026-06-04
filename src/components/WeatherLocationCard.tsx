@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { MapPin, Sun, CloudRain, Cloud, CloudSnow, Loader2, Sprout } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { getWeather, reverseGeo } from "@/lib/weather.functions";
 
 type Weather = {
   tempC: number;
@@ -56,29 +57,13 @@ function adviceFor(code: number, temp: number): string {
 }
 
 async function fetchWeather(lat: number, lon: number): Promise<Weather> {
-  const r = await fetch(
-    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code`,
-  );
-  const j = await r.json();
-  const code = j?.current?.weather_code ?? 0;
-  const { label, Icon } = decodeWeather(code);
-  return { tempC: Math.round(j?.current?.temperature_2m ?? 0), code, label, Icon };
+  const w = await getWeather({ data: { lat, lon } });
+  const { label, Icon } = decodeWeather(w.code);
+  return { tempC: w.tempC, code: w.code, label, Icon };
 }
 
-async function reverseGeocode(lat: number, lon: number): Promise<{ district: string; state: string }> {
-  try {
-    const r = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=hi`,
-    );
-    const j = await r.json();
-    const a = j?.address ?? {};
-    return {
-      district: a.county || a.state_district || a.city || a.town || a.village || "आपका क्षेत्र",
-      state: a.state || "",
-    };
-  } catch {
-    return { district: "आपका क्षेत्र", state: "" };
-  }
+async function reverseGeocode(lat: number, lon: number) {
+  return await reverseGeo({ data: { lat, lon } });
 }
 
 export function WeatherLocationCard() {
