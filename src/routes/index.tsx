@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { FAQSection } from "@/components/FAQSection";
 import { Newsletter } from "@/components/Newsletter";
+import { WeatherLocationCard } from "@/components/WeatherLocationCard";
 
 
 
@@ -176,6 +177,9 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* WEATHER & LOCATION */}
+      <WeatherLocationCard />
 
       {/* CATEGORIES */}
       <section className="mx-auto max-w-6xl px-4 py-12">
