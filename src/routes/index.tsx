@@ -21,6 +21,7 @@ import { Card } from "@/components/ui/card";
 import { FAQSection } from "@/components/FAQSection";
 import { Newsletter } from "@/components/Newsletter";
 import { WeatherLocationCard } from "@/components/WeatherLocationCard";
+import { KnowledgeCenterSection } from "@/components/KnowledgeCenterSection";
 
 
 
@@ -206,7 +207,8 @@ function HomePage() {
         </div>
       </section>
 
-
+      {/* KNOWLEDGE CENTER */}
+      <KnowledgeCenterSection />
 
       {/* TIPS */}
       <section className="mx-auto max-w-6xl px-4 py-12">
