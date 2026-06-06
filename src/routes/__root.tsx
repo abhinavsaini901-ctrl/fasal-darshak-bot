@@ -88,13 +88,26 @@ function RootComponent() {
     () => new QueryClient({ defaultOptions: { queries: { staleTime: 60_000, retry: 1 } } }),
   );
   useEffect(() => {
-    if (document.querySelector('script[data-adsense="1"]')) return;
-    const s = document.createElement("script");
-    s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2415253815061726";
-    s.async = true;
-    s.crossOrigin = "anonymous";
-    s.setAttribute("data-adsense", "1");
-    document.head.appendChild(s);
+    const load = () => {
+      try {
+        if (document.querySelector('script[data-adsense="1"]')) return;
+        const s = document.createElement("script");
+        s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2415253815061726";
+        s.async = true;
+        s.crossOrigin = "anonymous";
+        s.setAttribute("data-adsense", "1");
+        s.onerror = (e) => console.warn("AdSense script failed to load", e);
+        document.head.appendChild(s);
+      } catch (e) {
+        console.warn("AdSense init error", e);
+      }
+    };
+    const w = window as unknown as { requestIdleCallback?: (cb: () => void) => number };
+    const id = w.requestIdleCallback ? w.requestIdleCallback(load) : window.setTimeout(load, 1500);
+    return () => {
+      if (w.requestIdleCallback) cancelIdleCallback?.(id as number);
+      else clearTimeout(id as number);
+    };
   }, []);
   return (
     <QueryClientProvider client={queryClient}>
