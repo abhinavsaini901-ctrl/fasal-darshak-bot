@@ -82,7 +82,7 @@ export function KnowledgeCenterSection() {
       <div className="grid gap-5 lg:grid-cols-3">
         {/* Featured */}
         <Link
-          to="/blog/$slug"
+          to="/knowledge-center/$slug"
           params={{ slug: featured.slug }}
           className="group block lg:col-span-2"
         >
@@ -122,7 +122,7 @@ export function KnowledgeCenterSection() {
           {latest.slice(0, 4).map((a) => (
             <Link
               key={a.slug}
-              to="/blog/$slug"
+              to="/knowledge-center/$slug"
               params={{ slug: a.slug }}
               className="group block"
             >
@@ -150,7 +150,7 @@ export function KnowledgeCenterSection() {
           {latest.slice(4, 6).map((a) => {
             const g = GRADIENTS[hashIdx(a.slug) % GRADIENTS.length];
             return (
-              <Link key={a.slug} to="/blog/$slug" params={{ slug: a.slug }} className="group block">
+              <Link key={a.slug} to="/knowledge-center/$slug" params={{ slug: a.slug }} className="group block">
                 <Card className="flex h-full overflow-hidden border border-border bg-card transition-all hover:-translate-y-0.5 hover:shadow-soft">
                   <div
                     className={`flex w-28 shrink-0 items-center justify-center bg-gradient-to-br ${g}`}
