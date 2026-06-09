@@ -27,7 +27,6 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as KnowledgeCenterSlugRouteImport } from './routes/knowledge-center.$slug'
-import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
@@ -118,11 +117,6 @@ const NewsSlugRoute = NewsSlugRouteImport.update({
 const KnowledgeCenterSlugRoute = KnowledgeCenterSlugRouteImport.update({
   id: '/knowledge-center/$slug',
   path: '/knowledge-center/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NewsSlugRoute = NewsSlugRouteImport.update({
-  id: '/news/$slug',
-  path: '/news/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
