@@ -183,6 +183,9 @@ function HomePage() {
       {/* WEATHER & LOCATION */}
       <WeatherLocationCard />
 
+      {/* LIVE NEWS */}
+      <LiveKisanNews />
+
       {/* CATEGORIES */}
       <section className="mx-auto max-w-6xl px-4 py-12">
         <div className="mb-6 flex items-end justify-between">
