@@ -22,6 +22,7 @@ import { FAQSection } from "@/components/FAQSection";
 import { Newsletter } from "@/components/Newsletter";
 import { WeatherLocationCard } from "@/components/WeatherLocationCard";
 import { KnowledgeCenterSection } from "@/components/KnowledgeCenterSection";
+import { LiveKisanNews } from "@/components/LiveKisanNews";
 
 
 
@@ -181,6 +182,9 @@ function HomePage() {
 
       {/* WEATHER & LOCATION */}
       <WeatherLocationCard />
+
+      {/* LIVE NEWS */}
+      <LiveKisanNews />
 
       {/* CATEGORIES */}
       <section className="mx-auto max-w-6xl px-4 py-12">
