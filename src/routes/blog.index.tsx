@@ -19,7 +19,7 @@ const searchSchema = z.object({
   cat: z.string().optional(),
 });
 
-export const Route = createFileRoute("/blog")({
+export const Route = createFileRoute("/blog/")({
   component: BlogPage,
   validateSearch: searchSchema,
   head: () => ({
