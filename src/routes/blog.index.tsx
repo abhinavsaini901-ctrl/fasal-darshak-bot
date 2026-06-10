@@ -39,7 +39,7 @@ export const Route = createFileRoute("/blog/")({
 });
 
 function BlogPage() {
-  const { cat } = useSearch({ from: "/blog" });
+  const { cat } = useSearch({ from: "/blog/" });
   const [query, setQuery] = useState("");
   const listFn = useServerFn(listPublishedArticles);
   const dbQuery = useQuery({ queryKey: ["publishedArticles"], queryFn: () => listFn() });
