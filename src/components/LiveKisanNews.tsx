@@ -24,11 +24,12 @@ import {
 export function LiveKisanNews() {
   const [active, setActive] = useState<NewsCategory>("सभी");
   const [refreshTick, setRefreshTick] = useState(0);
-  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
+  const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
   const [speakingId, setSpeakingId] = useState<string | null>(null);
 
-  // Auto refresh every 30 minutes
+  // Auto refresh every 30 minutes — initialize on client to avoid SSR hydration mismatch
   useEffect(() => {
+    setLastRefresh(new Date());
     const id = setInterval(() => {
       setRefreshTick((t) => t + 30);
       setLastRefresh(new Date());
@@ -107,10 +108,12 @@ export function LiveKisanNews() {
         >
           <RefreshCw className="h-3.5 w-3.5" />
           अपडेट:{" "}
-          {lastRefresh.toLocaleTimeString("hi-IN", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
+          {lastRefresh
+            ? lastRefresh.toLocaleTimeString("hi-IN", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+            : "—"}
         </button>
       </div>
 
