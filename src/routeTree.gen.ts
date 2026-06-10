@@ -19,12 +19,12 @@ import { Route as GovernmentSchemesRouteImport } from './routes/government-schem
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as CropDiseasesRouteImport } from './routes/crop-diseases'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdsDottxtRouteImport } from './routes/ads[.]txt'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as KnowledgeCenterSlugRouteImport } from './routes/knowledge-center.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -80,11 +80,6 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -107,6 +102,11 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NewsSlugRoute = NewsSlugRouteImport.update({
@@ -135,7 +135,6 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/auth': typeof AuthRoute
-  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/crop-diseases': typeof CropDiseasesRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -150,13 +149,13 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/knowledge-center/$slug': typeof KnowledgeCenterSlugRoute
   '/news/$slug': typeof NewsSlugRoute
+  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/auth': typeof AuthRoute
-  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/crop-diseases': typeof CropDiseasesRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -171,6 +170,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/knowledge-center/$slug': typeof KnowledgeCenterSlugRoute
   '/news/$slug': typeof NewsSlugRoute
+  '/blog': typeof BlogIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -179,7 +179,6 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/auth': typeof AuthRoute
-  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/crop-diseases': typeof CropDiseasesRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -194,6 +193,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/knowledge-center/$slug': typeof KnowledgeCenterSlugRoute
   '/news/$slug': typeof NewsSlugRoute
+  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -202,7 +202,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/ads.txt'
     | '/auth'
-    | '/blog'
     | '/contact'
     | '/crop-diseases'
     | '/disclaimer'
@@ -217,13 +216,13 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/knowledge-center/$slug'
     | '/news/$slug'
+    | '/blog/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/ads.txt'
     | '/auth'
-    | '/blog'
     | '/contact'
     | '/crop-diseases'
     | '/disclaimer'
@@ -238,6 +237,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/knowledge-center/$slug'
     | '/news/$slug'
+    | '/blog'
   id:
     | '__root__'
     | '/'
@@ -245,7 +245,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/ads.txt'
     | '/auth'
-    | '/blog'
     | '/contact'
     | '/crop-diseases'
     | '/disclaimer'
@@ -260,6 +259,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/knowledge-center/$slug'
     | '/news/$slug'
+    | '/blog/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -268,7 +268,6 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AdsDottxtRoute: typeof AdsDottxtRoute
   AuthRoute: typeof AuthRoute
-  BlogRoute: typeof BlogRouteWithChildren
   ContactRoute: typeof ContactRoute
   CropDiseasesRoute: typeof CropDiseasesRoute
   DisclaimerRoute: typeof DisclaimerRoute
@@ -281,6 +280,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   KnowledgeCenterSlugRoute: typeof KnowledgeCenterSlugRoute
   NewsSlugRoute: typeof NewsSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -355,13 +355,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -395,6 +388,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/news/$slug': {
@@ -440,23 +440,12 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
-interface BlogRouteChildren {
-  BlogSlugRoute: typeof BlogSlugRoute
-}
-
-const BlogRouteChildren: BlogRouteChildren = {
-  BlogSlugRoute: BlogSlugRoute,
-}
-
-const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AboutRoute: AboutRoute,
   AdsDottxtRoute: AdsDottxtRoute,
   AuthRoute: AuthRoute,
-  BlogRoute: BlogRouteWithChildren,
   ContactRoute: ContactRoute,
   CropDiseasesRoute: CropDiseasesRoute,
   DisclaimerRoute: DisclaimerRoute,
@@ -469,6 +458,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   KnowledgeCenterSlugRoute: KnowledgeCenterSlugRoute,
   NewsSlugRoute: NewsSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
