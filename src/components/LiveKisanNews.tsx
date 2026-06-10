@@ -108,10 +108,12 @@ export function LiveKisanNews() {
         >
           <RefreshCw className="h-3.5 w-3.5" />
           अपडेट:{" "}
-          {lastRefresh.toLocaleTimeString("hi-IN", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
+          {lastRefresh
+            ? lastRefresh.toLocaleTimeString("hi-IN", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+            : "—"}
         </button>
       </div>
 
