@@ -197,15 +197,18 @@ function ArticlePage() {
           </div>
         )}
 
-        {/* Author box */}
-        <Card className="mt-8 border border-border bg-gradient-card p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">लेखक</p>
-          <p className="mt-1 text-base font-bold text-foreground">{a.author}</p>
-          <p className="mt-2 text-sm text-muted-foreground">
-            किसान मित्र की संपादकीय टीम कृषि विशेषज्ञों, वैज्ञानिकों और अनुभवी किसानों के साथ मिलकर
-            तथ्य-आधारित, व्यावहारिक कृषि सामग्री तैयार करती है।
-          </p>
-        </Card>
+        {/* Author box (E-E-A-T) */}
+        <AuthorBox
+          author={
+            a.authorId
+              ? AUTHORS.find((x) => x.id === a.authorId) ?? pickAuthorForCategory(a.category)
+              : pickAuthorForCategory(a.category)
+          }
+          reviewedAt={formatDate(a.updatedAt)}
+        />
+
+        {/* Sources & references */}
+        <SourcesList sources={a.sources} />
 
         {/* FAQs */}
         {a.faqs.length > 0 && (
