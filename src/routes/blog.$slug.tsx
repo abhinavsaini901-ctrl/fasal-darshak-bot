@@ -64,11 +64,23 @@ export const Route = createFileRoute("/blog/$slug")({
             inLanguage: "hi-IN",
             datePublished: a.publishedAt,
             dateModified: a.updatedAt,
-            author: { "@type": "Organization", name: a.author },
+            author: (() => {
+              const auth = a.authorId
+                ? AUTHORS.find((x) => x.id === a.authorId) ?? pickAuthorForCategory(a.category)
+                : pickAuthorForCategory(a.category);
+              return {
+                "@type": "Person",
+                name: auth.name,
+                jobTitle: auth.role,
+                description: auth.bio,
+                knowsAbout: auth.expertise,
+              };
+            })(),
             publisher: {
               "@type": "Organization",
               name: "किसान मित्र",
               url: "https://kisanlens.com",
+              logo: { "@type": "ImageObject", url: "https://kisanlens.com/favicon.ico" },
             },
             mainEntityOfPage: `https://kisanlens.com/blog/${params.slug}`,
             articleSection: a.category,
