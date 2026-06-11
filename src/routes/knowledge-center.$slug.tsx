@@ -167,6 +167,19 @@ function ArticlePage() {
           </div>
         )}
 
+        {/* Author E-E-A-T box */}
+        <AuthorBox
+          author={
+            a.authorId
+              ? AUTHORS.find((x) => x.id === a.authorId) ?? pickAuthorForCategory(a.category)
+              : pickAuthorForCategory(a.category)
+          }
+          reviewedAt={formatDate(a.updatedAt)}
+        />
+
+        {/* Sources */}
+        <SourcesList sources={a.sources} />
+
         {a.faqs.length > 0 && (
           <div className="mt-12">
             <FAQSection items={a.faqs} />
