@@ -4,8 +4,11 @@ import { PageShell } from "@/components/PageShell";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { FAQSection } from "@/components/FAQSection";
 import { ArticleCard } from "@/components/ArticleCard";
+import { AuthorBox } from "@/components/AuthorBox";
+import { SourcesList } from "@/components/SourcesList";
 import { Card } from "@/components/ui/card";
 import { getArticleBySlug, getRelatedArticles, type Article } from "@/data/articles";
+import { AUTHORS, pickAuthorForCategory } from "@/data/authors";
 import { getPublishedArticle } from "@/lib/articles.functions";
 
 
