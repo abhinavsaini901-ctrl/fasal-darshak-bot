@@ -27,7 +27,7 @@ export type Article = {
   updatedAt: string;
   readMinutes: number;
   author: string;
-  authorId: string;
+  authorId?: string;
   sources?: ArticleSource[];
 };
 
