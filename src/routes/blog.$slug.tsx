@@ -4,8 +4,11 @@ import { PageShell } from "@/components/PageShell";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { FAQSection } from "@/components/FAQSection";
 import { ArticleCard } from "@/components/ArticleCard";
+import { AuthorBox } from "@/components/AuthorBox";
+import { SourcesList } from "@/components/SourcesList";
 import { Card } from "@/components/ui/card";
 import { getArticleBySlug, getRelatedArticles, type Article } from "@/data/articles";
+import { AUTHORS, pickAuthorForCategory } from "@/data/authors";
 import { getPublishedArticle } from "@/lib/articles.functions";
 
 
@@ -61,11 +64,23 @@ export const Route = createFileRoute("/blog/$slug")({
             inLanguage: "hi-IN",
             datePublished: a.publishedAt,
             dateModified: a.updatedAt,
-            author: { "@type": "Organization", name: a.author },
+            author: (() => {
+              const auth = a.authorId
+                ? AUTHORS.find((x) => x.id === a.authorId) ?? pickAuthorForCategory(a.category)
+                : pickAuthorForCategory(a.category);
+              return {
+                "@type": "Person",
+                name: auth.name,
+                jobTitle: auth.role,
+                description: auth.bio,
+                knowsAbout: auth.expertise,
+              };
+            })(),
             publisher: {
               "@type": "Organization",
               name: "किसान मित्र",
               url: "https://kisanlens.com",
+              logo: { "@type": "ImageObject", url: "https://kisanlens.com/favicon.ico" },
             },
             mainEntityOfPage: `https://kisanlens.com/blog/${params.slug}`,
             articleSection: a.category,
@@ -182,15 +197,18 @@ function ArticlePage() {
           </div>
         )}
 
-        {/* Author box */}
-        <Card className="mt-8 border border-border bg-gradient-card p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">लेखक</p>
-          <p className="mt-1 text-base font-bold text-foreground">{a.author}</p>
-          <p className="mt-2 text-sm text-muted-foreground">
-            किसान मित्र की संपादकीय टीम कृषि विशेषज्ञों, वैज्ञानिकों और अनुभवी किसानों के साथ मिलकर
-            तथ्य-आधारित, व्यावहारिक कृषि सामग्री तैयार करती है।
-          </p>
-        </Card>
+        {/* Author box (E-E-A-T) */}
+        <AuthorBox
+          author={
+            a.authorId
+              ? AUTHORS.find((x) => x.id === a.authorId) ?? pickAuthorForCategory(a.category)
+              : pickAuthorForCategory(a.category)
+          }
+          reviewedAt={formatDate(a.updatedAt)}
+        />
+
+        {/* Sources & references */}
+        <SourcesList sources={a.sources} />
 
         {/* FAQs */}
         {a.faqs.length > 0 && (

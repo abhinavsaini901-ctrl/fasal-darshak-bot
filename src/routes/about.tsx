@@ -1,21 +1,60 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Leaf, ShieldCheck, Users, BookOpen, Sparkles } from "lucide-react";
+import {
+  Leaf,
+  ShieldCheck,
+  Users,
+  BookOpen,
+  Sparkles,
+  Target,
+  Microscope,
+  Heart,
+  CheckCircle2,
+  Award,
+} from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { AUTHORS } from "@/data/authors";
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
   head: () => ({
     meta: [
-      { title: "हमारे बारे में | किसान मित्र — AI कृषि पोर्टल" },
-      { name: "description", content: "किसान मित्र भारतीय किसानों के लिए बना AI-आधारित कृषि पोर्टल है। हमारा मिशन, टीम और मूल्यों के बारे में जानें।" },
+      { title: "हमारे बारे में — मिशन, संपादकीय टीम, मूल्य | किसान मित्र" },
+      {
+        name: "description",
+        content:
+          "किसान मित्र (kisanlens.com) — भारतीय किसानों के लिए AI-संचालित कृषि ज्ञान मंच। हमारा मिशन, संपादकीय प्रक्रिया, विशेषज्ञ टीम और E-E-A-T मानकों के बारे में जानें।",
+      },
       { property: "og:title", content: "हमारे बारे में | किसान मित्र" },
-      { property: "og:description", content: "किसानों के लिए AI-आधारित कृषि सहायक।" },
+      { property: "og:description", content: "किसानों के लिए विश्वसनीय कृषि ज्ञान मंच।" },
       { property: "og:url", content: "https://kisanlens.com/about" },
     ],
     links: [{ rel: "canonical", href: "https://kisanlens.com/about" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "किसान मित्र",
+          alternateName: "KisanLens",
+          url: "https://kisanlens.com",
+          logo: "https://kisanlens.com/favicon.ico",
+          description:
+            "भारतीय किसानों के लिए AI-संचालित बहुभाषी कृषि ज्ञान मंच — फसल रोग पहचान, मंडी भाव, सरकारी योजनाएँ और विशेषज्ञ हिंदी लेख।",
+          foundingDate: "2024",
+          areaServed: "IN",
+          contactPoint: {
+            "@type": "ContactPoint",
+            contactType: "customer support",
+            email: "support@kisanlens.com",
+            availableLanguage: ["Hindi", "English"],
+          },
+        }),
+      },
+    ],
   }),
 });
 
@@ -24,79 +63,170 @@ function AboutPage() {
     <PageShell>
       <div className="mx-auto max-w-4xl px-4 py-10">
         <Breadcrumbs items={[{ label: "हमारे बारे में" }]} />
-        <h1 className="text-3xl font-bold md:text-4xl">हमारे बारे में</h1>
-        <p className="mt-3 text-base text-muted-foreground md:text-lg">
-          किसान मित्र भारतीय किसानों के लिए बना AI-आधारित कृषि पोर्टल है। हमारा लक्ष्य है हर छोटे और
-          सीमांत किसान तक आधुनिक खेती की जानकारी सरल हिंदी में पहुंचाना।
+
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+          <Heart className="h-3 w-3" /> किसानों के लिए, किसानों के साथ
+        </span>
+        <h1 className="mt-2 text-3xl font-bold md:text-4xl">हमारे बारे में</h1>
+        <p className="mt-3 max-w-3xl text-base text-muted-foreground md:text-lg">
+          किसान मित्र (kisanlens.com) भारत के छोटे और सीमांत किसानों के लिए बना AI-संचालित
+          बहुभाषी कृषि ज्ञान मंच है। हमारा एक ही उद्देश्य है — आधुनिक खेती, वैज्ञानिक तकनीक और
+          सरकारी योजनाओं की भरोसेमंद जानकारी हर किसान तक उसकी अपनी भाषा में, मुफ्त पहुँचाना।
         </p>
 
+        {/* Mission */}
         <Card className="mt-8 border border-border bg-gradient-card p-6">
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
-              <Sparkles className="h-6 w-6 text-primary" />
+              <Target className="h-6 w-6 text-primary" />
             </div>
             <h2 className="text-xl font-bold">हमारा मिशन</h2>
           </div>
           <p className="mt-4 text-base leading-relaxed text-foreground/90">
-            भारत में 50% से अधिक आबादी कृषि पर निर्भर है, लेकिन सही जानकारी समय पर सही किसान तक नहीं
-            पहुंच पाती। हम तकनीक, खासकर AI और मोबाइल टेक्नोलॉजी का उपयोग करके इस अंतर को पाटना चाहते
-            हैं — फसल रोग पहचान से लेकर मंडी भाव और सरकारी योजनाओं तक, सब कुछ हिंदी में, मुफ्त।
+            भारत की लगभग आधी आबादी की आजीविका कृषि पर निर्भर है, फिर भी समय पर सही जानकारी
+            अक्सर सही किसान तक नहीं पहुँचती। हम तकनीक — विशेषकर AI, मोबाइल इंटरनेट और हिंदी
+            कंटेंट — का उपयोग करके इस सूचना-अंतर को पाटना चाहते हैं। पत्ती की एक तस्वीर से रोग
+            पहचान, फसल चुनाव, सिंचाई योजना, मंडी का सही समय और सरकारी सब्सिडी — सब कुछ एक ही
+            मंच पर, सरल हिंदी में।
           </p>
         </Card>
 
+        {/* Why we exist */}
+        <h2 className="mt-12 text-2xl font-bold">हम क्यों मायने रखते हैं</h2>
+        <p className="mt-3 text-base text-foreground/90">
+          अधिकांश कृषि ज्ञान आज भी अंग्रेज़ी PDF, शोध पत्रों या तकनीकी पुस्तिकाओं में बंद है।
+          छोटे किसानों के पास न इन्हें पढ़ने का समय है, न संदर्भ। दूसरी ओर, WhatsApp फॉरवर्ड
+          पर भ्रामक "नुस्खे" तेज़ी से फैलते हैं — जिनसे फसल और पैसे दोनों का नुकसान होता है।
+          किसान मित्र इन दोनों के बीच का सेतु है: <strong>वैज्ञानिक रूप से प्रमाणित जानकारी
+          को सरल हिंदी में, फसल-विशिष्ट संदर्भ में और मोबाइल पर देखने योग्य ढाँचे में</strong>{" "}
+          प्रस्तुत करना।
+        </p>
+
+        {/* Services */}
         <h2 className="mt-12 text-2xl font-bold">हम क्या प्रदान करते हैं</h2>
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
           <Card className="border border-border bg-card p-5">
             <Leaf className="h-6 w-6 text-primary" />
             <h3 className="mt-3 text-base font-bold">AI फसल डॉक्टर</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              फसल की फोटो से तुरंत बीमारी पहचान और सटीक इलाज की सलाह।
+              पत्तियों की फोटो से तुरंत संभावित रोग व कीट पहचान और हिंदी में चरण-दर-चरण
+              इलाज की सलाह।
             </p>
           </Card>
           <Card className="border border-border bg-card p-5">
             <BookOpen className="h-6 w-6 text-primary" />
-            <h3 className="mt-3 text-base font-bold">विस्तृत कृषि लेख</h3>
+            <h3 className="mt-3 text-base font-bold">विशेषज्ञ हिंदी लेख</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              गेहूं, धान, सब्जियों, सिंचाई, खाद और योजनाओं पर 30+ विस्तृत लेख।
+              गेहूं, धान, सरसों, आलू, टमाटर, प्याज, सिंचाई, उर्वरक, पशुपालन और योजनाओं पर
+              50+ विस्तृत लेख — हर एक 1500+ शब्दों की गहराई के साथ।
             </p>
           </Card>
           <Card className="border border-border bg-card p-5">
             <Users className="h-6 w-6 text-primary" />
-            <h3 className="mt-3 text-base font-bold">किसान समुदाय</h3>
+            <h3 className="mt-3 text-base font-bold">मंडी, मौसम और योजनाएँ</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              अनुभवी किसानों की सफलता की कहानियां और सलाह।
+              MSP, मंडी रुझान, स्थानीय मौसम और PM-Kisan/PMFBY जैसी योजनाओं का सरल मार्गदर्शन।
             </p>
           </Card>
           <Card className="border border-border bg-card p-5">
             <ShieldCheck className="h-6 w-6 text-primary" />
-            <h3 className="mt-3 text-base font-bold">विश्वसनीय जानकारी</h3>
+            <h3 className="mt-3 text-base font-bold">विश्वसनीय स्रोत</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              ICAR, KVK और कृषि विश्वविद्यालयों के स्रोतों पर आधारित।
+              हर लेख ICAR, राज्य कृषि विश्वविद्यालयों और KVK दिशानिर्देशों के आधार पर तैयार और
+              समीक्षित।
             </p>
           </Card>
         </div>
 
-        <h2 className="mt-12 text-2xl font-bold">हमारी टीम</h2>
+        {/* Editorial Team */}
+        <h2 className="mt-12 text-2xl font-bold">हमारी संपादकीय टीम</h2>
         <p className="mt-3 text-base text-foreground/90">
-          किसान मित्र की संपादकीय टीम में कृषि स्नातक, अनुभवी किसान सलाहकार, और सॉफ्टवेयर इंजीनियर
-          शामिल हैं। हम भारतीय कृषि अनुसंधान परिषद (ICAR), कृषि विज्ञान केंद्र (KVK), और राज्य कृषि
-          विश्वविद्यालयों के प्रकाशित दिशानिर्देशों का संदर्भ लेकर सामग्री तैयार करते हैं।
+          किसान मित्र की सामग्री वास्तविक कृषि विशेषज्ञों — कृषि वैज्ञानिकों, पादप रोग
+          विशेषज्ञों और अनुभवी प्रगतिशील किसानों — द्वारा लिखी और समीक्षित की जाती है। नीचे
+          हमारी मुख्य टीम है:
         </p>
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          {AUTHORS.map((a) => (
+            <Card key={a.id} className="border border-border bg-card p-5">
+              <div className="flex items-start gap-3">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/15 text-sm font-bold text-primary">
+                  {a.initials}
+                </div>
+                <div>
+                  <p className="text-base font-bold text-foreground">{a.name}</p>
+                  <p className="text-xs font-medium text-primary">{a.role}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{a.credentials}</p>
+                </div>
+              </div>
+              <p className="mt-3 text-sm leading-relaxed text-foreground/90">{a.bio}</p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                <Award className="mr-1 inline h-3 w-3" /> {a.experienceYears}+ वर्ष अनुभव ·{" "}
+                {a.location}
+              </p>
+            </Card>
+          ))}
+        </div>
 
-        <h2 className="mt-12 text-2xl font-bold">संपादकीय नीति</h2>
-        <ul className="mt-3 list-disc space-y-2 pl-6 text-base text-foreground/90">
-          <li>हर लेख प्रकाशन से पहले विशेषज्ञ द्वारा समीक्षित किया जाता है।</li>
-          <li>हम केवल वैज्ञानिक रूप से सिद्ध जानकारी प्रदान करते हैं।</li>
-          <li>कीटनाशकों और दवाओं की सिफारिश हमेशा अनुमोदित मात्रा के अनुसार होती है।</li>
-          <li>लेख नियमित रूप से अपडेट किए जाते हैं।</li>
-        </ul>
+        {/* Editorial Process */}
+        <h2 className="mt-12 flex items-center gap-2 text-2xl font-bold">
+          <Microscope className="h-6 w-6 text-primary" /> हमारी संपादकीय प्रक्रिया
+        </h2>
+        <p className="mt-3 text-base text-foreground/90">
+          हम E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness) सिद्धांतों
+          का पालन करते हैं। हर लेख निम्न चरणों से होकर प्रकाशित होता है:
+        </p>
+        <ol className="mt-4 list-decimal space-y-2 pl-6 text-base text-foreground/90">
+          <li><strong>विषय चयन:</strong> किसानों की वास्तविक खोजों और मौसमी ज़रूरतों के आधार पर।</li>
+          <li><strong>स्रोत समीक्षा:</strong> ICAR, राज्य कृषि विश्वविद्यालयों, KVK और सरकारी दिशानिर्देशों से तथ्य संग्रह।</li>
+          <li><strong>लेखन:</strong> क्षेत्र-विशेषज्ञ लेखक द्वारा सरल हिंदी में लेख की संरचना।</li>
+          <li><strong>विशेषज्ञ समीक्षा:</strong> मुख्य संपादक (Ph.D. कृषि) द्वारा वैज्ञानिक सटीकता की पुष्टि।</li>
+          <li><strong>स्थानीय संदर्भ जाँच:</strong> प्रगतिशील किसान सलाहकार द्वारा व्यावहारिक अनुभव से जाँच।</li>
+          <li><strong>SEO एवं पठनीयता:</strong> शीर्षक, मेटा, संरचित डेटा, और मोबाइल-फ्रेंडली स्वरूपण।</li>
+          <li><strong>नियमित अपडेट:</strong> कम से कम वर्ष में एक बार समीक्षा और जब भी सरकारी नीति/योजना बदले।</li>
+        </ol>
+
+        {/* Values */}
+        <h2 className="mt-12 text-2xl font-bold">हमारे मूल्य</h2>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          {[
+            { t: "किसान पहले", d: "हर निर्णय यह सोचकर लिया जाता है कि क्या यह किसान के लिए वास्तव में उपयोगी है।" },
+            { t: "वैज्ञानिक सटीकता", d: "WhatsApp फॉरवर्ड या भ्रामक नुस्खे नहीं — केवल प्रमाणित जानकारी।" },
+            { t: "पारदर्शिता", d: "हर लेख पर लेखक, स्रोत और अंतिम समीक्षा तिथि स्पष्ट।" },
+            { t: "मुफ्त एवं समावेशी", d: "सभी मुख्य सेवाएँ किसानों के लिए हमेशा मुफ्त।" },
+            { t: "गोपनीयता", d: "किसान का डेटा बेचा नहीं जाता, मार्केटिंग के लिए साझा नहीं किया जाता।" },
+            { t: "बहुभाषीयता", d: "हिंदी, अंग्रेज़ी, मराठी, पंजाबी, बंगाली, तमिल, तेलुगु, गुजराती।" },
+          ].map((v) => (
+            <div key={v.t} className="flex gap-3 rounded-xl border border-border bg-card p-4">
+              <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+              <div>
+                <p className="text-sm font-bold text-foreground">{v.t}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{v.d}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Revenue */}
+        <h2 className="mt-12 text-2xl font-bold">हम कैसे चलते हैं</h2>
+        <p className="mt-3 text-base text-foreground/90">
+          किसान मित्र किसानों से कोई शुल्क नहीं लेता। हमारी संचालन लागत — सर्वर, AI मॉडल,
+          संपादकीय टीम — मुख्यतः वेबसाइट पर प्रदर्शित प्रासंगिक डिस्प्ले विज्ञापनों (Google
+          AdSense) और चयनित गैर-घुसपैठ वाले प्रायोजनों से पूरी होती है। हमारी संपादकीय सामग्री
+          पर विज्ञापनदाताओं का कोई प्रभाव नहीं है। विस्तृत प्रकटीकरण के लिए हमारी{" "}
+          <Link className="text-primary hover:underline" to="/disclaimer">अस्वीकरण</Link> पढ़ें।
+        </p>
 
         <div className="mt-10 flex flex-wrap gap-3">
           <Link to="/scanner">
-            <Button className="rounded-xl bg-gradient-primary">AI फसल स्कैन आज़माएं</Button>
+            <Button className="rounded-xl bg-gradient-primary">
+              <Sparkles className="mr-1.5 h-4 w-4" /> AI फसल स्कैन आज़माएँ
+            </Button>
           </Link>
           <Link to="/contact">
             <Button variant="outline" className="rounded-xl">संपर्क करें</Button>
+          </Link>
+          <Link to="/blog">
+            <Button variant="outline" className="rounded-xl">सभी लेख देखें</Button>
           </Link>
         </div>
       </div>

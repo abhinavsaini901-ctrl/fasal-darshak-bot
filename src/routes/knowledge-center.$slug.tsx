@@ -4,8 +4,11 @@ import { PageShell } from "@/components/PageShell";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { FAQSection } from "@/components/FAQSection";
 import { ArticleCard } from "@/components/ArticleCard";
+import { AuthorBox } from "@/components/AuthorBox";
+import { SourcesList } from "@/components/SourcesList";
 import { Card } from "@/components/ui/card";
 import { getArticleBySlug, getRelatedArticles, type Article } from "@/data/articles";
+import { AUTHORS, pickAuthorForCategory } from "@/data/authors";
 import { getPublishedArticle } from "@/lib/articles.functions";
 
 export const Route = createFileRoute("/knowledge-center/$slug")({
@@ -163,6 +166,19 @@ function ArticlePage() {
             ))}
           </div>
         )}
+
+        {/* Author E-E-A-T box */}
+        <AuthorBox
+          author={
+            a.authorId
+              ? AUTHORS.find((x) => x.id === a.authorId) ?? pickAuthorForCategory(a.category)
+              : pickAuthorForCategory(a.category)
+          }
+          reviewedAt={formatDate(a.updatedAt)}
+        />
+
+        {/* Sources */}
+        <SourcesList sources={a.sources} />
 
         {a.faqs.length > 0 && (
           <div className="mt-12">
