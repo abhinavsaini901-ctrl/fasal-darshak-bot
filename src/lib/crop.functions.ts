@@ -113,7 +113,7 @@ export const scanCrop = createServerFn({ method: "POST" })
           content: [
             {
               type: "text",
-              text: `Analyze this crop photo. Identify the crop, check if it is healthy or diseased, and give practical treatment in ${data.languageName}.`,
+              text: `Analyze this crop photo. Identify the crop, check if it is healthy or diseased, and give practical treatment in ${languageName}.`,
             },
             { type: "image_url", image_url: { url: data.imageDataUrl } },
           ],
