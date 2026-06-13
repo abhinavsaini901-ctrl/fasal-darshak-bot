@@ -77,7 +77,8 @@ async function callGateway(body: unknown): Promise<GatewayResponse> {
 export const scanCrop = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => ScanInput.parse(d))
   .handler(async ({ data }) => {
-    const systemPrompt = `You are an expert agricultural scientist and plant pathologist helping Indian farmers. You analyze crop images and identify the crop, its health, diseases, pests, and recommend practical, low-cost treatments. ALWAYS respond in ${data.languageName}. Be warm, simple, and practical — speak like talking to a farmer who may not have technical background. Use the local crop and medicine names where possible.`;
+    const languageName = LANG_NAMES[data.language];
+    const systemPrompt = `You are an expert agricultural scientist and plant pathologist helping Indian farmers. You analyze crop images and identify the crop, its health, diseases, pests, and recommend practical, low-cost treatments. ALWAYS respond in ${languageName}. Be warm, simple, and practical — speak like talking to a farmer who may not have technical background. Use the local crop and medicine names where possible.`;
 
     const tool = {
       type: "function" as const,
