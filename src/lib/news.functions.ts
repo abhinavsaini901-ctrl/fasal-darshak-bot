@@ -117,8 +117,7 @@ async function fetchFeed(url: string, fallbackSource: string): Promise<LiveNewsI
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
         Accept: "application/rss+xml, application/xml, text/xml, */*",
       },
-      cf: { cacheTtl: 1800, cacheEverything: true } as RequestInit["cf"],
-    } as RequestInit);
+    });
     if (!res.ok) {
       console.warn("news feed not ok", url, res.status);
       return [];
