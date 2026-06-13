@@ -3,15 +3,39 @@ import { z } from "zod";
 
 const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
 
+// Server-side allowlist — derive the human-readable language name here so
+// untrusted client input can never be interpolated into the AI system prompt.
+const LANG_NAMES = {
+  hi: "Hindi (हिन्दी)",
+  en: "English",
+  mr: "Marathi (मराठी)",
+  pa: "Punjabi (ਪੰਜਾਬੀ)",
+  bn: "Bengali (বাংলা)",
+  ta: "Tamil (தமிழ்)",
+  te: "Telugu (తెలుగు)",
+  gu: "Gujarati (ગુજરાતી)",
+} as const;
+const LanguageCode = z.enum(["hi", "en", "mr", "pa", "bn", "ta", "te", "gu"]);
+
+// Only accept inline base64 data: image URLs to avoid SSRF via the AI gateway.
+const ImageDataUrl = z
+  .string()
+  .min(20)
+  .max(8_000_000)
+  .refine((v) => /^data:image\/[a-zA-Z0-9.+-]+;base64,/.test(v), {
+    message: "imageDataUrl must be a base64 data:image/* URL",
+  });
+
 const ScanInput = z.object({
-  imageDataUrl: z.string().min(20).max(8_000_000),
-  language: z.string().min(2).max(10),
-  languageName: z.string().min(2).max(60),
+  imageDataUrl: ImageDataUrl,
+  language: LanguageCode,
+  // languageName is accepted for backward compatibility but ignored on the server.
+  languageName: z.string().max(60).optional(),
 });
 
 const ChatInput = z.object({
-  language: z.string().min(2).max(10),
-  languageName: z.string().min(2).max(60),
+  language: LanguageCode,
+  languageName: z.string().max(60).optional(),
   history: z
     .array(
       z.object({
@@ -20,7 +44,7 @@ const ChatInput = z.object({
       })
     )
     .max(30),
-  imageDataUrl: z.string().max(8_000_000).optional(),
+  imageDataUrl: ImageDataUrl.optional(),
 });
 
 type GatewayResponse = {
@@ -53,7 +77,8 @@ async function callGateway(body: unknown): Promise<GatewayResponse> {
 export const scanCrop = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => ScanInput.parse(d))
   .handler(async ({ data }) => {
-    const systemPrompt = `You are an expert agricultural scientist and plant pathologist helping Indian farmers. You analyze crop images and identify the crop, its health, diseases, pests, and recommend practical, low-cost treatments. ALWAYS respond in ${data.languageName}. Be warm, simple, and practical — speak like talking to a farmer who may not have technical background. Use the local crop and medicine names where possible.`;
+    const languageName = LANG_NAMES[data.language];
+    const systemPrompt = `You are an expert agricultural scientist and plant pathologist helping Indian farmers. You analyze crop images and identify the crop, its health, diseases, pests, and recommend practical, low-cost treatments. ALWAYS respond in ${languageName}. Be warm, simple, and practical — speak like talking to a farmer who may not have technical background. Use the local crop and medicine names where possible.`;
 
     const tool = {
       type: "function" as const,
@@ -88,7 +113,7 @@ export const scanCrop = createServerFn({ method: "POST" })
           content: [
             {
               type: "text",
-              text: `Analyze this crop photo. Identify the crop, check if it is healthy or diseased, and give practical treatment in ${data.languageName}.`,
+              text: `Analyze this crop photo. Identify the crop, check if it is healthy or diseased, and give practical treatment in ${languageName}.`,
             },
             { type: "image_url", image_url: { url: data.imageDataUrl } },
           ],
@@ -134,7 +159,8 @@ export const scanCrop = createServerFn({ method: "POST" })
 export const chatCrop = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => ChatInput.parse(d))
   .handler(async ({ data }) => {
-    const systemPrompt = `You are Kisan Mitra — a friendly AI farming assistant for Indian farmers. ALWAYS reply in ${data.languageName}. Keep answers short, practical, and easy to understand. Use simple words. Give step-by-step actionable advice. If asked about diseases, suggest both organic and chemical solutions with local product names where possible.`;
+    const languageName = LANG_NAMES[data.language];
+    const systemPrompt = `You are Kisan Mitra — a friendly AI farming assistant for Indian farmers. ALWAYS reply in ${languageName}. Keep answers short, practical, and easy to understand. Use simple words. Give step-by-step actionable advice. If asked about diseases, suggest both organic and chemical solutions with local product names where possible.`;
 
     const messages: unknown[] = [{ role: "system", content: systemPrompt }];
 
