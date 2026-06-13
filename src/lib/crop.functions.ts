@@ -159,7 +159,8 @@ export const scanCrop = createServerFn({ method: "POST" })
 export const chatCrop = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => ChatInput.parse(d))
   .handler(async ({ data }) => {
-    const systemPrompt = `You are Kisan Mitra — a friendly AI farming assistant for Indian farmers. ALWAYS reply in ${data.languageName}. Keep answers short, practical, and easy to understand. Use simple words. Give step-by-step actionable advice. If asked about diseases, suggest both organic and chemical solutions with local product names where possible.`;
+    const languageName = LANG_NAMES[data.language];
+    const systemPrompt = `You are Kisan Mitra — a friendly AI farming assistant for Indian farmers. ALWAYS reply in ${languageName}. Keep answers short, practical, and easy to understand. Use simple words. Give step-by-step actionable advice. If asked about diseases, suggest both organic and chemical solutions with local product names where possible.`;
 
     const messages: unknown[] = [{ role: "system", content: systemPrompt }];
 
