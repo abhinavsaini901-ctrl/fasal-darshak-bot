@@ -240,19 +240,13 @@ type Cache = { at: number; data: LiveNewsItem[] };
 let CACHE: Cache | null = null;
 const TTL_MS = 60 * 60 * 1000;
 
-export const getLiveAgriNews = createServerFn({ method: "GET" }).handler(async () => {
+async function ensureNewsCache(): Promise<LiveNewsItem[]> {
   const now = Date.now();
-  if (CACHE && now - CACHE.at < TTL_MS && CACHE.data.length > 0) {
-    return { items: CACHE.data, cachedAt: new Date(CACHE.at).toISOString(), fresh: false };
-  }
-
+  if (CACHE && now - CACHE.at < TTL_MS && CACHE.data.length > 0) return CACHE.data;
   try {
     const results = await Promise.allSettled(FEEDS.map((f) => fetchFeed(f.url, f.source)));
     const flat: LiveNewsItem[] = [];
-    for (const r of results) {
-      if (r.status === "fulfilled") flat.push(...r.value);
-    }
-
+    for (const r of results) if (r.status === "fulfilled") flat.push(...r.value);
     const seen = new Set<string>();
     const unique = flat.filter((it) => {
       const k = it.title.slice(0, 60).toLowerCase();
@@ -261,14 +255,96 @@ export const getLiveAgriNews = createServerFn({ method: "GET" }).handler(async (
       return true;
     });
     unique.sort((a, b) => a.minutesAgo - b.minutesAgo);
-
     const final = unique.length >= 6 ? unique.slice(0, 30) : [...unique, ...fallbackItems()];
     CACHE = { at: now, data: final };
-    return { items: final, cachedAt: new Date(now).toISOString(), fresh: true };
+    return final;
   } catch (e) {
-    console.error("getLiveAgriNews failed:", e);
+    console.error("ensureNewsCache failed:", e);
+    if (CACHE) return CACHE.data;
     const fb = fallbackItems();
-    if (CACHE) return { items: CACHE.data, cachedAt: new Date(CACHE.at).toISOString(), fresh: false };
-    return { items: fb, cachedAt: new Date().toISOString(), fresh: true };
+    CACHE = { at: now, data: fb };
+    return fb;
   }
+}
+
+export const getLiveAgriNews = createServerFn({ method: "GET" }).handler(async () => {
+  const data = await ensureNewsCache();
+  const at = CACHE?.at ?? Date.now();
+  return { items: data, cachedAt: new Date(at).toISOString(), fresh: true };
 });
+
+// ===== Full article generation via Lovable AI Gateway =====
+
+type ArticleCacheEntry = { at: number; paragraphs: string[] };
+const ARTICLE_CACHE = new Map<string, ArticleCacheEntry>();
+const ARTICLE_TTL_MS = 6 * 60 * 60 * 1000;
+
+async function generateHindiArticle(item: LiveNewsItem): Promise<string[]> {
+  const apiKey = process.env.LOVABLE_API_KEY;
+  if (!apiKey) {
+    return [
+      item.summary,
+      `यह खबर ${item.source} द्वारा प्रकाशित की गई है। पूरी जानकारी के लिए मूल स्रोत देखें।`,
+    ];
+  }
+  const prompt = `आप एक अनुभवी कृषि पत्रकार हैं। नीचे दी गई खबर के शीर्षक व सारांश के आधार पर एक मौलिक, सरल हिंदी में 350-450 शब्दों का विस्तृत समाचार लेख लिखें ताकि किसान पूरी खबर वेबसाइट पर ही पढ़ सकें।
+
+नियम:
+- केवल हिंदी में लिखें, सरल शब्द उपयोग करें।
+- 4-6 अनुच्छेद बनाएँ, हर अनुच्छेद को दो नई लाइनों से अलग करें।
+- कोई heading, bullet, या markdown चिह्न (#, *, -) न लगाएँ — केवल सादा गद्य।
+- किसी अन्य वेबसाइट का सीधा वाक्य कॉपी न करें, मौलिक रूप से लिखें।
+- अंत में 1 अनुच्छेद किसानों के लिए व्यावहारिक सलाह का जोड़ें।
+
+शीर्षक: ${item.title}
+सारांश: ${item.summary}
+श्रेणी: ${item.category}
+स्रोत: ${item.source}`;
+
+  try {
+    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash",
+        messages: [
+          { role: "system", content: "You are an expert Indian agricultural journalist who writes original, plagiarism-free, easy Hindi articles for farmers." },
+          { role: "user", content: prompt },
+        ],
+      }),
+    });
+    if (!res.ok) {
+      console.error("AI gateway error", res.status, await res.text().catch(() => ""));
+      throw new Error("ai gateway failed");
+    }
+    const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
+    const text = json.choices?.[0]?.message?.content?.trim() || "";
+    const paragraphs = text
+      .split(/\n\s*\n/)
+      .map((p) => p.replace(/^[#*\-\s]+/, "").trim())
+      .filter((p) => p.length > 0);
+    if (paragraphs.length === 0) throw new Error("empty article");
+    return paragraphs;
+  } catch (e) {
+    console.error("generateHindiArticle failed", e);
+    return [
+      item.summary,
+      `यह खबर ${item.source} द्वारा प्रकाशित की गई है। हमारी टीम पूरा विवरण जल्द अपडेट करेगी।`,
+    ];
+  }
+}
+
+export const getLiveNewsArticle = createServerFn({ method: "GET" })
+  .inputValidator((d: { id: string }) => d)
+  .handler(async ({ data }) => {
+    const items = await ensureNewsCache();
+    const item = items.find((i) => i.id === data.id);
+    if (!item) return { item: null, paragraphs: [] as string[] };
+    const cached = ARTICLE_CACHE.get(item.id);
+    if (cached && Date.now() - cached.at < ARTICLE_TTL_MS) {
+      return { item, paragraphs: cached.paragraphs };
+    }
+    const paragraphs = await generateHindiArticle(item);
+    ARTICLE_CACHE.set(item.id, { at: Date.now(), paragraphs });
+    return { item, paragraphs };
+  });
