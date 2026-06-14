@@ -30,6 +30,7 @@ import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as KnowledgeCenterSlugRouteImport } from './routes/knowledge-center.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as NewsLiveIdRouteImport } from './routes/news.live.$id'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -135,6 +136,11 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const NewsLiveIdRoute = NewsLiveIdRouteImport.update({
+  id: '/news/live/$id',
+  path: '/news/live/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -157,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/knowledge-center/$slug': typeof KnowledgeCenterSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/news/live/$id': typeof NewsLiveIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -178,6 +185,7 @@ export interface FileRoutesByTo {
   '/knowledge-center/$slug': typeof KnowledgeCenterSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/blog': typeof BlogIndexRoute
+  '/news/live/$id': typeof NewsLiveIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -202,6 +210,7 @@ export interface FileRoutesById {
   '/knowledge-center/$slug': typeof KnowledgeCenterSlugRoute
   '/news/$slug': typeof NewsSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/news/live/$id': typeof NewsLiveIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -226,6 +235,7 @@ export interface FileRouteTypes {
     | '/knowledge-center/$slug'
     | '/news/$slug'
     | '/blog/'
+    | '/news/live/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -247,6 +257,7 @@ export interface FileRouteTypes {
     | '/knowledge-center/$slug'
     | '/news/$slug'
     | '/blog'
+    | '/news/live/$id'
   id:
     | '__root__'
     | '/'
@@ -270,6 +281,7 @@ export interface FileRouteTypes {
     | '/knowledge-center/$slug'
     | '/news/$slug'
     | '/blog/'
+    | '/news/live/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -291,6 +303,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   KnowledgeCenterSlugRoute: typeof KnowledgeCenterSlugRoute
   NewsSlugRoute: typeof NewsSlugRoute
+  NewsLiveIdRoute: typeof NewsLiveIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -442,6 +455,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/news/live/$id': {
+      id: '/news/live/$id'
+      path: '/news/live/$id'
+      fullPath: '/news/live/$id'
+      preLoaderRoute: typeof NewsLiveIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -488,6 +508,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   KnowledgeCenterSlugRoute: KnowledgeCenterSlugRoute,
   NewsSlugRoute: NewsSlugRoute,
+  NewsLiveIdRoute: NewsLiveIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

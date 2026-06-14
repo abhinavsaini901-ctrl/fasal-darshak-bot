@@ -76,7 +76,7 @@ function LiveNewsArticle() {
   const { item, paragraphs } = Route.useLoaderData();
   const router = useRouter();
   if (!item) return <NotFound />;
-  const Icon = ICONS[item.iconKey] ?? Newspaper;
+  const Icon = ICONS[item.iconKey as keyof typeof ICONS] ?? Newspaper;
 
   const handleShare = async () => {
     const text = `${item.title}\n\n${item.summary}\n— ${item.source} (किसान मित्र)`;
@@ -146,7 +146,7 @@ function LiveNewsArticle() {
         </header>
 
         <div className="prose-content mt-6 space-y-4">
-          {paragraphs.map((p, i) => (
+          {paragraphs.map((p: string, i: number) => (
             <p key={i} className="text-base leading-relaxed text-foreground/90">
               {p}
             </p>
