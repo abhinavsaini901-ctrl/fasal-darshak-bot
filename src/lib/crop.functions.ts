@@ -1,7 +1,43 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeader } from "@tanstack/react-start/server";
 import { z } from "zod";
 
 const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+
+// ---- Per-IP rate limiting (defense in depth) ----
+// These endpoints are intentionally unauthenticated so any farmer can use the
+// app without sign-up. To prevent bots from draining the paid AI quota, we
+// enforce a sliding-window per-IP cap in worker memory. Worker instances are
+// ephemeral so this is best-effort, not a hard guarantee.
+const RATE_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+const RATE_MAX_PER_WINDOW = 20; // 20 AI calls / IP / hour
+const RATE_BUCKETS = new Map<string, number[]>();
+
+function clientIp(): string {
+  const h =
+    getRequestHeader("cf-connecting-ip") ||
+    getRequestHeader("x-real-ip") ||
+    getRequestHeader("x-forwarded-for") ||
+    "unknown";
+  return h.split(",")[0]!.trim();
+}
+
+function enforceRateLimit(): void {
+  const ip = clientIp();
+  const now = Date.now();
+  const arr = (RATE_BUCKETS.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+  if (arr.length >= RATE_MAX_PER_WINDOW) {
+    throw new Error("RATE_LIMITED");
+  }
+  arr.push(now);
+  RATE_BUCKETS.set(ip, arr);
+  // Opportunistic cleanup to bound memory
+  if (RATE_BUCKETS.size > 5000) {
+    for (const [k, v] of RATE_BUCKETS) {
+      if (!v.some((t) => now - t < RATE_WINDOW_MS)) RATE_BUCKETS.delete(k);
+    }
+  }
+}
 
 // Server-side allowlist — derive the human-readable language name here so
 // untrusted client input can never be interpolated into the AI system prompt.
