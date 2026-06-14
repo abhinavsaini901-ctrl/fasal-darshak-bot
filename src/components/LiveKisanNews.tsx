@@ -11,7 +11,7 @@ import {
   RefreshCw,
   TrendingUp,
   Radio,
-  ExternalLink,
+  
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
