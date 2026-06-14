@@ -249,10 +249,9 @@ export function LiveKisanNews() {
                   </div>
 
                   <div className="mt-3 flex items-center gap-2 border-t border-border pt-3">
-                    <a
-                      href={item.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      to="/news/live/$id"
+                      params={{ id: item.id }}
                       className="flex-1"
                     >
                       <Button
@@ -260,9 +259,9 @@ export function LiveKisanNews() {
                         className="h-8 w-full rounded-lg bg-gradient-primary text-xs font-semibold"
                       >
                         पूरा पढ़ें
-                        <ExternalLink className="ml-1 h-3 w-3" />
+                        <ArrowRight className="ml-1 h-3 w-3" />
                       </Button>
-                    </a>
+                    </Link>
                     <button
                       onClick={() => handleSpeak(item)}
                       className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border transition ${
