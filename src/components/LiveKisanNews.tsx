@@ -206,10 +206,9 @@ export function LiveKisanNews() {
                 key={item.id}
                 className="group flex flex-col overflow-hidden border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-strong"
               >
-                <a
-                  href={item.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to="/news/live/$id"
+                  params={{ id: item.id }}
                   aria-label={item.title}
                   className="block"
                 >
@@ -228,15 +227,15 @@ export function LiveKisanNews() {
                       </span>
                     </div>
                   </div>
-                </a>
+                </Link>
 
                 {/* Body */}
                 <div className="flex flex-1 flex-col p-4">
-                  <a href={item.link} target="_blank" rel="noopener noreferrer">
+                  <Link to="/news/live/$id" params={{ id: item.id }}>
                     <h3 className="text-sm font-bold leading-snug text-foreground line-clamp-2 hover:text-primary">
                       {item.title}
                     </h3>
-                  </a>
+                  </Link>
                   <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground line-clamp-3">
                     {item.summary}
                   </p>
