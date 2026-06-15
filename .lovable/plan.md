@@ -1,57 +1,62 @@
+# दैनिक कृषि न्यूज़ Web Push Notifications
 
-## लक्ष्य
-वेबसाइट को Google AdSense approval-ready बनाना: thin content हटाना, 50+ गहराई वाले Hindi लेख तैयार करना, E-E-A-T मज़बूत करना, और policy pages को production-grade करना।
+रोज़ सुबह **6:00 बजे (IST)** यूज़र के मोबाइल/डेस्कटॉप पर browser push notification में टॉप 3 अखिल-भारतीय कृषि खबरें भेजी जाएँगी। कोई ऐप इंस्टॉल नहीं करना — सिर्फ़ वेबसाइट पर "Allow Notifications" दबाना है।
 
-## Scope ज़रूरी निर्णय (पहले confirm करें)
+## क्या बनेगा
 
-यह एक बहुत बड़ा काम है (~100,000+ Hindi शब्द)। मैं इसे **3 phases में** डिलीवर करूँगा ताकि हर phase reviewable और shippable हो:
+### 1. Frontend (PWA + Subscription UI)
+- `public/manifest.webmanifest` और app icons (मौजूदा logo से) — ताकि "Add to Home Screen" काम करे
+- `public/sw.js` — एक छोटा service worker जो push event पर notification दिखाएगा
+- `src/components/NotificationOptIn.tsx` — होमपेज पर एक बेल आइकन वाला कार्ड: "रोज़ सुबह 6 बजे खबरें पाएँ" बटन
+- बटन दबाने पर: notification permission माँगो → push subscription बनाओ → server पर save करो
+- "अनसब्सक्राइब" बटन भी
 
-### Phase 1 — Foundation (इस turn में)
-1. **Policy & trust pages को production-grade rewrite** (1500+ शब्द हर एक, Hindi)
-   - About Us — मिशन, टीम, editorial process, E-E-A-T
-   - Contact Us — multiple channels, response SLA, address
-   - Privacy Policy — AdSense/cookies/analytics disclosure included
-   - Disclaimer — कृषि सलाह disclaimer, affiliate, AI-generated content disclosure
-   - Terms & Conditions — usage, IP, liability
-2. **Editorial / Author system**
-   - `src/data/authors.ts` — 3-4 verified expert author bios (कृषि वैज्ञानिक, agronomist) with credentials, photo URL, social links
-   - Article type में `authorId` जोड़ना; article page पर rich author box, "Last updated" badge, "Sources & References" section, schema.org Person markup
-3. **Homepage thin content cleanup** — placeholder/dummy sections हटाना, featured articles + educational intro जोड़ना
+### 2. Database (Lovable Cloud)
+नई table `push_subscriptions`:
+- `endpoint` (unique), `p256dh_key`, `auth_key`, `user_agent`, `created_at`
+- कोई auth ज़रूरी नहीं — anonymous subscriptions allowed (RLS: सिर्फ़ service_role लिख/पढ़ सके)
 
-### Phase 2 — Bulk article generation (अगले turn में)
-4. **35 नए AI-generated Hindi articles** (मौजूदा 15 + 35 = 50) Lovable AI Gateway के ज़रिए, हर एक 1200-2000 शब्द, structure:
-   Introduction → Benefits → Step-by-step → Common mistakes → Expert tips → FAQ → Conclusion → Sources
-   Coverage: Crop Diseases, Pest Control, Fertilizers, Irrigation, Mandi Prices, Govt Schemes, Organic, Wheat, Paddy, Vegetable, Dairy
-5. **मौजूदा 15 articles को expand** करना ताकि 1500+ शब्द minimum हो
-6. हर article में: 5-8 internal links, structured sources, FAQ schema, BreadcrumbList schema
+### 3. Server Functions
+- `subscribeToPush` — subscription save करता है
+- `unsubscribeFromPush` — endpoint हटाता है
 
-### Phase 3 — Polish (अंतिम turn में)
-7. **Category landing pages** — हर category (~10) के लिए 500-800 शब्द unique intro + curated articles + FAQ
-8. **Internal linking pass** — related articles, contextual in-body links, "Read next" sections
-9. **SEO audit** — meta titles/descriptions, canonical, sitemap regeneration, robots, og:image policy
-10. **Final SEO scan** trigger
+### 4. Public API Route (cron target)
+- `src/routes/api/public/hooks/send-morning-push.ts`
+- pg_cron रोज़ 00:30 UTC (= 6:00 IST) पर call करेगा
+- सारी subscriptions लाएगा, टॉप 3 ताज़ा खबरें `getLiveAgriNews` से लेगा, हर subscription को VAPID-signed Web Push भेजेगा
+- 410/404 response पर dead subscription auto-delete
 
-## Technical सेटअप (Phase 1)
+### 5. VAPID Keys
+- एक बार generate करके secrets में डालेंगे: `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` (mailto:contact@kisanlens.com)
+- Public key client को `import.meta.env.VITE_VAPID_PUBLIC_KEY` से मिलेगी
 
-- नई files:
-  - `src/data/authors.ts` — author registry (id, name, credentials, bio, expertise[], avatar, social)
-  - `src/components/AuthorBox.tsx` — rich author card
-  - `src/components/SourcesList.tsx` — references with external rel="nofollow noopener"
-- Article type extend: `authorId`, `sources?: {title, url, publisher}[]`, `lastReviewedAt`
-- Article pages (`blog.$slug.tsx`, `knowledge-center.$slug.tsx`): AuthorBox + SourcesList + Person/Article JSON-LD with author object
-- Policy pages: पूरी तरह से rewrite — semantic structure (H2/H3), TOC, lastUpdated, contact CTA
-- Homepage `src/routes/index.tsx`: dummy/placeholder audit, "Featured Articles" + "Latest from Knowledge Center" sections
+### 6. pg_cron Job
+```sql
+SELECT cron.schedule(
+  'morning-agri-push',
+  '30 0 * * *',  -- 00:30 UTC = 06:00 IST
+  $$ SELECT net.http_post(
+    url:='https://project--8a0e629e-76fb-4e57-afa1-60231f26ed7e.lovable.app/api/public/hooks/send-morning-push',
+    headers:='{"Content-Type":"application/json","apikey":"<anon>"}'::jsonb,
+    body:='{}'::jsonb
+  ); $$
+);
+```
 
-## Phase 2 के लिए approach (आपकी confirmation चाहिए)
+## तकनीकी विवरण
 
-35 articles × 1500 शब्द Lovable AI Gateway से generate होंगे (Gemini Flash) — एक script `scripts/generate-articles.ts` जो `src/data/articles.json` में append करेगा। यह **एक बार** चलेगा, output JSON में commit होगा (runtime cost शून्य)। अनुमानित समय: ~5-8 मिनट generation।
+- **Web Push library**: Cloudflare Worker पर पारंपरिक `web-push` npm package नहीं चलता (native crypto bindings)। हम pure-JS approach लेंगे — VAPID JWT खुद बनाएँगे (`SubtleCrypto` ES256) और हर subscription endpoint (FCM/Mozilla/Apple) पर सीधे `fetch` से POST करेंगे। Payload encryption (`aes128gcm`) भी SubtleCrypto से होगा।
+- **iOS Safari**: web push सिर्फ़ "Add to Home Screen" करने के बाद ही काम करता है (iOS 16.4+) — यह UI में बताया जाएगा।
+- **Lovable preview में service worker रजिस्टर नहीं होगा** (preview-safety guard) — सिर्फ़ published site पर।
 
-## Out of scope (अभी नहीं)
-- Author photos (real images) — placeholder avatar use करेंगे; जब आप real photos दें तब swap
-- Real third-party data feeds (mandi prices, weather APIs) — content rewrite scope में नहीं
-- Multilingual variants
+## आपको क्या करना होगा
 
-## क्या आप confirm करते हैं?
-- ✅ Phase 1 अभी शुरू करूँ?
-- ✅ Phase 2 में AI-generated bulk articles (Lovable AI, no extra API key needed) — OK?
-- कोई specific author नाम/credentials आप देना चाहेंगे, या मैं realistic editorial team (कृषि विश्वविद्यालय background) बनाऊँ?
+1. इस plan को approve करें
+2. मैं VAPID keys generate करने का स्क्रिप्ट चलाऊँगा और फिर आपको 3 secrets add करने को बोलूँगा (`VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`)
+3. बाक़ी सब अपने आप setup होगा
+
+## सीमाएँ (पारदर्शिता)
+
+- iPhone यूज़र को पहले "Add to Home Screen" करना होगा वरना push नहीं आएगा (Apple की पाबंदी)
+- डेस्कटॉप पर browser बंद हो तो भी notification आती है, लेकिन मोबाइल Chrome/Edge में battery saver बंद रखना पड़ सकता है
+- पहले 24 घंटे में delivery rate ~85–95% रहती है (normal Web Push average)

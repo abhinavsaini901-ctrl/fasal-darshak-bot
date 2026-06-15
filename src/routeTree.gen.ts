@@ -31,6 +31,7 @@ import { Route as KnowledgeCenterSlugRouteImport } from './routes/knowledge-cent
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as NewsLiveIdRouteImport } from './routes/news.live.$id'
+import { Route as ApiPublicHooksSendMorningPushRouteImport } from './routes/api/public/hooks/send-morning-push'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -141,6 +142,12 @@ const NewsLiveIdRoute = NewsLiveIdRouteImport.update({
   path: '/news/live/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksSendMorningPushRoute =
+  ApiPublicHooksSendMorningPushRouteImport.update({
+    id: '/api/public/hooks/send-morning-push',
+    path: '/api/public/hooks/send-morning-push',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -164,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/news/$slug': typeof NewsSlugRoute
   '/blog/': typeof BlogIndexRoute
   '/news/live/$id': typeof NewsLiveIdRoute
+  '/api/public/hooks/send-morning-push': typeof ApiPublicHooksSendMorningPushRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -186,6 +194,7 @@ export interface FileRoutesByTo {
   '/news/$slug': typeof NewsSlugRoute
   '/blog': typeof BlogIndexRoute
   '/news/live/$id': typeof NewsLiveIdRoute
+  '/api/public/hooks/send-morning-push': typeof ApiPublicHooksSendMorningPushRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -211,6 +220,7 @@ export interface FileRoutesById {
   '/news/$slug': typeof NewsSlugRoute
   '/blog/': typeof BlogIndexRoute
   '/news/live/$id': typeof NewsLiveIdRoute
+  '/api/public/hooks/send-morning-push': typeof ApiPublicHooksSendMorningPushRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -236,6 +246,7 @@ export interface FileRouteTypes {
     | '/news/$slug'
     | '/blog/'
     | '/news/live/$id'
+    | '/api/public/hooks/send-morning-push'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -258,6 +269,7 @@ export interface FileRouteTypes {
     | '/news/$slug'
     | '/blog'
     | '/news/live/$id'
+    | '/api/public/hooks/send-morning-push'
   id:
     | '__root__'
     | '/'
@@ -282,6 +294,7 @@ export interface FileRouteTypes {
     | '/news/$slug'
     | '/blog/'
     | '/news/live/$id'
+    | '/api/public/hooks/send-morning-push'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -304,6 +317,7 @@ export interface RootRouteChildren {
   KnowledgeCenterSlugRoute: typeof KnowledgeCenterSlugRoute
   NewsSlugRoute: typeof NewsSlugRoute
   NewsLiveIdRoute: typeof NewsLiveIdRoute
+  ApiPublicHooksSendMorningPushRoute: typeof ApiPublicHooksSendMorningPushRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -462,6 +476,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewsLiveIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/send-morning-push': {
+      id: '/api/public/hooks/send-morning-push'
+      path: '/api/public/hooks/send-morning-push'
+      fullPath: '/api/public/hooks/send-morning-push'
+      preLoaderRoute: typeof ApiPublicHooksSendMorningPushRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -509,17 +530,8 @@ const rootRouteChildren: RootRouteChildren = {
   KnowledgeCenterSlugRoute: KnowledgeCenterSlugRoute,
   NewsSlugRoute: NewsSlugRoute,
   NewsLiveIdRoute: NewsLiveIdRoute,
+  ApiPublicHooksSendMorningPushRoute: ApiPublicHooksSendMorningPushRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
