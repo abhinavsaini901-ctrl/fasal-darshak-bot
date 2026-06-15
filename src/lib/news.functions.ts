@@ -52,12 +52,25 @@ const CAT_META: Record<LiveNewsCategory, CatMeta> = {
 };
 
 // Multiple Hindi-language Indian agriculture RSS sources
+const GN = (q: string) =>
+  `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=hi&gl=IN&ceid=IN:hi`;
+
 const FEEDS: { url: string; source: string }[] = [
-  { url: "https://news.google.com/rss/search?q=%E0%A4%95%E0%A4%BF%E0%A4%B8%E0%A4%BE%E0%A4%A8&hl=hi&gl=IN&ceid=IN:hi", source: "Google News" },
-  { url: "https://news.google.com/rss/search?q=%E0%A4%96%E0%A5%87%E0%A4%A4%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi", source: "Google News" },
-  { url: "https://news.google.com/rss/search?q=%E0%A4%AE%E0%A4%82%E0%A4%A1%E0%A5%80+%E0%A4%AD%E0%A4%BE%E0%A4%B5&hl=hi&gl=IN&ceid=IN:hi", source: "Google News" },
-  { url: "https://news.google.com/rss/search?q=%E0%A4%AE%E0%A5%8C%E0%A4%B8%E0%A4%AE+%E0%A4%95%E0%A4%BF%E0%A4%B8%E0%A4%BE%E0%A4%A8&hl=hi&gl=IN&ceid=IN:hi", source: "Google News" },
-  { url: "https://news.google.com/rss/search?q=%E0%A4%AA%E0%A5%80%E0%A4%8F%E0%A4%AE+%E0%A4%95%E0%A4%BF%E0%A4%B8%E0%A4%BE%E0%A4%A8+%E0%A4%AF%E0%A5%8B%E0%A4%9C%E0%A4%A8%E0%A4%BE&hl=hi&gl=IN&ceid=IN:hi", source: "Google News" },
+  { url: GN("किसान भारत"), source: "Google News" },
+  { url: GN("खेती भारत"), source: "Google News" },
+  { url: GN("मंडी भाव आज"), source: "Google News" },
+  { url: GN("मौसम किसान बारिश"), source: "Google News" },
+  { url: GN("पीएम किसान योजना"), source: "Google News" },
+  { url: GN("कृषि मंत्रालय भारत"), source: "Google News" },
+  { url: GN("MSP फसल"), source: "Google News" },
+  { url: GN("गेहूं धान सरसों भाव"), source: "Google News" },
+  { url: GN("ICAR कृषि अनुसंधान"), source: "Google News" },
+  { url: GN("कृषि तकनीक ड्रोन"), source: "Google News" },
+  { url: GN("पंजाब हरियाणा किसान"), source: "Google News" },
+  { url: GN("उत्तर प्रदेश बिहार किसान"), source: "Google News" },
+  { url: GN("महाराष्ट्र मध्य प्रदेश किसान"), source: "Google News" },
+  { url: GN("राजस्थान गुजरात किसान"), source: "Google News" },
+  { url: GN("दक्षिण भारत कृषि"), source: "Google News" },
 ];
 
 function decodeEntities(s: string): string {
@@ -238,7 +251,7 @@ function fallbackItems(): LiveNewsItem[] {
 
 type Cache = { at: number; data: LiveNewsItem[] };
 let CACHE: Cache | null = null;
-const TTL_MS = 60 * 60 * 1000;
+const TTL_MS = 30 * 60 * 1000;
 
 async function ensureNewsCache(): Promise<LiveNewsItem[]> {
   const now = Date.now();
@@ -277,7 +290,7 @@ export const getLiveAgriNews = createServerFn({ method: "GET" }).handler(async (
 
 type ArticleCacheEntry = { at: number; paragraphs: string[] };
 const ARTICLE_CACHE = new Map<string, ArticleCacheEntry>();
-const ARTICLE_TTL_MS = 6 * 60 * 60 * 1000;
+const ARTICLE_TTL_MS = 24 * 60 * 60 * 1000;
 
 async function generateHindiArticle(item: LiveNewsItem): Promise<string[]> {
   const apiKey = process.env.LOVABLE_API_KEY;
@@ -287,19 +300,23 @@ async function generateHindiArticle(item: LiveNewsItem): Promise<string[]> {
       `यह खबर ${item.source} द्वारा प्रकाशित की गई है। पूरी जानकारी के लिए मूल स्रोत देखें।`,
     ];
   }
-  const prompt = `आप एक अनुभवी कृषि पत्रकार हैं। नीचे दी गई खबर के शीर्षक व सारांश के आधार पर एक मौलिक, सरल हिंदी में 350-450 शब्दों का विस्तृत समाचार लेख लिखें ताकि किसान पूरी खबर वेबसाइट पर ही पढ़ सकें।
+  const today = new Date().toLocaleDateString("hi-IN", { day: "numeric", month: "long", year: "numeric" });
+  const prompt = `आप अखिल भारतीय "किसान लेंस" समाचार पोर्टल के वरिष्ठ कृषि पत्रकार हैं। नीचे दिए गए शीर्षक व सारांश के आधार पर एक 100% मौलिक (plagiarism-free), विस्तृत हिंदी समाचार लेख लिखें जिसे किसान पूरी तरह वेबसाइट पर ही पढ़ सकें।
 
-नियम:
-- केवल हिंदी में लिखें, सरल शब्द उपयोग करें।
-- 4-6 अनुच्छेद बनाएँ, हर अनुच्छेद को दो नई लाइनों से अलग करें।
+सख्त नियम:
+- कुल 380-480 शब्द, केवल सरल हिंदी में।
+- 5-6 अनुच्छेद; हर अनुच्छेद को दो नई लाइनों (\\n\\n) से अलग करें।
 - कोई heading, bullet, या markdown चिह्न (#, *, -) न लगाएँ — केवल सादा गद्य।
-- किसी अन्य वेबसाइट का सीधा वाक्य कॉपी न करें, मौलिक रूप से लिखें।
-- अंत में 1 अनुच्छेद किसानों के लिए व्यावहारिक सलाह का जोड़ें।
+- मूल स्रोत के वाक्य कॉपी न करें; नई भाषा, नए उदाहरण और अखिल भारतीय परिप्रेक्ष्य जोड़ें।
+- पहला अनुच्छेद: मुख्य खबर का सार (आज की तारीख ${today} का संदर्भ)।
+- बीच के अनुच्छेद: पृष्ठभूमि, सरकारी रुख/आंकड़े, राज्यवार असर (पंजाब, यूपी, एमपी, महाराष्ट्र, बिहार आदि में से प्रासंगिक)।
+- अंतिम अनुच्छेद: "किसानों के लिए सलाह" — 3 व्यावहारिक सुझाव एक ही अनुच्छेद में।
+- तथ्यहीन/अति-दावे न करें; अनिश्चित आंकड़ों के लिए "लगभग", "सूत्रों के अनुसार" जैसे शब्द उपयोग करें।
 
 शीर्षक: ${item.title}
-सारांश: ${item.summary}
+मूल सारांश: ${item.summary}
 श्रेणी: ${item.category}
-स्रोत: ${item.source}`;
+मूल स्रोत: ${item.source}`;
 
   try {
     const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
