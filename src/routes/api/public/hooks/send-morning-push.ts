@@ -13,10 +13,11 @@ type Row = {
 async function sendOne(row: Row, body: string, vapid: VapidKeys): Promise<number> {
   const sub: PushSubscription = {
     endpoint: row.endpoint,
+    expirationTime: null,
     keys: { p256dh: row.p256dh, auth: row.auth },
   };
   const payload = await buildPushPayload({ data: body, options: { ttl: 60 * 60 * 6 } }, sub, vapid);
-  const res = await fetch(row.endpoint, payload);
+  const res = await fetch(row.endpoint, payload as unknown as RequestInit);
   return res.status;
 }
 
@@ -90,13 +91,18 @@ export const Route = createFileRoute("/api/public/hooks/send-morning-push")({
           if (!delErr) removed = deadIds.length;
         }
 
-        // Mark last_sent_at for successful ones (best-effort)
-        await supabaseAdmin
-          .from("push_subscriptions")
-          .update({ last_sent_at: new Date().toISOString() })
-          .not("id", "in", `(${deadIds.length ? deadIds.map((id) => `"${id}"`).join(",") : '""'})`)
-          .then(() => {})
-          .catch(() => {});
+        // Mark last_sent_at for live subscriptions (best-effort)
+        try {
+          const liveIds = rows.map((r) => r.id).filter((id) => !deadIds.includes(id));
+          if (liveIds.length > 0) {
+            await supabaseAdmin
+              .from("push_subscriptions")
+              .update({ last_sent_at: new Date().toISOString() })
+              .in("id", liveIds);
+          }
+        } catch (e) {
+          console.warn("update last_sent_at failed", e);
+        }
 
         return Response.json({ ok: true, total: rows.length, sent, removed });
       },
