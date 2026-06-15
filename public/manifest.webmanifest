@@ -1,0 +1,16 @@
+{
+  "name": "किसान लेंस — AI कृषि पोर्टल",
+  "short_name": "किसान लेंस",
+  "description": "भारतीय किसानों के लिए AI फसल डॉक्टर, मंडी भाव, मौसम और सरकारी योजनाएं।",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e8a4d",
+  "lang": "hi-IN",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
