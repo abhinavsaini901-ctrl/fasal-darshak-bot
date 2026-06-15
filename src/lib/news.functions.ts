@@ -52,12 +52,25 @@ const CAT_META: Record<LiveNewsCategory, CatMeta> = {
 };
 
 // Multiple Hindi-language Indian agriculture RSS sources
+const GN = (q: string) =>
+  `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=hi&gl=IN&ceid=IN:hi`;
+
 const FEEDS: { url: string; source: string }[] = [
-  { url: "https://news.google.com/rss/search?q=%E0%A4%95%E0%A4%BF%E0%A4%B8%E0%A4%BE%E0%A4%A8&hl=hi&gl=IN&ceid=IN:hi", source: "Google News" },
-  { url: "https://news.google.com/rss/search?q=%E0%A4%96%E0%A5%87%E0%A4%A4%E0%A5%80&hl=hi&gl=IN&ceid=IN:hi", source: "Google News" },
-  { url: "https://news.google.com/rss/search?q=%E0%A4%AE%E0%A4%82%E0%A4%A1%E0%A5%80+%E0%A4%AD%E0%A4%BE%E0%A4%B5&hl=hi&gl=IN&ceid=IN:hi", source: "Google News" },
-  { url: "https://news.google.com/rss/search?q=%E0%A4%AE%E0%A5%8C%E0%A4%B8%E0%A4%AE+%E0%A4%95%E0%A4%BF%E0%A4%B8%E0%A4%BE%E0%A4%A8&hl=hi&gl=IN&ceid=IN:hi", source: "Google News" },
-  { url: "https://news.google.com/rss/search?q=%E0%A4%AA%E0%A5%80%E0%A4%8F%E0%A4%AE+%E0%A4%95%E0%A4%BF%E0%A4%B8%E0%A4%BE%E0%A4%A8+%E0%A4%AF%E0%A5%8B%E0%A4%9C%E0%A4%A8%E0%A4%BE&hl=hi&gl=IN&ceid=IN:hi", source: "Google News" },
+  { url: GN("किसान भारत"), source: "Google News" },
+  { url: GN("खेती भारत"), source: "Google News" },
+  { url: GN("मंडी भाव आज"), source: "Google News" },
+  { url: GN("मौसम किसान बारिश"), source: "Google News" },
+  { url: GN("पीएम किसान योजना"), source: "Google News" },
+  { url: GN("कृषि मंत्रालय भारत"), source: "Google News" },
+  { url: GN("MSP फसल"), source: "Google News" },
+  { url: GN("गेहूं धान सरसों भाव"), source: "Google News" },
+  { url: GN("ICAR कृषि अनुसंधान"), source: "Google News" },
+  { url: GN("कृषि तकनीक ड्रोन"), source: "Google News" },
+  { url: GN("पंजाब हरियाणा किसान"), source: "Google News" },
+  { url: GN("उत्तर प्रदेश बिहार किसान"), source: "Google News" },
+  { url: GN("महाराष्ट्र मध्य प्रदेश किसान"), source: "Google News" },
+  { url: GN("राजस्थान गुजरात किसान"), source: "Google News" },
+  { url: GN("दक्षिण भारत कृषि"), source: "Google News" },
 ];
 
 function decodeEntities(s: string): string {
