@@ -290,7 +290,7 @@ export const getLiveAgriNews = createServerFn({ method: "GET" }).handler(async (
 
 type ArticleCacheEntry = { at: number; paragraphs: string[] };
 const ARTICLE_CACHE = new Map<string, ArticleCacheEntry>();
-const ARTICLE_TTL_MS = 6 * 60 * 60 * 1000;
+const ARTICLE_TTL_MS = 24 * 60 * 60 * 1000;
 
 async function generateHindiArticle(item: LiveNewsItem): Promise<string[]> {
   const apiKey = process.env.LOVABLE_API_KEY;
@@ -300,19 +300,23 @@ async function generateHindiArticle(item: LiveNewsItem): Promise<string[]> {
       `यह खबर ${item.source} द्वारा प्रकाशित की गई है। पूरी जानकारी के लिए मूल स्रोत देखें।`,
     ];
   }
-  const prompt = `आप एक अनुभवी कृषि पत्रकार हैं। नीचे दी गई खबर के शीर्षक व सारांश के आधार पर एक मौलिक, सरल हिंदी में 350-450 शब्दों का विस्तृत समाचार लेख लिखें ताकि किसान पूरी खबर वेबसाइट पर ही पढ़ सकें।
+  const today = new Date().toLocaleDateString("hi-IN", { day: "numeric", month: "long", year: "numeric" });
+  const prompt = `आप अखिल भारतीय "किसान लेंस" समाचार पोर्टल के वरिष्ठ कृषि पत्रकार हैं। नीचे दिए गए शीर्षक व सारांश के आधार पर एक 100% मौलिक (plagiarism-free), विस्तृत हिंदी समाचार लेख लिखें जिसे किसान पूरी तरह वेबसाइट पर ही पढ़ सकें।
 
-नियम:
-- केवल हिंदी में लिखें, सरल शब्द उपयोग करें।
-- 4-6 अनुच्छेद बनाएँ, हर अनुच्छेद को दो नई लाइनों से अलग करें।
+सख्त नियम:
+- कुल 380-480 शब्द, केवल सरल हिंदी में।
+- 5-6 अनुच्छेद; हर अनुच्छेद को दो नई लाइनों (\\n\\n) से अलग करें।
 - कोई heading, bullet, या markdown चिह्न (#, *, -) न लगाएँ — केवल सादा गद्य।
-- किसी अन्य वेबसाइट का सीधा वाक्य कॉपी न करें, मौलिक रूप से लिखें।
-- अंत में 1 अनुच्छेद किसानों के लिए व्यावहारिक सलाह का जोड़ें।
+- मूल स्रोत के वाक्य कॉपी न करें; नई भाषा, नए उदाहरण और अखिल भारतीय परिप्रेक्ष्य जोड़ें।
+- पहला अनुच्छेद: मुख्य खबर का सार (आज की तारीख ${today} का संदर्भ)।
+- बीच के अनुच्छेद: पृष्ठभूमि, सरकारी रुख/आंकड़े, राज्यवार असर (पंजाब, यूपी, एमपी, महाराष्ट्र, बिहार आदि में से प्रासंगिक)।
+- अंतिम अनुच्छेद: "किसानों के लिए सलाह" — 3 व्यावहारिक सुझाव एक ही अनुच्छेद में।
+- तथ्यहीन/अति-दावे न करें; अनिश्चित आंकड़ों के लिए "लगभग", "सूत्रों के अनुसार" जैसे शब्द उपयोग करें।
 
 शीर्षक: ${item.title}
-सारांश: ${item.summary}
+मूल सारांश: ${item.summary}
 श्रेणी: ${item.category}
-स्रोत: ${item.source}`;
+मूल स्रोत: ${item.source}`;
 
   try {
     const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
