@@ -23,7 +23,7 @@ import { Newsletter } from "@/components/Newsletter";
 import { WeatherLocationCard } from "@/components/WeatherLocationCard";
 import { KnowledgeCenterSection } from "@/components/KnowledgeCenterSection";
 import { LiveKisanNews } from "@/components/LiveKisanNews";
-import { NotificationOptIn } from "@/components/NotificationOptIn";
+
 
 
 
@@ -187,10 +187,6 @@ function HomePage() {
       {/* LIVE NEWS */}
       <LiveKisanNews />
 
-      {/* DAILY PUSH OPT-IN */}
-      <section className="mx-auto max-w-6xl px-4 pt-6">
-        <NotificationOptIn />
-      </section>
 
 
 
