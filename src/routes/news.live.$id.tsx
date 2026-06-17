@@ -34,6 +34,10 @@ function formatTimeAgo(minutes: number) {
   return `${Math.floor(h / 24)} दिन पहले`;
 }
 
+function minutesSince(date: string): number {
+  return Math.max(1, Math.round((Date.now() - new Date(date).getTime()) / 60000));
+}
+
 export const Route = createFileRoute("/news/live/$id")({
   loader: async ({ params }) => {
     const res = await getLiveNewsArticle({ data: { id: params.id } });
@@ -134,7 +138,7 @@ function LiveNewsArticle() {
             </span>
             <span className="font-medium">स्रोत: {item.source}</span>
             <span className="inline-flex items-center gap-1">
-              <Calendar className="h-3.5 w-3.5" /> {formatTimeAgo(item.minutesAgo)}
+              <Calendar className="h-3.5 w-3.5" /> {formatTimeAgo(minutesSince(item.publishedAt))}
             </span>
             <button
               onClick={handleShare}
