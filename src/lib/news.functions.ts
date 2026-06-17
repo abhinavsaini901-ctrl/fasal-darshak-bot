@@ -251,7 +251,7 @@ function fallbackItems(): LiveNewsItem[] {
 
 type Cache = { at: number; data: LiveNewsItem[] };
 let CACHE: Cache | null = null;
-const TTL_MS = 2 * 60 * 60 * 1000; // 2 hours — fresh news every 2 hrs
+const TTL_MS = 3 * 60 * 60 * 1000; // 3 hours — fresh news every 3 hrs
 
 async function ensureNewsCache(): Promise<LiveNewsItem[]> {
   const now = Date.now();
@@ -283,7 +283,12 @@ async function ensureNewsCache(): Promise<LiveNewsItem[]> {
 export const getLiveAgriNews = createServerFn({ method: "GET" }).handler(async () => {
   const data = await ensureNewsCache();
   const at = CACHE?.at ?? Date.now();
-  return { items: data, cachedAt: new Date(at).toISOString(), fresh: true };
+  const now = Date.now();
+  const items = data.map((item) => {
+    const minutesAgo = Math.max(1, Math.round((now - new Date(item.publishedAt).getTime()) / 60000));
+    return { ...item, minutesAgo, breaking: minutesAgo <= 60 };
+  });
+  return { items, cachedAt: new Date(at).toISOString(), fresh: true };
 });
 
 // ===== Full article generation via Lovable AI Gateway =====
@@ -319,23 +324,11 @@ async function generateHindiArticle(item: LiveNewsItem): Promise<string[]> {
 मूल स्रोत: ${item.source}`;
 
   try {
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [
-          { role: "system", content: "You are an expert Indian agricultural journalist who writes original, plagiarism-free, easy Hindi articles for farmers." },
-          { role: "user", content: prompt },
-        ],
-      }),
-    });
-    if (!res.ok) {
-      console.error("AI gateway error", res.status, await res.text().catch(() => ""));
-      throw new Error("ai gateway failed");
-    }
-    const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
-    const text = json.choices?.[0]?.message?.content?.trim() || "";
+    const { generateHindiNewsArticle } = await import("@/lib/ai-gateway.server");
+    const text = await generateHindiNewsArticle(apiKey, [
+      { role: "system", content: "You are an expert Indian agricultural journalist who writes original, plagiarism-free, easy Hindi articles for farmers." },
+      { role: "user", content: prompt },
+    ]);
     const paragraphs = text
       .split(/\n\s*\n/)
       .map((p) => p.replace(/^[#*\-\s]+/, "").trim())
@@ -355,8 +348,11 @@ export const getLiveNewsArticle = createServerFn({ method: "GET" })
   .inputValidator((d: { id: string }) => d)
   .handler(async ({ data }) => {
     const items = await ensureNewsCache();
-    const item = items.find((i) => i.id === data.id);
+    const now = Date.now();
+    let item = items.find((i) => i.id === data.id) ?? null;
     if (!item) return { item: null, paragraphs: [] as string[] };
+    const minutesAgo = Math.max(1, Math.round((now - new Date(item.publishedAt).getTime()) / 60000));
+    item = { ...item, minutesAgo, breaking: minutesAgo <= 60 };
     const cached = ARTICLE_CACHE.get(item.id);
     if (cached && Date.now() - cached.at < ARTICLE_TTL_MS) {
       return { item, paragraphs: cached.paragraphs };
