@@ -23,6 +23,7 @@ import { Newsletter } from "@/components/Newsletter";
 import { WeatherLocationCard } from "@/components/WeatherLocationCard";
 import { KnowledgeCenterSection } from "@/components/KnowledgeCenterSection";
 import { LiveKisanNews } from "@/components/LiveKisanNews";
+import { KrishiStore } from "@/components/KrishiStore";
 
 
 
@@ -186,6 +187,9 @@ function HomePage() {
 
       {/* LIVE NEWS */}
       <LiveKisanNews />
+
+      {/* KRISHI STORE */}
+      <KrishiStore />
 
 
 
