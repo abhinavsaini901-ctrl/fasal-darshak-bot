@@ -1,6 +1,9 @@
 import { Sprout, FlaskConical, MapPin, ExternalLink } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import seedsImg from "@/assets/store-seeds.jpg";
+import medicineImg from "@/assets/store-medicine.jpg";
+import tourImg from "@/assets/store-tour.jpg";
 
 const ITEMS = [
   {
@@ -10,7 +13,9 @@ const ITEMS = [
     cta: "खरीदें",
     href: "https://agribegri.com/seeds",
     icon: Sprout,
-    color: "text-emerald-600 bg-emerald-50",
+    color: "text-emerald-700 bg-emerald-50",
+    image: seedsImg,
+    alt: "प्रमाणित कृषि बीजों की बोरी",
   },
   {
     title: "कृषि दवा स्टोर",
@@ -19,7 +24,9 @@ const ITEMS = [
     cta: "खरीदें",
     href: "https://agribegri.com/crop-protection",
     icon: FlaskConical,
-    color: "text-amber-600 bg-amber-50",
+    color: "text-amber-700 bg-amber-50",
+    image: medicineImg,
+    alt: "कृषि दवाइयों की बोतलें",
   },
   {
     title: "कृषि यात्रा",
@@ -28,7 +35,9 @@ const ITEMS = [
     cta: "बुक करें",
     href: "https://www.krishijagran.com",
     icon: MapPin,
-    color: "text-indigo-600 bg-indigo-50",
+    color: "text-indigo-700 bg-indigo-50",
+    image: tourImg,
+    alt: "किसानों की फार्म विजिट",
   },
 ];
 
@@ -45,27 +54,41 @@ export function KrishiStore() {
         {ITEMS.map((item) => (
           <Card
             key={item.title}
-            className="flex flex-col overflow-hidden rounded-2xl border border-border bg-gradient-card p-5 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-strong"
+            className="flex flex-col overflow-hidden rounded-2xl border border-border bg-gradient-card p-0 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-strong"
           >
-            <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${item.color}`}>
-              <item.icon className="h-7 w-7" />
+            <div className="relative aspect-[3/2] w-full overflow-hidden bg-muted">
+              <img
+                src={item.image}
+                alt={item.alt}
+                loading="lazy"
+                width={768}
+                height={512}
+                className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+              />
+              <div
+                className={`absolute left-3 top-3 flex h-10 w-10 items-center justify-center rounded-xl shadow-soft ring-1 ring-white/60 ${item.color}`}
+              >
+                <item.icon className="h-5 w-5" />
+              </div>
             </div>
-            <h3 className="mt-4 text-lg font-bold text-foreground">{item.title}</h3>
-            <p className="mt-1 text-sm text-muted-foreground">{item.desc}</p>
-            <div className="mt-4 inline-flex w-fit items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-bold text-primary">
-              {item.price}
+            <div className="flex flex-1 flex-col p-5">
+              <h3 className="text-lg font-bold text-foreground">{item.title}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{item.desc}</p>
+              <div className="mt-4 inline-flex w-fit items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-bold text-primary">
+                {item.price}
+              </div>
+              <a
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="mt-5 mt-auto pt-5"
+              >
+                <Button className="w-full rounded-xl bg-gradient-primary font-bold shadow-soft">
+                  {item.cta}
+                  <ExternalLink className="ml-1 h-4 w-4" />
+                </Button>
+              </a>
             </div>
-            <a
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-              className="mt-5"
-            >
-              <Button className="w-full rounded-xl bg-gradient-primary font-bold shadow-soft">
-                {item.cta}
-                <ExternalLink className="ml-1 h-4 w-4" />
-              </Button>
-            </a>
           </Card>
         ))}
       </div>
