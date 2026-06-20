@@ -33,7 +33,7 @@ const ITEMS = [
     desc: "ट्रैक्टर, पंप, स्प्रेयर और कृषि उपकरण",
     price: "₹499 से शुरू",
     cta: "खरीदें",
-    href: "https://agribegri.com/agriculture-tools",
+    href: "https://www.tractorjunction.com/farm-implements/",
     icon: Tractor,
     color: "text-indigo-700 bg-indigo-50",
     image: tourImg,
