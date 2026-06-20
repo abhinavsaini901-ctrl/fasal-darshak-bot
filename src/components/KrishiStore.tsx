@@ -1,4 +1,4 @@
-import { Sprout, FlaskConical, MapPin, ExternalLink } from "lucide-react";
+import { Sprout, FlaskConical, Tractor, ExternalLink } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import seedsImg from "@/assets/store-seeds.jpg";
@@ -29,15 +29,15 @@ const ITEMS = [
     alt: "कृषि दवाइयों की बोतलें",
   },
   {
-    title: "कृषि यात्रा",
-    desc: "कृषि प्रशिक्षण, फार्म विजिट और कृषि एक्सपो",
+    title: "कृषि यंत्र",
+    desc: "ट्रैक्टर, पंप, स्प्रेयर और कृषि उपकरण",
     price: "₹499 से शुरू",
-    cta: "बुक करें",
-    href: "https://www.krishijagran.com",
-    icon: MapPin,
+    cta: "खरीदें",
+    href: "https://agribegri.com/agriculture-tools",
+    icon: Tractor,
     color: "text-indigo-700 bg-indigo-50",
     image: tourImg,
-    alt: "किसानों की फार्म विजिट",
+    alt: "कृषि यंत्र और उपकरण",
   },
 ];
 
