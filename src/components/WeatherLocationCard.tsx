@@ -89,15 +89,24 @@ async function fetchWeather(lat: number, lon: number): Promise<Weather> {
   return { tempC: w.tempC, code: w.code, label, Icon };
 }
 
+// Default static fallback so card is never blank (shown until API resolves)
+const DEFAULT_LOC: Loc = { district: "नई दिल्ली", state: "भारत", lat: 28.6139, lon: 77.2090 };
+const DEFAULT_WEATHER: Weather = {
+  tempC: 32,
+  code: 2,
+  label: "आंशिक बादल",
+  Icon: Cloud,
+};
+
 export function WeatherLocationCard() {
-  const [loc, setLoc] = useState<Loc | null>(null);
-  const [weather, setWeather] = useState<Weather | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loc, setLoc] = useState<Loc>(DEFAULT_LOC);
+  const [weather, setWeather] = useState<Weather>(DEFAULT_WEATHER);
   const [selected, setSelected] = useState<string>("");
   const [geoDenied, setGeoDenied] = useState(false);
+  const [updating, setUpdating] = useState(false);
 
   async function loadByCoords(lat: number, lon: number, fallback?: { district: string; state: string }) {
-    setLoading(true);
+    setUpdating(true);
     try {
       const [geo, w] = await Promise.all([
         reverseGeo({ data: { lat, lon } }).catch(() => fallback ?? { district: "आपका क्षेत्र", state: "" }),
@@ -113,15 +122,13 @@ export function WeatherLocationCard() {
     } catch (e) {
       console.error("weather load failed", e);
     } finally {
-      setLoading(false);
+      setUpdating(false);
     }
   }
 
   function tryGeolocation() {
     if (typeof window === "undefined" || !navigator.geolocation) {
       setGeoDenied(true);
-      setLoading(false);
-      // default to first district
       const d = DISTRICTS[0];
       setSelected(d.label);
       loadByCoords(d.lat, d.lon, { district: d.label, state: d.state });
@@ -153,8 +160,9 @@ export function WeatherLocationCard() {
     loadByCoords(d.lat, d.lon, { district: d.label, state: d.state });
   }
 
-  const Icon = weather?.Icon ?? Cloud;
-  const tip = weather ? adviceFor(weather.code, weather.tempC) : "मौसम लोड हो रहा है…";
+  const Icon = weather.Icon;
+  const tip = adviceFor(weather.code, weather.tempC);
+
 
   return (
     <section className="mx-auto max-w-6xl px-4 pt-6">
@@ -169,21 +177,17 @@ export function WeatherLocationCard() {
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 आपका स्थान
               </p>
-              {loc && (
-                <>
-                  <p className="mt-0.5 text-lg font-bold leading-tight text-foreground">
-                    {loc.district}
-                  </p>
-                  {loc.state && (
-                    <p className="text-sm text-muted-foreground">{loc.state}</p>
-                  )}
-                </>
+              <p className="mt-0.5 text-lg font-bold leading-tight text-foreground">
+                {loc.district}
+              </p>
+              {loc.state && (
+                <p className="text-sm text-muted-foreground">{loc.state}</p>
               )}
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <select
                   value={selected}
                   onChange={(e) => onPickDistrict(e.target.value)}
-                  disabled={loading}
+                  disabled={updating}
                   className="w-full max-w-xs rounded-lg border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground focus:border-primary focus:outline-none disabled:opacity-60"
                   aria-label="ज़िला चुनें"
                 >
@@ -211,29 +215,18 @@ export function WeatherLocationCard() {
           <div className="flex items-center justify-start gap-4 sm:justify-end">
             <div className="text-right">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                अभी का मौसम
+                अभी का मौसम {updating && <Loader2 className="ml-1 inline h-3 w-3 animate-spin" />}
               </p>
-              {weather && !loading ? (
-                <>
-                  <p className="text-3xl font-extrabold leading-tight text-foreground">
-                    {weather.tempC}°C
-                  </p>
-                  <p className="text-sm font-medium text-primary">{weather.label}</p>
-                </>
-              ) : (
-                <p className="mt-1 flex items-center justify-end gap-2 text-sm text-muted-foreground">
-                  <Loader2 className="h-4 w-4 animate-spin" /> लोड हो रहा है…
-                </p>
-              )}
+              <p className="text-3xl font-extrabold leading-tight text-foreground">
+                {weather.tempC}°C
+              </p>
+              <p className="text-sm font-medium text-primary">{weather.label}</p>
             </div>
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              {loading ? (
-                <Loader2 className="h-7 w-7 animate-spin" />
-              ) : (
-                <Icon className="h-9 w-9" />
-              )}
+              <Icon className="h-9 w-9" />
             </div>
           </div>
+
         </div>
 
         {/* Advice strip */}
