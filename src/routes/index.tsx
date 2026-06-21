@@ -22,7 +22,7 @@ import { FAQSection } from "@/components/FAQSection";
 import { Newsletter } from "@/components/Newsletter";
 import { WeatherLocationCard } from "@/components/WeatherLocationCard";
 import { KnowledgeCenterSection } from "@/components/KnowledgeCenterSection";
-import { LiveKisanNews } from "@/components/LiveKisanNews";
+// import { LiveKisanNews } from "@/components/LiveKisanNews"; // Hidden until AdSense approval
 import { KrishiStore } from "@/components/KrishiStore";
 
 
@@ -185,8 +185,8 @@ function HomePage() {
       {/* WEATHER & LOCATION */}
       <WeatherLocationCard />
 
-      {/* LIVE NEWS */}
-      <LiveKisanNews />
+      {/* LIVE NEWS — hidden until AdSense approval to avoid third-party content concerns */}
+      {/* <LiveKisanNews /> */}
 
       {/* KRISHI STORE */}
       <KrishiStore />
