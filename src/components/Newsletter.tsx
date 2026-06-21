@@ -1,12 +1,13 @@
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
-import { Mail, Send } from "lucide-react";
+import { Mail, Send, CheckCircle2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export function Newsletter() {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -16,10 +17,14 @@ export function Newsletter() {
       return;
     }
     setSubmitting(true);
+    setSuccess(false);
     setTimeout(() => {
       setSubmitting(false);
       setEmail("");
-      toast.success("धन्यवाद! आप जल्द ही हमसे जुड़ जाएंगे।");
+      setSuccess(true);
+      toast.success("सफलतापूर्वक सब्सक्राइब किया गया!");
+      // auto-hide inline message after a few seconds
+      setTimeout(() => setSuccess(false), 4000);
     }, 600);
   };
 
@@ -41,7 +46,10 @@ export function Newsletter() {
           maxLength={120}
           placeholder="aap@example.com"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            if (success) setSuccess(false);
+          }}
           className="h-11 flex-1 rounded-xl"
         />
         <Button type="submit" disabled={submitting} className="h-11 rounded-xl bg-gradient-primary px-6">
@@ -49,9 +57,22 @@ export function Newsletter() {
           {submitting ? "भेज रहे हैं…" : "सब्सक्राइब"}
         </Button>
       </form>
+
+      {success && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="mt-3 inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-800 shadow-sm animate-in fade-in slide-in-from-top-1"
+        >
+          <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+          सफलतापूर्वक सब्सक्राइब किया गया!
+        </div>
+      )}
+
       <p className="mt-2 text-[11px] text-muted-foreground">
         हम कभी स्पैम नहीं भेजते। कभी भी अनसब्सक्राइब कर सकते हैं।
       </p>
     </section>
   );
 }
+
