@@ -169,10 +169,6 @@ function LiveNewsArticle() {
             </Button>
           </Link>
         </div>
-
-        <p className="mt-6 text-[11px] text-muted-foreground">
-          नोट: यह एक मौलिक AI-सहायक हिंदी लेख है, जो मूल स्रोत से प्रेरित होकर लिखा गया है। आधिकारिक विवरण के लिए मूल स्रोत अवश्य देखें।
-        </p>
       </article>
     </PageShell>
   );
