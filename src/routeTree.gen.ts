@@ -15,6 +15,7 @@ import { Route as ScannerRouteImport } from './routes/scanner'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PestControlRouteImport } from './routes/pest-control'
 import { Route as MarketPricesRouteImport } from './routes/market-prices'
+import { Route as KrishiYantraRouteImport } from './routes/krishi-yantra'
 import { Route as GovernmentSchemesRouteImport } from './routes/government-schemes'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as CropDiseasesRouteImport } from './routes/crop-diseases'
@@ -61,6 +62,11 @@ const PestControlRoute = PestControlRouteImport.update({
 const MarketPricesRoute = MarketPricesRouteImport.update({
   id: '/market-prices',
   path: '/market-prices',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KrishiYantraRoute = KrishiYantraRouteImport.update({
+  id: '/krishi-yantra',
+  path: '/krishi-yantra',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GovernmentSchemesRoute = GovernmentSchemesRouteImport.update({
@@ -159,6 +165,7 @@ export interface FileRoutesByFullPath {
   '/crop-diseases': typeof CropDiseasesRoute
   '/disclaimer': typeof DisclaimerRoute
   '/government-schemes': typeof GovernmentSchemesRoute
+  '/krishi-yantra': typeof KrishiYantraRoute
   '/market-prices': typeof MarketPricesRoute
   '/pest-control': typeof PestControlRoute
   '/privacy': typeof PrivacyRoute
@@ -182,6 +189,7 @@ export interface FileRoutesByTo {
   '/crop-diseases': typeof CropDiseasesRoute
   '/disclaimer': typeof DisclaimerRoute
   '/government-schemes': typeof GovernmentSchemesRoute
+  '/krishi-yantra': typeof KrishiYantraRoute
   '/market-prices': typeof MarketPricesRoute
   '/pest-control': typeof PestControlRoute
   '/privacy': typeof PrivacyRoute
@@ -208,6 +216,7 @@ export interface FileRoutesById {
   '/crop-diseases': typeof CropDiseasesRoute
   '/disclaimer': typeof DisclaimerRoute
   '/government-schemes': typeof GovernmentSchemesRoute
+  '/krishi-yantra': typeof KrishiYantraRoute
   '/market-prices': typeof MarketPricesRoute
   '/pest-control': typeof PestControlRoute
   '/privacy': typeof PrivacyRoute
@@ -234,6 +243,7 @@ export interface FileRouteTypes {
     | '/crop-diseases'
     | '/disclaimer'
     | '/government-schemes'
+    | '/krishi-yantra'
     | '/market-prices'
     | '/pest-control'
     | '/privacy'
@@ -257,6 +267,7 @@ export interface FileRouteTypes {
     | '/crop-diseases'
     | '/disclaimer'
     | '/government-schemes'
+    | '/krishi-yantra'
     | '/market-prices'
     | '/pest-control'
     | '/privacy'
@@ -282,6 +293,7 @@ export interface FileRouteTypes {
     | '/crop-diseases'
     | '/disclaimer'
     | '/government-schemes'
+    | '/krishi-yantra'
     | '/market-prices'
     | '/pest-control'
     | '/privacy'
@@ -308,6 +320,7 @@ export interface RootRouteChildren {
   CropDiseasesRoute: typeof CropDiseasesRoute
   DisclaimerRoute: typeof DisclaimerRoute
   GovernmentSchemesRoute: typeof GovernmentSchemesRoute
+  KrishiYantraRoute: typeof KrishiYantraRoute
   MarketPricesRoute: typeof MarketPricesRoute
   PestControlRoute: typeof PestControlRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -362,6 +375,13 @@ declare module '@tanstack/react-router' {
       path: '/market-prices'
       fullPath: '/market-prices'
       preLoaderRoute: typeof MarketPricesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/krishi-yantra': {
+      id: '/krishi-yantra'
+      path: '/krishi-yantra'
+      fullPath: '/krishi-yantra'
+      preLoaderRoute: typeof KrishiYantraRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/government-schemes': {
@@ -521,6 +541,7 @@ const rootRouteChildren: RootRouteChildren = {
   CropDiseasesRoute: CropDiseasesRoute,
   DisclaimerRoute: DisclaimerRoute,
   GovernmentSchemesRoute: GovernmentSchemesRoute,
+  KrishiYantraRoute: KrishiYantraRoute,
   MarketPricesRoute: MarketPricesRoute,
   PestControlRoute: PestControlRoute,
   PrivacyRoute: PrivacyRoute,
@@ -535,13 +556,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
