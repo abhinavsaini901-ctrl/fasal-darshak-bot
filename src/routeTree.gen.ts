@@ -18,9 +18,11 @@ import { Route as MarketPricesRouteImport } from './routes/market-prices'
 import { Route as KrishiYantraRouteImport } from './routes/krishi-yantra'
 import { Route as GovernmentSchemesRouteImport } from './routes/government-schemes'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
+import { Route as DawaStoreRouteImport } from './routes/dawa-store'
 import { Route as CropDiseasesRouteImport } from './routes/crop-diseases'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BlogRouteImport } from './routes/blog'
+import { Route as BeejStoreRouteImport } from './routes/beej-store'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdsDottxtRouteImport } from './routes/ads[.]txt'
 import { Route as AboutRouteImport } from './routes/about'
@@ -79,6 +81,11 @@ const DisclaimerRoute = DisclaimerRouteImport.update({
   path: '/disclaimer',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DawaStoreRoute = DawaStoreRouteImport.update({
+  id: '/dawa-store',
+  path: '/dawa-store',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CropDiseasesRoute = CropDiseasesRouteImport.update({
   id: '/crop-diseases',
   path: '/crop-diseases',
@@ -92,6 +99,11 @@ const ContactRoute = ContactRouteImport.update({
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BeejStoreRoute = BeejStoreRouteImport.update({
+  id: '/beej-store',
+  path: '/beej-store',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -160,9 +172,11 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/auth': typeof AuthRoute
+  '/beej-store': typeof BeejStoreRoute
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/crop-diseases': typeof CropDiseasesRoute
+  '/dawa-store': typeof DawaStoreRoute
   '/disclaimer': typeof DisclaimerRoute
   '/government-schemes': typeof GovernmentSchemesRoute
   '/krishi-yantra': typeof KrishiYantraRoute
@@ -185,8 +199,10 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/auth': typeof AuthRoute
+  '/beej-store': typeof BeejStoreRoute
   '/contact': typeof ContactRoute
   '/crop-diseases': typeof CropDiseasesRoute
+  '/dawa-store': typeof DawaStoreRoute
   '/disclaimer': typeof DisclaimerRoute
   '/government-schemes': typeof GovernmentSchemesRoute
   '/krishi-yantra': typeof KrishiYantraRoute
@@ -211,9 +227,11 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/auth': typeof AuthRoute
+  '/beej-store': typeof BeejStoreRoute
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/crop-diseases': typeof CropDiseasesRoute
+  '/dawa-store': typeof DawaStoreRoute
   '/disclaimer': typeof DisclaimerRoute
   '/government-schemes': typeof GovernmentSchemesRoute
   '/krishi-yantra': typeof KrishiYantraRoute
@@ -238,9 +256,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/ads.txt'
     | '/auth'
+    | '/beej-store'
     | '/blog'
     | '/contact'
     | '/crop-diseases'
+    | '/dawa-store'
     | '/disclaimer'
     | '/government-schemes'
     | '/krishi-yantra'
@@ -263,8 +283,10 @@ export interface FileRouteTypes {
     | '/about'
     | '/ads.txt'
     | '/auth'
+    | '/beej-store'
     | '/contact'
     | '/crop-diseases'
+    | '/dawa-store'
     | '/disclaimer'
     | '/government-schemes'
     | '/krishi-yantra'
@@ -288,9 +310,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/ads.txt'
     | '/auth'
+    | '/beej-store'
     | '/blog'
     | '/contact'
     | '/crop-diseases'
+    | '/dawa-store'
     | '/disclaimer'
     | '/government-schemes'
     | '/krishi-yantra'
@@ -315,9 +339,11 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AdsDottxtRoute: typeof AdsDottxtRoute
   AuthRoute: typeof AuthRoute
+  BeejStoreRoute: typeof BeejStoreRoute
   BlogRoute: typeof BlogRouteWithChildren
   ContactRoute: typeof ContactRoute
   CropDiseasesRoute: typeof CropDiseasesRoute
+  DawaStoreRoute: typeof DawaStoreRoute
   DisclaimerRoute: typeof DisclaimerRoute
   GovernmentSchemesRoute: typeof GovernmentSchemesRoute
   KrishiYantraRoute: typeof KrishiYantraRoute
@@ -398,6 +424,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DisclaimerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dawa-store': {
+      id: '/dawa-store'
+      path: '/dawa-store'
+      fullPath: '/dawa-store'
+      preLoaderRoute: typeof DawaStoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/crop-diseases': {
       id: '/crop-diseases'
       path: '/crop-diseases'
@@ -417,6 +450,13 @@ declare module '@tanstack/react-router' {
       path: '/blog'
       fullPath: '/blog'
       preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/beej-store': {
+      id: '/beej-store'
+      path: '/beej-store'
+      fullPath: '/beej-store'
+      preLoaderRoute: typeof BeejStoreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -536,9 +576,11 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AdsDottxtRoute: AdsDottxtRoute,
   AuthRoute: AuthRoute,
+  BeejStoreRoute: BeejStoreRoute,
   BlogRoute: BlogRouteWithChildren,
   ContactRoute: ContactRoute,
   CropDiseasesRoute: CropDiseasesRoute,
+  DawaStoreRoute: DawaStoreRoute,
   DisclaimerRoute: DisclaimerRoute,
   GovernmentSchemesRoute: GovernmentSchemesRoute,
   KrishiYantraRoute: KrishiYantraRoute,
