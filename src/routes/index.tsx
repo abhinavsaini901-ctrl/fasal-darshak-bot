@@ -24,7 +24,7 @@ import { WeatherLocationCard } from "@/components/WeatherLocationCard";
 import { KnowledgeCenterSection } from "@/components/KnowledgeCenterSection";
 // import { LiveKisanNews } from "@/components/LiveKisanNews"; // Hidden until AdSense approval
 import { KrishiStore } from "@/components/KrishiStore";
-import { AdSlot } from "@/components/AdSlot";
+
 
 
 
@@ -220,10 +220,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* AD SLOT #2 — In-content (between main sections). Paste AdSense code inside AdSlot.tsx */}
-      <div className="py-6">
-        <AdSlot variant="in-article" id="ad-in-content" />
-      </div>
 
       {/* KNOWLEDGE CENTER */}
       <KnowledgeCenterSection />
