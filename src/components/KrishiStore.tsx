@@ -1,4 +1,4 @@
-import { Sprout, FlaskConical, Tractor, ExternalLink, ArrowRight } from "lucide-react";
+import { Sprout, FlaskConical, Tractor, ArrowRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,10 +9,10 @@ import tourImg from "@/assets/store-tour.jpg";
 const ITEMS = [
   {
     title: "बीज स्टोर",
-    desc: "प्रमाणित बीज खरीदें",
-    price: "₹99 से शुरू",
-    cta: "खरीदें",
-    href: "https://agribegri.com/seeds",
+    desc: "5 मुख्य फसलों की उन्नत बीज किस्मों की पूरी जानकारी",
+    price: "विस्तृत गाइड",
+    cta: "जानकारी देखें",
+    href: "/beej-store",
     icon: Sprout,
     color: "text-emerald-700 bg-emerald-50",
     image: seedsImg,
@@ -20,14 +20,14 @@ const ITEMS = [
   },
   {
     title: "कृषि दवा स्टोर",
-    desc: "कीटनाशक, फफूंदनाशक और जैविक दवाइयाँ",
-    price: "₹149 से शुरू",
-    cta: "खरीदें",
-    href: "https://agribegri.com/crop-protection",
+    desc: "नीम तेल, बीटी, ट्राइकोडर्मा जैसे जैविक कीट नियंत्रकों की जानकारी",
+    price: "जैविक उपाय",
+    cta: "जानकारी देखें",
+    href: "/dawa-store",
     icon: FlaskConical,
     color: "text-amber-700 bg-amber-50",
     image: medicineImg,
-    alt: "कृषि दवाइयों की बोतलें",
+    alt: "जैविक कृषि दवाइयाँ",
   },
   {
     title: "कृषि यंत्र",
@@ -35,7 +35,6 @@ const ITEMS = [
     price: "विस्तृत गाइड",
     cta: "जानकारी देखें",
     href: "/krishi-yantra",
-    internal: true,
     icon: Tractor,
     color: "text-indigo-700 bg-indigo-50",
     image: tourImg,
@@ -79,26 +78,12 @@ export function KrishiStore() {
               <div className="mt-4 inline-flex w-fit items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-bold text-primary">
                 {item.price}
               </div>
-              {item.internal ? (
-                <Link to={item.href} className="mt-5 mt-auto pt-5">
-                  <Button className="w-full rounded-xl bg-gradient-primary font-bold shadow-soft">
-                    {item.cta}
-                    <ArrowRight className="ml-1 h-4 w-4" />
-                  </Button>
-                </Link>
-              ) : (
-                <a
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer nofollow"
-                  className="mt-5 mt-auto pt-5"
-                >
-                  <Button className="w-full rounded-xl bg-gradient-primary font-bold shadow-soft">
-                    {item.cta}
-                    <ExternalLink className="ml-1 h-4 w-4" />
-                  </Button>
-                </a>
-              )}
+              <Link to={item.href} className="mt-5 mt-auto pt-5">
+                <Button className="w-full rounded-xl bg-gradient-primary font-bold shadow-soft">
+                  {item.cta}
+                  <ArrowRight className="ml-1 h-4 w-4" />
+                </Button>
+              </Link>
             </div>
           </Card>
         ))}
