@@ -37,6 +37,7 @@ export const Route = createRootRoute({
       { property: "og:locale", content: "hi_IN" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "google-adsense-account", content: "ca-pub-2415253815061726" },
+      { name: "google-site-verification", content: "-B8F907iGMru7LF4K9skmEIreefs1-1WshCQmbb9xTo" },
     ],
     links: [
       {
