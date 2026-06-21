@@ -78,26 +78,12 @@ export function KrishiStore() {
               <div className="mt-4 inline-flex w-fit items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-bold text-primary">
                 {item.price}
               </div>
-              {item.internal ? (
-                <Link to={item.href} className="mt-5 mt-auto pt-5">
-                  <Button className="w-full rounded-xl bg-gradient-primary font-bold shadow-soft">
-                    {item.cta}
-                    <ArrowRight className="ml-1 h-4 w-4" />
-                  </Button>
-                </Link>
-              ) : (
-                <a
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer nofollow"
-                  className="mt-5 mt-auto pt-5"
-                >
-                  <Button className="w-full rounded-xl bg-gradient-primary font-bold shadow-soft">
-                    {item.cta}
-                    <ExternalLink className="ml-1 h-4 w-4" />
-                  </Button>
-                </a>
-              )}
+              <Link to={item.href} className="mt-5 mt-auto pt-5">
+                <Button className="w-full rounded-xl bg-gradient-primary font-bold shadow-soft">
+                  {item.cta}
+                  <ArrowRight className="ml-1 h-4 w-4" />
+                </Button>
+              </Link>
             </div>
           </Card>
         ))}
