@@ -1,11 +1,16 @@
 import { Link } from "@tanstack/react-router";
 import { Leaf, Mail, Facebook, Twitter, Youtube, Instagram } from "lucide-react";
+import { AdSlot } from "./AdSlot";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
     <footer className="mt-16 border-t border-border bg-secondary/40">
+      {/* AD SLOT #3 — Footer area. Paste AdSense code inside AdSlot.tsx */}
+      <div className="pt-8">
+        <AdSlot variant="footer" id="ad-footer" />
+      </div>
       <div className="mx-auto max-w-6xl px-4 py-10">
         <div className="grid gap-8 md:grid-cols-4">
           <div className="md:col-span-1">
