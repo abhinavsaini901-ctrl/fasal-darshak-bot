@@ -1,4 +1,5 @@
-import { Sprout, FlaskConical, Tractor, ExternalLink } from "lucide-react";
+import { Sprout, FlaskConical, Tractor, ExternalLink, ArrowRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import seedsImg from "@/assets/store-seeds.jpg";
@@ -30,10 +31,11 @@ const ITEMS = [
   },
   {
     title: "कृषि यंत्र",
-    desc: "ट्रैक्टर, पंप, स्प्रेयर और कृषि उपकरण",
-    price: "₹499 से शुरू",
-    cta: "खरीदें",
-    href: "https://www.tractorjunction.com/farm-implements/",
+    desc: "ट्रैक्टर, रोटावेटर, थ्रेशर, पंप और अन्य उपकरणों की पूरी जानकारी",
+    price: "विस्तृत गाइड",
+    cta: "जानकारी देखें",
+    href: "/krishi-yantra",
+    internal: true,
     icon: Tractor,
     color: "text-indigo-700 bg-indigo-50",
     image: tourImg,
@@ -77,17 +79,26 @@ export function KrishiStore() {
               <div className="mt-4 inline-flex w-fit items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-bold text-primary">
                 {item.price}
               </div>
-              <a
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                className="mt-5 mt-auto pt-5"
-              >
-                <Button className="w-full rounded-xl bg-gradient-primary font-bold shadow-soft">
-                  {item.cta}
-                  <ExternalLink className="ml-1 h-4 w-4" />
-                </Button>
-              </a>
+              {item.internal ? (
+                <Link to={item.href} className="mt-5 mt-auto pt-5">
+                  <Button className="w-full rounded-xl bg-gradient-primary font-bold shadow-soft">
+                    {item.cta}
+                    <ArrowRight className="ml-1 h-4 w-4" />
+                  </Button>
+                </Link>
+              ) : (
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  className="mt-5 mt-auto pt-5"
+                >
+                  <Button className="w-full rounded-xl bg-gradient-primary font-bold shadow-soft">
+                    {item.cta}
+                    <ExternalLink className="ml-1 h-4 w-4" />
+                  </Button>
+                </a>
+              )}
             </div>
           </Card>
         ))}
