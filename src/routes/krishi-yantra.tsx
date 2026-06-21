@@ -120,7 +120,7 @@ function KrishiYantraPage() {
   return (
     <PageShell>
       <div className="mx-auto max-w-5xl px-4 py-8">
-        <Breadcrumbs items={[{ label: "होम", href: "/" }, { label: "कृषि यंत्र" }]} />
+        <Breadcrumbs items={[{ label: "होम", to: "/" }, { label: "कृषि यंत्र" }]} />
 
         <header className="mt-4">
           <h1 className="text-3xl font-bold text-foreground md:text-4xl">कृषि यंत्र</h1>
