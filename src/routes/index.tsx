@@ -205,10 +205,28 @@ function HomePage() {
       {/* KRISHI STORE */}
       <KrishiStore />
 
-
-
-
-      {/* CATEGORIES */}
+      {/* FEATURED SERVICES — छोटे आइकन के साथ */}
+      <section className="mx-auto max-w-6xl px-4 py-12">
+        <h2 className="text-2xl font-bold text-foreground md:text-3xl">मुख्य सुविधाएं</h2>
+        <p className="mt-1 text-sm text-muted-foreground">किसान मित्र आपके लिए क्या-क्या कर सकता है</p>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {FEATURES.map((f) => (
+            <Link
+              key={f.title}
+              to={f.href}
+              className="group flex items-start gap-3 rounded-2xl border border-border bg-card p-4 transition-all hover:border-primary/40 hover:shadow-soft"
+            >
+              <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${f.color}`}>
+                <f.icon className="h-4 w-4" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-foreground group-hover:text-primary">{f.title}</p>
+                <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{f.desc}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
       <section className="mx-auto max-w-6xl px-4 py-12">
         <div className="mb-6 flex items-end justify-between">
           <div>
