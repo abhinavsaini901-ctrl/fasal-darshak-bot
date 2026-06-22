@@ -249,21 +249,25 @@ function HomePage() {
             languageName: LANG_NAME_FOR_AI[lang as LangCode],
           },
         });
-        setResult(res);
-        setView("result");
-        // Auto-speak summary
-        if (res.summary) speak(res.summary);
+        if (liveMode) {
+          // Live mode: stay on camera, update the overlay only
+          setLiveResult(res);
+        } else {
+          setResult(res);
+          setView("result");
+          if (res.summary) speak(res.summary);
+        }
       } catch (e) {
         const msg = (e as Error).message;
         if (msg === "RATE_LIMITED") toast.error(t("rateLimited"));
         else if (msg === "PAYMENT_REQUIRED") toast.error(t("paymentRequired"));
-        else toast.error(t("error"));
-        setView("home");
+        else if (!liveMode) toast.error(t("error"));
+        if (!liveMode) setView("home");
       } finally {
         setAnalyzing(false);
       }
     },
-    [scanFn, lang, t, speak]
+    [scanFn, lang, t, speak, liveMode]
   );
 
   const sendMessage = useCallback(
