@@ -124,13 +124,14 @@ const TIPS = [
 ];
 
 const FEATURES = [
-  { title: "AI फसल स्कैन", desc: "पत्ते/फसल की फोटो लें, रोग और इलाज 10 सेकंड में पाएं।", icon: Scan, href: "/scanner", color: "text-primary bg-primary/10" },
-  { title: "स्मार्ट सहायक", desc: "किसी भी खेती से जुड़ा सवाल पूछें, AI हिंदी में जवाब देगा।", icon: MessageCircle, href: "/scanner", color: "text-sky-600 bg-sky-50" },
-  { title: "मंडी भाव", desc: "रोज़ाना मंडी के ताज़ा भाव और MSP की जानकारी।", icon: TrendingUp, href: "/market-prices", color: "text-lime-700 bg-lime-50" },
-  { title: "सरकारी योजनाएं", desc: "PM-KISAN, PMKSY और अन्य सब्सिडी योजनाओं का विवरण।", icon: Landmark, href: "/government-schemes", color: "text-indigo-600 bg-indigo-50" },
-  { title: "मौसम अपडेट", desc: "अपने गाँव/जिले का मौसम और बारिश का पूर्वानुमान।", icon: Sun, href: "/", color: "text-amber-600 bg-amber-50" },
-  { title: "कई भाषाएं", desc: "हिंदी, अंग्रेज़ी, मराठी, पंजाबी, गुजराती और ज़्यादा।", icon: Languages, href: "#", color: "text-rose-600 bg-rose-50" },
+  { title: "AI फसल स्कैन", desc: "पत्ते/फसल की फोटो लें, रोग और इलाज 10 सेकंड में पाएं।", icon: Scan, href: "/scanner" },
+  { title: "स्मार्ट सहायक", desc: "किसी भी खेती से जुड़ा सवाल पूछें, AI हिंदी में जवाब देगा।", icon: MessageCircle, href: "/scanner" },
+  { title: "मंडी भाव", desc: "रोज़ाना मंडी के ताज़ा भाव और MSP की जानकारी।", icon: TrendingUp, href: "/market-prices" },
+  { title: "सरकारी योजनाएं", desc: "PM-KISAN, PMKSY और अन्य सब्सिडी योजनाओं का विवरण।", icon: Landmark, href: "/government-schemes" },
+  { title: "मौसम अपडेट", desc: "अपने गाँव/जिले का मौसम और बारिश का पूर्वानुमान।", icon: Sun, href: "/" },
+  { title: "कई भाषाएं", desc: "हिंदी, अंग्रेज़ी, मराठी, पंजाबी, गुजराती और ज़्यादा।", icon: Languages, href: "#" },
 ];
+
 
 function HomePage() {
   return (
@@ -218,9 +219,9 @@ function HomePage() {
                 to={f.href}
                 className="group flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 shadow-sm transition-all hover:border-primary/40 hover:bg-primary/5 hover:shadow-soft"
               >
-                <div className={`flex h-6 w-6 items-center justify-center rounded-full ${f.color}`}>
-                  <f.icon className="h-3 w-3" />
-                </div>
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <f.icon className="h-3 w-3" />
+              </div>
                 <span className="text-xs font-semibold text-foreground group-hover:text-primary">{f.title}</span>
               </Link>
             ))}
