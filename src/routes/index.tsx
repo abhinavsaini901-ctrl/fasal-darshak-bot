@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Camera,
   MessageCircle,
+  Scan,
   Sprout,
   Bug,
   Droplets,
@@ -13,6 +14,8 @@ import {
   ShieldCheck,
   Users,
   Smartphone,
+  Languages,
+  Sun,
 } from "lucide-react";
 import heroImg from "@/assets/hero-crop.jpg";
 import { PageShell } from "@/components/PageShell";
