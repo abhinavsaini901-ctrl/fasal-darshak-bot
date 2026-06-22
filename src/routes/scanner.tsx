@@ -334,11 +334,61 @@ function HomePage() {
 
   // ---------- VIEWS ----------
   if (view === "camera") {
+    const lr = liveResult;
+    const overlay = liveMode && lr ? (
+      <div className="rounded-2xl border border-white/10 bg-black/75 p-3 text-white shadow-strong backdrop-blur">
+        <div className="flex items-center justify-between gap-2">
+          <div className="min-w-0">
+            <p className="truncate text-base font-bold">
+              {lr.isPlant ? (lr.cropName || "फसल") : "कोई फसल नहीं दिखी"}
+            </p>
+            <p className="truncate text-xs opacity-80">
+              {lr.isHealthy ? "✅ स्वस्थ" : (lr.disease || "विश्लेषण…")}
+            </p>
+          </div>
+          <div className="flex flex-col items-end">
+            <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${lr.isHealthy ? "bg-emerald-500" : "bg-amber-500"}`}>
+              {lr.healthScore}%
+            </span>
+            <span className="mt-0.5 text-[10px] opacity-70">AI score</span>
+          </div>
+        </div>
+        {lr.summary && (
+          <p className="mt-2 line-clamp-2 text-xs opacity-90">{lr.summary}</p>
+        )}
+        {lr.isPlant && (
+          <Button
+            size="sm"
+            className="mt-2 h-8 w-full rounded-full bg-primary text-xs font-semibold"
+            onClick={() => {
+              setLiveMode(false);
+              setResult(lr);
+              setView("result");
+              if (lr.summary) speak(lr.summary);
+            }}
+          >
+            पूरी रिपोर्ट देखें
+          </Button>
+        )}
+      </div>
+    ) : null;
+
     return (
       <CameraCapture
         onCapture={handleCapture}
-        onClose={() => setView("home")}
+        onClose={() => {
+          setLiveMode(false);
+          setLiveResult(null);
+          setView("home");
+        }}
         isAnalyzing={analyzing}
+        liveMode={liveMode}
+        onToggleLive={(next) => {
+          setLiveMode(next);
+          if (!next) setLiveResult(null);
+        }}
+        liveIntervalMs={5000}
+        liveOverlay={overlay}
       />
     );
   }
