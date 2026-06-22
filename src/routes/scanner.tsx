@@ -198,6 +198,8 @@ function HomePage() {
   const [analyzing, setAnalyzing] = useState(false);
   const [imageData, setImageData] = useState<string | null>(null);
   const [result, setResult] = useState<ScanResult | null>(null);
+  const [liveMode, setLiveMode] = useState(false);
+  const [liveResult, setLiveResult] = useState<ScanResult | null>(null);
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
