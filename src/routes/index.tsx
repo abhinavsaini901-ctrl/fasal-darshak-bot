@@ -25,7 +25,7 @@ import { FAQSection } from "@/components/FAQSection";
 import { Newsletter } from "@/components/Newsletter";
 import { WeatherLocationCard } from "@/components/WeatherLocationCard";
 import { KnowledgeCenterSection } from "@/components/KnowledgeCenterSection";
-import { LiveKisanNews } from "@/components/LiveKisanNews";
+// import { LiveKisanNews } from "@/components/LiveKisanNews"; // Hidden until AdSense approval
 import { KrishiStore } from "@/components/KrishiStore";
 import { AdSlot } from "@/components/AdSlot";
 
@@ -200,10 +200,8 @@ function HomePage() {
       {/* WEATHER & LOCATION */}
       <WeatherLocationCard />
 
-      {/* LIVE KISAN NEWS — अलग सेक्शन */}
-      <section className="border-y border-border bg-secondary/30 py-6">
-        <LiveKisanNews />
-      </section>
+      {/* LIVE NEWS — hidden until AdSense approval to avoid third-party content concerns */}
+      {/* <LiveKisanNews /> */}
 
       {/* KRISHI STORE */}
       <KrishiStore />
