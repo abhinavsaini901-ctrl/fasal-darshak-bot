@@ -198,6 +198,8 @@ function HomePage() {
   const [analyzing, setAnalyzing] = useState(false);
   const [imageData, setImageData] = useState<string | null>(null);
   const [result, setResult] = useState<ScanResult | null>(null);
+  const [liveMode, setLiveMode] = useState(false);
+  const [liveResult, setLiveResult] = useState<ScanResult | null>(null);
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
@@ -247,21 +249,25 @@ function HomePage() {
             languageName: LANG_NAME_FOR_AI[lang as LangCode],
           },
         });
-        setResult(res);
-        setView("result");
-        // Auto-speak summary
-        if (res.summary) speak(res.summary);
+        if (liveMode) {
+          // Live mode: stay on camera, update the overlay only
+          setLiveResult(res);
+        } else {
+          setResult(res);
+          setView("result");
+          if (res.summary) speak(res.summary);
+        }
       } catch (e) {
         const msg = (e as Error).message;
         if (msg === "RATE_LIMITED") toast.error(t("rateLimited"));
         else if (msg === "PAYMENT_REQUIRED") toast.error(t("paymentRequired"));
-        else toast.error(t("error"));
-        setView("home");
+        else if (!liveMode) toast.error(t("error"));
+        if (!liveMode) setView("home");
       } finally {
         setAnalyzing(false);
       }
     },
-    [scanFn, lang, t, speak]
+    [scanFn, lang, t, speak, liveMode]
   );
 
   const sendMessage = useCallback(
@@ -328,11 +334,61 @@ function HomePage() {
 
   // ---------- VIEWS ----------
   if (view === "camera") {
+    const lr = liveResult;
+    const overlay = liveMode && lr ? (
+      <div className="rounded-2xl border border-white/10 bg-black/75 p-3 text-white shadow-strong backdrop-blur">
+        <div className="flex items-center justify-between gap-2">
+          <div className="min-w-0">
+            <p className="truncate text-base font-bold">
+              {lr.isPlant ? (lr.cropName || "फसल") : "कोई फसल नहीं दिखी"}
+            </p>
+            <p className="truncate text-xs opacity-80">
+              {lr.isHealthy ? "✅ स्वस्थ" : (lr.disease || "विश्लेषण…")}
+            </p>
+          </div>
+          <div className="flex flex-col items-end">
+            <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${lr.isHealthy ? "bg-emerald-500" : "bg-amber-500"}`}>
+              {lr.healthScore}%
+            </span>
+            <span className="mt-0.5 text-[10px] opacity-70">AI score</span>
+          </div>
+        </div>
+        {lr.summary && (
+          <p className="mt-2 line-clamp-2 text-xs opacity-90">{lr.summary}</p>
+        )}
+        {lr.isPlant && (
+          <Button
+            size="sm"
+            className="mt-2 h-8 w-full rounded-full bg-primary text-xs font-semibold"
+            onClick={() => {
+              setLiveMode(false);
+              setResult(lr);
+              setView("result");
+              if (lr.summary) speak(lr.summary);
+            }}
+          >
+            पूरी रिपोर्ट देखें
+          </Button>
+        )}
+      </div>
+    ) : null;
+
     return (
       <CameraCapture
         onCapture={handleCapture}
-        onClose={() => setView("home")}
+        onClose={() => {
+          setLiveMode(false);
+          setLiveResult(null);
+          setView("home");
+        }}
         isAnalyzing={analyzing}
+        liveMode={liveMode}
+        onToggleLive={(next) => {
+          setLiveMode(next);
+          if (!next) setLiveResult(null);
+        }}
+        liveIntervalMs={5000}
+        liveOverlay={overlay}
       />
     );
   }
