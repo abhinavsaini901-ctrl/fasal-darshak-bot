@@ -219,9 +219,9 @@ function HomePage() {
                 to={f.href}
                 className="group flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 shadow-sm transition-all hover:border-primary/40 hover:bg-primary/5 hover:shadow-soft"
               >
-                <div className={`flex h-6 w-6 items-center justify-center rounded-full ${f.color}`}>
-                  <f.icon className="h-3 w-3" />
-                </div>
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <f.icon className="h-3 w-3" />
+              </div>
                 <span className="text-xs font-semibold text-foreground group-hover:text-primary">{f.title}</span>
               </Link>
             ))}
