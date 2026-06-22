@@ -25,7 +25,7 @@ import { FAQSection } from "@/components/FAQSection";
 import { Newsletter } from "@/components/Newsletter";
 import { WeatherLocationCard } from "@/components/WeatherLocationCard";
 import { KnowledgeCenterSection } from "@/components/KnowledgeCenterSection";
-// import { LiveKisanNews } from "@/components/LiveKisanNews"; // Hidden until AdSense approval
+import { LiveKisanNews } from "@/components/LiveKisanNews";
 import { KrishiStore } from "@/components/KrishiStore";
 import { AdSlot } from "@/components/AdSlot";
 
