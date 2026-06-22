@@ -29,7 +29,7 @@ export function SiteFooter() {
               <a href="#" aria-label="Twitter" className="text-muted-foreground hover:text-primary">
                 <Twitter className="h-4 w-4" />
               </a>
-              <a href="#" aria-label="YouTube" className="text-muted-foreground hover:text-primary">
+              <a href="https://youtube.com/@kisanaidoc" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="text-muted-foreground hover:text-primary">
                 <Youtube className="h-4 w-4" />
               </a>
               <a href="#" aria-label="Instagram" className="text-muted-foreground hover:text-primary">
