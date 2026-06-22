@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Camera,
   MessageCircle,
+  Scan,
   Sprout,
   Bug,
   Droplets,
@@ -13,6 +14,8 @@ import {
   ShieldCheck,
   Users,
   Smartphone,
+  Languages,
+  Sun,
 } from "lucide-react";
 import heroImg from "@/assets/hero-crop.jpg";
 import { PageShell } from "@/components/PageShell";
@@ -120,6 +123,15 @@ const TIPS = [
   { title: "जैविक खाद", text: "वर्मीकम्पोस्ट और गोबर खाद से मिट्टी की उपजाऊ शक्ति बढ़ती है।" },
 ];
 
+const FEATURES = [
+  { title: "AI फसल स्कैन", desc: "पत्ते/फसल की फोटो लें, रोग और इलाज 10 सेकंड में पाएं।", icon: Scan, href: "/scanner", color: "text-primary bg-primary/10" },
+  { title: "स्मार्ट सहायक", desc: "किसी भी खेती से जुड़ा सवाल पूछें, AI हिंदी में जवाब देगा।", icon: MessageCircle, href: "/scanner", color: "text-sky-600 bg-sky-50" },
+  { title: "मंडी भाव", desc: "रोज़ाना मंडी के ताज़ा भाव और MSP की जानकारी।", icon: TrendingUp, href: "/market-prices", color: "text-lime-700 bg-lime-50" },
+  { title: "सरकारी योजनाएं", desc: "PM-KISAN, PMKSY और अन्य सब्सिडी योजनाओं का विवरण।", icon: Landmark, href: "/government-schemes", color: "text-indigo-600 bg-indigo-50" },
+  { title: "मौसम अपडेट", desc: "अपने गाँव/जिले का मौसम और बारिश का पूर्वानुमान।", icon: Sun, href: "/", color: "text-amber-600 bg-amber-50" },
+  { title: "कई भाषाएं", desc: "हिंदी, अंग्रेज़ी, मराठी, पंजाबी, गुजराती और ज़्यादा।", icon: Languages, href: "#", color: "text-rose-600 bg-rose-50" },
+];
+
 function HomePage() {
   return (
 
@@ -193,10 +205,28 @@ function HomePage() {
       {/* KRISHI STORE */}
       <KrishiStore />
 
-
-
-
-      {/* CATEGORIES */}
+      {/* FEATURED SERVICES — छोटे आइकन के साथ */}
+      <section className="mx-auto max-w-6xl px-4 py-12">
+        <h2 className="text-2xl font-bold text-foreground md:text-3xl">मुख्य सुविधाएं</h2>
+        <p className="mt-1 text-sm text-muted-foreground">किसान मित्र आपके लिए क्या-क्या कर सकता है</p>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {FEATURES.map((f) => (
+            <Link
+              key={f.title}
+              to={f.href}
+              className="group flex items-start gap-3 rounded-2xl border border-border bg-card p-4 transition-all hover:border-primary/40 hover:shadow-soft"
+            >
+              <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${f.color}`}>
+                <f.icon className="h-4 w-4" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-foreground group-hover:text-primary">{f.title}</p>
+                <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{f.desc}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
       <section className="mx-auto max-w-6xl px-4 py-12">
         <div className="mb-6 flex items-end justify-between">
           <div>
