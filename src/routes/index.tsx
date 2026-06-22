@@ -200,8 +200,10 @@ function HomePage() {
       {/* WEATHER & LOCATION */}
       <WeatherLocationCard />
 
-      {/* LIVE NEWS — hidden until AdSense approval to avoid third-party content concerns */}
-      {/* <LiveKisanNews /> */}
+      {/* LIVE KISAN NEWS — अलग सेक्शन */}
+      <section className="border-y border-border bg-secondary/30 py-6">
+        <LiveKisanNews />
+      </section>
 
       {/* KRISHI STORE */}
       <KrishiStore />
