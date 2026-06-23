@@ -255,6 +255,7 @@ function HomePage() {
   const handleCapture = useCallback(
     async (dataUrl: string) => {
       setImageData(dataUrl);
+      lastFrameRef.current = dataUrl;
       setAnalyzing(true);
       try {
         const res = await scanFn({
@@ -265,7 +266,6 @@ function HomePage() {
           },
         });
         if (liveMode) {
-          // Live mode: stay on camera, update the overlay only
           setLiveResult(res);
         } else {
           setResult(res);
@@ -283,6 +283,36 @@ function HomePage() {
       }
     },
     [scanFn, lang, t, speak, liveMode]
+  );
+
+  const askLive = useCallback(
+    async (question: string) => {
+      const q = question.trim();
+      if (!q || liveAsking) return;
+      setLiveAsking(true);
+      setLiveAnswer(null);
+      try {
+        const res = await chatFn({
+          data: {
+            language: lang,
+            languageName: LANG_NAME_FOR_AI[lang as LangCode],
+            history: [{ role: "user", content: q }],
+            imageDataUrl: lastFrameRef.current ?? undefined,
+          },
+        });
+        const reply = res.reply || t("error");
+        setLiveAnswer(reply);
+        speak(reply);
+      } catch (e) {
+        const msg = (e as Error).message;
+        if (msg === "RATE_LIMITED") toast.error(t("rateLimited"));
+        else if (msg === "PAYMENT_REQUIRED") toast.error(t("paymentRequired"));
+        else toast.error(t("error"));
+      } finally {
+        setLiveAsking(false);
+      }
+    },
+    [chatFn, lang, t, speak, liveAsking]
   );
 
   const sendMessage = useCallback(
