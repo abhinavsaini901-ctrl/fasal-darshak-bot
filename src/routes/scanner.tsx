@@ -31,8 +31,15 @@ import { useVoiceMode } from "@/hooks/use-voice-mode";
 import { LANG_NAME_FOR_AI, type LangCode } from "@/lib/i18n";
 import { scanCrop, chatCrop } from "@/lib/crop.functions";
 
+type ScannerSearch = { mode?: "camera" | "live" | "chat" };
+
 export const Route = createFileRoute("/scanner")({
   component: HomePage,
+  validateSearch: (s: Record<string, unknown>): ScannerSearch => {
+    const m = s.mode;
+    if (m === "camera" || m === "live" || m === "chat") return { mode: m };
+    return {};
+  },
   head: () => ({
     meta: [
       { title: "AI फसल डॉक्टर — फसल की फोटो से रोग पहचानें | किसान मित्र" },
@@ -194,12 +201,20 @@ const TOPIC_CATEGORIES: { title: string; items: string[] }[] = [
 function HomePage() {
   const { lang, t, speechCode } = useLanguage();
   const { ttsEnabled } = useVoiceMode();
-  const [view, setView] = useState<View>("home");
+  const search = Route.useSearch();
+  const [view, setView] = useState<View>(() => {
+    if (search.mode === "camera" || search.mode === "live") return "camera";
+    if (search.mode === "chat") return "chat";
+    return "home";
+  });
   const [analyzing, setAnalyzing] = useState(false);
   const [imageData, setImageData] = useState<string | null>(null);
   const [result, setResult] = useState<ScanResult | null>(null);
-  const [liveMode, setLiveMode] = useState(false);
+  const [liveMode, setLiveMode] = useState(search.mode === "live");
   const [liveResult, setLiveResult] = useState<ScanResult | null>(null);
+  const [liveAnswer, setLiveAnswer] = useState<string | null>(null);
+  const [liveAsking, setLiveAsking] = useState(false);
+  const lastFrameRef = useRef<string | null>(null);
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
@@ -240,6 +255,7 @@ function HomePage() {
   const handleCapture = useCallback(
     async (dataUrl: string) => {
       setImageData(dataUrl);
+      lastFrameRef.current = dataUrl;
       setAnalyzing(true);
       try {
         const res = await scanFn({
@@ -250,7 +266,6 @@ function HomePage() {
           },
         });
         if (liveMode) {
-          // Live mode: stay on camera, update the overlay only
           setLiveResult(res);
         } else {
           setResult(res);
@@ -268,6 +283,36 @@ function HomePage() {
       }
     },
     [scanFn, lang, t, speak, liveMode]
+  );
+
+  const askLive = useCallback(
+    async (question: string) => {
+      const q = question.trim();
+      if (!q || liveAsking) return;
+      setLiveAsking(true);
+      setLiveAnswer(null);
+      try {
+        const res = await chatFn({
+          data: {
+            language: lang,
+            languageName: LANG_NAME_FOR_AI[lang as LangCode],
+            history: [{ role: "user", content: q }],
+            imageDataUrl: lastFrameRef.current ?? undefined,
+          },
+        });
+        const reply = res.reply || t("error");
+        setLiveAnswer(reply);
+        speak(reply);
+      } catch (e) {
+        const msg = (e as Error).message;
+        if (msg === "RATE_LIMITED") toast.error(t("rateLimited"));
+        else if (msg === "PAYMENT_REQUIRED") toast.error(t("paymentRequired"));
+        else toast.error(t("error"));
+      } finally {
+        setLiveAsking(false);
+      }
+    },
+    [chatFn, lang, t, speak, liveAsking]
   );
 
   const sendMessage = useCallback(
@@ -335,41 +380,64 @@ function HomePage() {
   // ---------- VIEWS ----------
   if (view === "camera") {
     const lr = liveResult;
-    const overlay = liveMode && lr ? (
-      <div className="rounded-2xl border border-white/10 bg-black/75 p-3 text-white shadow-strong backdrop-blur">
-        <div className="flex items-center justify-between gap-2">
-          <div className="min-w-0">
-            <p className="truncate text-base font-bold">
-              {lr.isPlant ? (lr.cropName || "फसल") : "कोई फसल नहीं दिखी"}
-            </p>
-            <p className="truncate text-xs opacity-80">
-              {lr.isHealthy ? "✅ स्वस्थ" : (lr.disease || "विश्लेषण…")}
-            </p>
+    const overlay = liveMode ? (
+      <div className="space-y-2">
+        {lr && (
+          <div className="rounded-2xl border border-white/10 bg-black/75 p-3 text-white shadow-strong backdrop-blur">
+            <div className="flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <p className="truncate text-base font-bold">
+                  {lr.isPlant ? (lr.cropName || "फसल") : "कोई फसल नहीं दिखी"}
+                </p>
+                <p className="truncate text-xs opacity-80">
+                  {lr.isHealthy ? "✅ स्वस्थ" : (lr.disease || "विश्लेषण…")}
+                </p>
+              </div>
+              <div className="flex flex-col items-end">
+                <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${lr.isHealthy ? "bg-emerald-500" : "bg-amber-500"}`}>
+                  {lr.healthScore}%
+                </span>
+                <span className="mt-0.5 text-[10px] opacity-70">AI score</span>
+              </div>
+            </div>
+            {lr.summary && (
+              <p className="mt-2 line-clamp-2 text-xs opacity-90">{lr.summary}</p>
+            )}
+            {lr.isPlant && (
+              <Button
+                size="sm"
+                className="mt-2 h-8 w-full rounded-full bg-primary text-xs font-semibold"
+                onClick={() => {
+                  setLiveMode(false);
+                  setResult(lr);
+                  setView("result");
+                  if (lr.summary) speak(lr.summary);
+                }}
+              >
+                पूरी रिपोर्ट देखें
+              </Button>
+            )}
           </div>
-          <div className="flex flex-col items-end">
-            <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${lr.isHealthy ? "bg-emerald-500" : "bg-amber-500"}`}>
-              {lr.healthScore}%
-            </span>
-            <span className="mt-0.5 text-[10px] opacity-70">AI score</span>
+        )}
+
+        {/* Voice Q&A about what the camera sees */}
+        <div className="rounded-2xl border border-emerald-300/20 bg-black/75 p-3 text-white shadow-strong backdrop-blur">
+          <div className="flex items-center gap-2">
+            <VoiceInputButton onText={(txt) => askLive(txt)} />
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-semibold leading-tight">🎤 कैमरे को कुछ भी पूछें</p>
+              <p className="truncate text-[10px] opacity-70">
+                {liveAsking ? "AI सोच रहा है…" : "माइक दबाएं और सवाल बोलें"}
+              </p>
+            </div>
+            {liveAsking && <Loader2 className="h-4 w-4 animate-spin text-lime-300" />}
           </div>
+          {liveAnswer && (
+            <div className="mt-2 max-h-32 overflow-y-auto rounded-xl bg-white/10 p-2 text-xs leading-relaxed">
+              {liveAnswer}
+            </div>
+          )}
         </div>
-        {lr.summary && (
-          <p className="mt-2 line-clamp-2 text-xs opacity-90">{lr.summary}</p>
-        )}
-        {lr.isPlant && (
-          <Button
-            size="sm"
-            className="mt-2 h-8 w-full rounded-full bg-primary text-xs font-semibold"
-            onClick={() => {
-              setLiveMode(false);
-              setResult(lr);
-              setView("result");
-              if (lr.summary) speak(lr.summary);
-            }}
-          >
-            पूरी रिपोर्ट देखें
-          </Button>
-        )}
       </div>
     ) : null;
 
