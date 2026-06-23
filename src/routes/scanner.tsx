@@ -382,6 +382,24 @@ function HomePage() {
     const lr = liveResult;
     const overlay = liveMode ? (
       <div className="space-y-2">
+        {/* Voice setting — AI will speak answers */}
+        <div className="flex items-center justify-between rounded-2xl border border-emerald-300/20 bg-black/75 p-2 px-3 text-white shadow-strong backdrop-blur">
+          <span className="flex items-center gap-1.5 text-[11px] font-semibold">
+            {ttsEnabled ? (
+              <>
+                <Volume2 className="h-3.5 w-3.5 text-lime-300" />
+                AI बोलकर भी बताएगा
+              </>
+            ) : (
+              <>
+                <VolumeX className="h-3.5 w-3.5 text-amber-300" />
+                आवाज़ बंद है
+              </>
+            )}
+          </span>
+          <VoiceModeSelector compact />
+        </div>
+
         {lr && (
           <div className="rounded-2xl border border-white/10 bg-black/75 p-3 text-white shadow-strong backdrop-blur">
             <div className="flex items-center justify-between gap-2">
@@ -427,14 +445,25 @@ function HomePage() {
             <div className="min-w-0 flex-1">
               <p className="text-xs font-semibold leading-tight">🎤 कैमरे को कुछ भी पूछें</p>
               <p className="truncate text-[10px] opacity-70">
-                {liveAsking ? "AI सोच रहा है…" : "माइक दबाएं और सवाल बोलें"}
+                {liveAsking ? "AI सोच रहा है…" : "माइक दबाएं और सवाल बोलें — जवाब आवाज़ में भी सुने"}
               </p>
             </div>
             {liveAsking && <Loader2 className="h-4 w-4 animate-spin text-lime-300" />}
           </div>
           {liveAnswer && (
-            <div className="mt-2 max-h-32 overflow-y-auto rounded-xl bg-white/10 p-2 text-xs leading-relaxed">
-              {liveAnswer}
+            <div className="mt-2 rounded-xl bg-white/10 p-2">
+              <div className="max-h-32 overflow-y-auto text-xs leading-relaxed">
+                {liveAnswer}
+              </div>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => (speaking ? stop() : speak(liveAnswer))}
+                className="mt-1.5 h-7 gap-1 rounded-full px-2 text-[11px] font-semibold text-lime-300 hover:bg-white/10 hover:text-white"
+              >
+                {speaking ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
+                {speaking ? "रोकें" : "🔊 जवाब सुनें"}
+              </Button>
             </div>
           )}
         </div>
