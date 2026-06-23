@@ -445,7 +445,7 @@ function HomePage() {
             <div className="min-w-0 flex-1">
               <p className="text-xs font-semibold leading-tight">🎤 कैमरे को कुछ भी पूछें</p>
               <p className="truncate text-[10px] opacity-70">
-                {liveAsking ? "AI सोच रहा है…" : "माइक दबाएं और सवाल बोलें — जवाब आवाज़ में भी सुने"}
+                {liveAsking ? "AI सोच रहा है…" : "माइक दबाकर रखें और बोलें — छोड़ने पर AI जवाब देगा"}
               </p>
             </div>
             {liveAsking && <Loader2 className="h-4 w-4 animate-spin text-lime-300" />}
