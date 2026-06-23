@@ -16,6 +16,13 @@ import {
   Smartphone,
   Languages,
   Sun,
+  Mic,
+  Volume2,
+  Leaf,
+  CloudRain,
+  History,
+  Heart,
+  Eye,
 } from "lucide-react";
 import heroImg from "@/assets/hero-crop.jpg";
 import { PageShell } from "@/components/PageShell";
@@ -199,6 +206,94 @@ function HomePage() {
 
       {/* WEATHER & LOCATION */}
       <WeatherLocationCard />
+
+      {/* AI KISAN VISION ASSISTANT */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-success/10 py-12">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="mb-8 text-center">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 text-xs font-bold text-primary">
+              <Sparkles className="h-3 w-3" /> नया फीचर
+            </span>
+            <h2 className="mt-3 text-2xl font-bold text-foreground md:text-4xl">
+              AI किसान <span className="text-primary">विज़न असिस्टेंट</span>
+            </h2>
+            <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground md:text-base">
+              कैमरा ऑन करें — फसल, फल, सब्ज़ी, औषधीय पौधे और पेड़ पहचानें। रोग, कीट, कमी सब हिंदी आवाज़ में।
+            </p>
+          </div>
+
+          {/* Big CTA card */}
+          <Card className="mb-6 overflow-hidden border-2 border-primary/20 bg-gradient-card shadow-strong">
+            <div className="grid gap-0 md:grid-cols-2">
+              <div className="flex flex-col justify-center p-6 md:p-8">
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-primary">
+                  <Eye className="h-4 w-4" /> Live AI Vision
+                </div>
+                <h3 className="mt-2 text-xl font-bold text-foreground md:text-2xl">
+                  कैमरा खोलें, तुरंत पहचान पाएं
+                </h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  फसल की फोटो लें — AI बताएगा रोग, इलाज, मात्रा, खर्च और जैविक उपाय। हिंदी आवाज़ में जवाब।
+                </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <Link to="/scanner">
+                    <Button size="lg" className="h-12 rounded-xl bg-gradient-primary px-6 text-base font-bold shadow-soft">
+                      <Camera className="mr-2 h-5 w-5" /> कैमरा खोलें
+                    </Button>
+                  </Link>
+                  <Link to="/scanner">
+                    <Button size="lg" variant="outline" className="h-12 rounded-xl px-6 text-base font-semibold">
+                      <Mic className="mr-2 h-5 w-5" /> आवाज़ से पूछें
+                    </Button>
+                  </Link>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2 text-[11px] font-semibold">
+                  <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">हिंदी</span>
+                  <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">भोजपुरी</span>
+                  <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">पंजाबी</span>
+                  <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">हरियाणवी</span>
+                  <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">मराठी</span>
+                  <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">गुजराती</span>
+                </div>
+              </div>
+              <div className="relative flex items-center justify-center bg-primary/5 p-8">
+                <div className="relative">
+                  <div className="absolute inset-0 animate-pulse-ring rounded-full bg-primary/20" />
+                  <div className="relative flex h-32 w-32 items-center justify-center rounded-full bg-gradient-primary shadow-strong md:h-40 md:w-40">
+                    <Camera className="h-14 w-14 text-primary-foreground md:h-16 md:w-16" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Feature grid */}
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { icon: Scan, title: "लाइव स्कैनर", desc: "रोग, कीट, खरपतवार और कमी पहचानें" },
+              { icon: Volume2, title: "हिंदी आवाज़ जवाब", desc: "हर रिज़ल्ट बोलकर सुनाया जाए" },
+              { icon: MessageCircle, title: "AI एक्सपर्ट चैट", desc: "स्कैन के बाद सवाल पूछते रहें" },
+              { icon: Leaf, title: "पौधा विश्वकोश", desc: "फसल, पेड़, औषधीय पौधे की जानकारी" },
+              { icon: FlaskConical, title: "दवा व खर्च", desc: "कौन सी दवा, कितनी मात्रा, कितना खर्च" },
+              { icon: CloudRain, title: "मौसम व सिंचाई", desc: "बारिश और रोग जोखिम पूर्वानुमान" },
+              { icon: History, title: "स्कैन हिस्ट्री", desc: "पुराने स्कैन कभी भी देखें" },
+              { icon: Heart, title: "पसंदीदा फसल", desc: "अपनी फसलों को सेव करें" },
+            ].map((f) => (
+              <div
+                key={f.title}
+                className="rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-soft"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <f.icon className="h-5 w-5" />
+                </div>
+                <p className="mt-3 text-sm font-bold text-foreground">{f.title}</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
 
       {/* LIVE NEWS — hidden until AdSense approval to avoid third-party content concerns */}
       {/* <LiveKisanNews /> */}
