@@ -15,11 +15,6 @@ import {
   Smartphone,
   Languages,
   Sun,
-  TreePine,
-  Microscope,
-  CloudSun,
-  IndianRupee,
-  Mic,
 } from "lucide-react";
 import heroImg from "@/assets/hero-crop.jpg";
 import { PageShell } from "@/components/PageShell";
