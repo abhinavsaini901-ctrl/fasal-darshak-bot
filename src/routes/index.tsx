@@ -162,15 +162,42 @@ function HomePage() {
             </p>
           </div>
 
-          {/* Animated AI Camera Logo */}
-          <div className="relative mx-auto mt-10 flex h-48 w-48 items-center justify-center md:h-56 md:w-56">
+          {/* Animated AI Camera Logo — clickable */}
+          <Link
+            to="/scanner"
+            aria-label="लाइव कैमरा शुरू करें"
+            className="group relative mx-auto mt-10 flex h-56 w-56 items-center justify-center md:h-64 md:w-64"
+          >
             <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/30" />
             <span className="absolute inset-4 animate-pulse rounded-full bg-emerald-300/20 blur-2xl" />
-            <span className="absolute inset-0 rounded-full border-2 border-dashed border-emerald-300/40 [animation:spin_8s_linear_infinite]" />
-            <div className="relative flex h-28 w-28 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-green-600 shadow-2xl shadow-emerald-500/40 md:h-32 md:w-32">
-              <Camera className="h-12 w-12 text-white md:h-14 md:w-14" />
+            <span className="absolute inset-0 rounded-full border-2 border-dashed border-emerald-300/40 [animation:spin_12s_linear_infinite]" />
+            <span className="absolute inset-3 rounded-full border border-lime-300/30" />
+
+            {/* Camera body */}
+            <div className="relative flex h-36 w-40 items-center justify-center rounded-3xl bg-gradient-to-br from-emerald-500 via-green-600 to-emerald-800 shadow-2xl shadow-emerald-500/40 transition-transform group-hover:scale-105 md:h-40 md:w-44">
+              <div className="absolute -top-3 left-1/2 h-4 w-16 -translate-x-1/2 rounded-t-xl bg-emerald-700" />
+              <div className="absolute right-3 top-3 h-2 w-2 animate-pulse rounded-full bg-lime-300 shadow-[0_0_8px_2px_rgba(190,242,100,0.8)]" />
+              <div className="absolute left-3 top-3 h-1.5 w-1.5 rounded-full bg-red-400 shadow-[0_0_6px_2px_rgba(248,113,113,0.7)]" />
+
+              {/* Lens */}
+              <div className="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-100 via-white to-emerald-200 ring-4 ring-emerald-900/40 md:h-28 md:w-28">
+                <div className="absolute inset-2 rounded-full bg-gradient-to-br from-emerald-700 to-emerald-950" />
+                {/* Scanning sweep line */}
+                <span className="absolute inset-x-0 top-0 h-px bg-lime-300/80 shadow-[0_0_8px_2px_rgba(190,242,100,0.7)] [animation:lens-scan_2.2s_ease-in-out_infinite]" />
+                {/* Plant icons inside the lens */}
+                <Sprout className="absolute h-6 w-6 -translate-x-5 -translate-y-1 text-lime-300 drop-shadow md:h-7 md:w-7" />
+                <TreePine className="absolute h-7 w-7 translate-x-4 -translate-y-2 text-emerald-200 drop-shadow md:h-8 md:w-8" />
+                <Leaf className="absolute h-5 w-5 translate-y-5 text-emerald-300 drop-shadow md:h-6 md:w-6" />
+                <span className="absolute left-3 top-3 h-3 w-3 rounded-full bg-white/70 blur-[1px]" />
+              </div>
             </div>
-          </div>
+
+            {/* AI scanner corner brackets */}
+            <span className="pointer-events-none absolute left-2 top-2 h-5 w-5 border-l-2 border-t-2 border-lime-300/80" />
+            <span className="pointer-events-none absolute right-2 top-2 h-5 w-5 border-r-2 border-t-2 border-lime-300/80" />
+            <span className="pointer-events-none absolute bottom-2 left-2 h-5 w-5 border-b-2 border-l-2 border-lime-300/80" />
+            <span className="pointer-events-none absolute bottom-2 right-2 h-5 w-5 border-b-2 border-r-2 border-lime-300/80" />
+          </Link>
 
           {/* Main CTA */}
           <div className="mt-10 flex flex-col items-center gap-3">
