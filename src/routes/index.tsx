@@ -16,11 +16,8 @@ import {
   Languages,
   Sun,
   Mic,
-  Volume2,
   Leaf,
   TreePine,
-  Microscope,
-  CloudSun,
 } from "lucide-react";
 
 import heroImg from "@/assets/hero-crop.jpg";
