@@ -380,41 +380,64 @@ function HomePage() {
   // ---------- VIEWS ----------
   if (view === "camera") {
     const lr = liveResult;
-    const overlay = liveMode && lr ? (
-      <div className="rounded-2xl border border-white/10 bg-black/75 p-3 text-white shadow-strong backdrop-blur">
-        <div className="flex items-center justify-between gap-2">
-          <div className="min-w-0">
-            <p className="truncate text-base font-bold">
-              {lr.isPlant ? (lr.cropName || "फसल") : "कोई फसल नहीं दिखी"}
-            </p>
-            <p className="truncate text-xs opacity-80">
-              {lr.isHealthy ? "✅ स्वस्थ" : (lr.disease || "विश्लेषण…")}
-            </p>
+    const overlay = liveMode ? (
+      <div className="space-y-2">
+        {lr && (
+          <div className="rounded-2xl border border-white/10 bg-black/75 p-3 text-white shadow-strong backdrop-blur">
+            <div className="flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <p className="truncate text-base font-bold">
+                  {lr.isPlant ? (lr.cropName || "फसल") : "कोई फसल नहीं दिखी"}
+                </p>
+                <p className="truncate text-xs opacity-80">
+                  {lr.isHealthy ? "✅ स्वस्थ" : (lr.disease || "विश्लेषण…")}
+                </p>
+              </div>
+              <div className="flex flex-col items-end">
+                <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${lr.isHealthy ? "bg-emerald-500" : "bg-amber-500"}`}>
+                  {lr.healthScore}%
+                </span>
+                <span className="mt-0.5 text-[10px] opacity-70">AI score</span>
+              </div>
+            </div>
+            {lr.summary && (
+              <p className="mt-2 line-clamp-2 text-xs opacity-90">{lr.summary}</p>
+            )}
+            {lr.isPlant && (
+              <Button
+                size="sm"
+                className="mt-2 h-8 w-full rounded-full bg-primary text-xs font-semibold"
+                onClick={() => {
+                  setLiveMode(false);
+                  setResult(lr);
+                  setView("result");
+                  if (lr.summary) speak(lr.summary);
+                }}
+              >
+                पूरी रिपोर्ट देखें
+              </Button>
+            )}
           </div>
-          <div className="flex flex-col items-end">
-            <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${lr.isHealthy ? "bg-emerald-500" : "bg-amber-500"}`}>
-              {lr.healthScore}%
-            </span>
-            <span className="mt-0.5 text-[10px] opacity-70">AI score</span>
+        )}
+
+        {/* Voice Q&A about what the camera sees */}
+        <div className="rounded-2xl border border-emerald-300/20 bg-black/75 p-3 text-white shadow-strong backdrop-blur">
+          <div className="flex items-center gap-2">
+            <VoiceInputButton onText={(txt) => askLive(txt)} />
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-semibold leading-tight">🎤 कैमरे को कुछ भी पूछें</p>
+              <p className="truncate text-[10px] opacity-70">
+                {liveAsking ? "AI सोच रहा है…" : "माइक दबाएं और सवाल बोलें"}
+              </p>
+            </div>
+            {liveAsking && <Loader2 className="h-4 w-4 animate-spin text-lime-300" />}
           </div>
+          {liveAnswer && (
+            <div className="mt-2 max-h-32 overflow-y-auto rounded-xl bg-white/10 p-2 text-xs leading-relaxed">
+              {liveAnswer}
+            </div>
+          )}
         </div>
-        {lr.summary && (
-          <p className="mt-2 line-clamp-2 text-xs opacity-90">{lr.summary}</p>
-        )}
-        {lr.isPlant && (
-          <Button
-            size="sm"
-            className="mt-2 h-8 w-full rounded-full bg-primary text-xs font-semibold"
-            onClick={() => {
-              setLiveMode(false);
-              setResult(lr);
-              setView("result");
-              if (lr.summary) speak(lr.summary);
-            }}
-          >
-            पूरी रिपोर्ट देखें
-          </Button>
-        )}
       </div>
     ) : null;
 
