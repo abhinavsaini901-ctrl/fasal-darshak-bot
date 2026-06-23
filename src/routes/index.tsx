@@ -16,6 +16,13 @@ import {
   Smartphone,
   Languages,
   Sun,
+  Mic,
+  Volume2,
+  Leaf,
+  CloudRain,
+  History,
+  Heart,
+  Eye,
 } from "lucide-react";
 import heroImg from "@/assets/hero-crop.jpg";
 import { PageShell } from "@/components/PageShell";
