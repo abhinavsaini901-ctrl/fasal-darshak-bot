@@ -31,8 +31,15 @@ import { useVoiceMode } from "@/hooks/use-voice-mode";
 import { LANG_NAME_FOR_AI, type LangCode } from "@/lib/i18n";
 import { scanCrop, chatCrop } from "@/lib/crop.functions";
 
+type ScannerSearch = { mode?: "camera" | "live" | "chat" };
+
 export const Route = createFileRoute("/scanner")({
   component: HomePage,
+  validateSearch: (s: Record<string, unknown>): ScannerSearch => {
+    const m = s.mode;
+    if (m === "camera" || m === "live" || m === "chat") return { mode: m };
+    return {};
+  },
   head: () => ({
     meta: [
       { title: "AI फसल डॉक्टर — फसल की फोटो से रोग पहचानें | किसान मित्र" },
@@ -194,12 +201,20 @@ const TOPIC_CATEGORIES: { title: string; items: string[] }[] = [
 function HomePage() {
   const { lang, t, speechCode } = useLanguage();
   const { ttsEnabled } = useVoiceMode();
-  const [view, setView] = useState<View>("home");
+  const search = Route.useSearch();
+  const [view, setView] = useState<View>(() => {
+    if (search.mode === "camera" || search.mode === "live") return "camera";
+    if (search.mode === "chat") return "chat";
+    return "home";
+  });
   const [analyzing, setAnalyzing] = useState(false);
   const [imageData, setImageData] = useState<string | null>(null);
   const [result, setResult] = useState<ScanResult | null>(null);
-  const [liveMode, setLiveMode] = useState(false);
+  const [liveMode, setLiveMode] = useState(search.mode === "live");
   const [liveResult, setLiveResult] = useState<ScanResult | null>(null);
+  const [liveAnswer, setLiveAnswer] = useState<string | null>(null);
+  const [liveAsking, setLiveAsking] = useState(false);
+  const lastFrameRef = useRef<string | null>(null);
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
