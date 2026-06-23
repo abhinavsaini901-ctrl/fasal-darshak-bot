@@ -15,7 +15,14 @@ import {
   Smartphone,
   Languages,
   Sun,
+  Mic,
+  Volume2,
+  Leaf,
+  TreePine,
+  Microscope,
+  CloudSun,
 } from "lucide-react";
+
 import heroImg from "@/assets/hero-crop.jpg";
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
@@ -136,7 +143,91 @@ function HomePage() {
   return (
 
     <PageShell>
+      {/* AI खेती गुरु — Premium Hero Section */}
+      <section className="relative w-full overflow-hidden bg-gradient-to-br from-emerald-950 via-green-900 to-emerald-800 py-12 md:py-20">
+        {/* Decorative blurs */}
+        <div className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-emerald-400/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 -right-20 h-72 w-72 rounded-full bg-lime-400/20 blur-3xl" />
+
+        <div className="relative mx-auto max-w-6xl px-4">
+          <div className="mx-auto max-w-3xl text-center">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300/30 bg-white/10 px-3 py-1 text-xs font-semibold text-emerald-100 backdrop-blur">
+              🌾 AI खेती गुरु
+            </span>
+            <h1 className="mt-4 text-4xl font-extrabold leading-tight text-white drop-shadow md:text-6xl">
+              AI <span className="bg-gradient-to-r from-lime-300 to-emerald-300 bg-clip-text text-transparent">खेती गुरु</span>
+            </h1>
+            <p className="mx-auto mt-4 max-w-2xl text-base text-emerald-50/90 md:text-lg">
+              कैमरा खोलें, फसल, पेड़, पौधा या फल दिखाएं और AI से तुरंत जानकारी प्राप्त करें
+            </p>
+          </div>
+
+          {/* Animated AI Camera Logo */}
+          <div className="relative mx-auto mt-10 flex h-48 w-48 items-center justify-center md:h-56 md:w-56">
+            <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/30" />
+            <span className="absolute inset-4 animate-pulse rounded-full bg-emerald-300/20 blur-2xl" />
+            <span className="absolute inset-0 rounded-full border-2 border-dashed border-emerald-300/40 [animation:spin_8s_linear_infinite]" />
+            <div className="relative flex h-28 w-28 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-green-600 shadow-2xl shadow-emerald-500/40 md:h-32 md:w-32">
+              <Camera className="h-12 w-12 text-white md:h-14 md:w-14" />
+            </div>
+          </div>
+
+          {/* Main CTA */}
+          <div className="mt-10 flex flex-col items-center gap-3">
+            <Link to="/scanner">
+              <Button
+                size="lg"
+                className="h-14 rounded-2xl bg-gradient-to-r from-lime-400 to-emerald-500 px-8 text-base font-bold text-emerald-950 shadow-xl shadow-emerald-500/30 transition-transform hover:scale-105 md:text-lg"
+              >
+                <Camera className="mr-2 h-6 w-6" /> 📷 लाइव कैमरा शुरू करें
+              </Button>
+            </Link>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <Link to="/scanner">
+                <Button variant="outline" className="h-10 rounded-xl border-emerald-300/40 bg-white/10 text-emerald-50 backdrop-blur hover:bg-white/20 hover:text-white">
+                  <Mic className="mr-2 h-4 w-4" /> वॉयस से पूछें
+                </Button>
+              </Link>
+              <Link to="/scanner">
+                <Button variant="outline" className="h-10 rounded-xl border-emerald-300/40 bg-white/10 text-emerald-50 backdrop-blur hover:bg-white/20 hover:text-white">
+                  <MessageCircle className="mr-2 h-4 w-4" /> AI चैट
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Feature grid (glassmorphism) */}
+          <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
+            {[
+              { icon: Sprout, label: "फसल पहचान" },
+              { icon: TreePine, label: "पेड़ पहचान" },
+              { icon: Leaf, label: "पौधा/फल" },
+              { icon: Microscope, label: "रोग पहचान" },
+              { icon: Bug, label: "कीट पहचान" },
+              { icon: FlaskConical, label: "पोषण कमी" },
+              { icon: Scan, label: "खरपतवार" },
+              { icon: Volume2, label: "हिंदी आवाज़" },
+              { icon: CloudSun, label: "मौसम सलाह" },
+              { icon: TrendingUp, label: "मंडी भाव" },
+            ].map((f) => (
+              <div
+                key={f.label}
+                className="flex flex-col items-center gap-2 rounded-2xl border border-white/15 bg-white/10 p-3 text-center backdrop-blur transition-colors hover:bg-white/20"
+              >
+                <f.icon className="h-5 w-5 text-lime-300" />
+                <span className="text-xs font-semibold text-emerald-50">{f.label}</span>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-6 text-center text-xs text-emerald-100/70">
+            Gemini Vision • Voice AI • Real-time Chat • हिंदी सपोर्ट
+          </p>
+        </div>
+      </section>
+
       {/* HERO */}
+
       <section className="relative overflow-hidden bg-gradient-hero">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-2 md:items-center md:py-16">
           <div>
