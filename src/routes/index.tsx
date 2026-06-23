@@ -9,7 +9,6 @@ import {
   FlaskConical,
   TrendingUp,
   Landmark,
-  ArrowRight,
   Sparkles,
   ShieldCheck,
   Users,
