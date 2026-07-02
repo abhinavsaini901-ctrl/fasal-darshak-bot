@@ -30,7 +30,7 @@ import { WeatherLocationCard } from "@/components/WeatherLocationCard";
 import { KnowledgeCenterSection } from "@/components/KnowledgeCenterSection";
 // import { LiveKisanNews } from "@/components/LiveKisanNews"; // Hidden until AdSense approval
 import { KrishiStore } from "@/components/KrishiStore";
-import { AdSlot } from "@/components/AdSlot";
+
 
 
 
@@ -345,9 +345,6 @@ function HomePage() {
         </div>
       </section>
 
-
-      {/* Ad Slot #2 — In-article placement */}
-      <AdSlot variant="in-article" />
 
       {/* KNOWLEDGE CENTER */}
       <KnowledgeCenterSection />
