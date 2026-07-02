@@ -215,6 +215,8 @@ function HomePage() {
   const [liveAnswer, setLiveAnswer] = useState<string | null>(null);
   const [liveAsking, setLiveAsking] = useState(false);
   const lastFrameRef = useRef<string | null>(null);
+  const lastSpokenRef = useRef<string | null>(null);
+
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
@@ -267,11 +269,19 @@ function HomePage() {
         });
         if (liveMode) {
           setLiveResult(res);
+          if (res.summary) {
+            const key = `${res.cropName ?? ""}|${res.disease ?? ""}|${res.isHealthy ? "h" : "s"}`;
+            if (lastSpokenRef.current !== key) {
+              lastSpokenRef.current = key;
+              speakRaw(res.summary);
+            }
+          }
         } else {
           setResult(res);
           setView("result");
           if (res.summary) speak(res.summary);
         }
+
       } catch (e) {
         const msg = (e as Error).message;
         if (msg === "RATE_LIMITED") toast.error(t("rateLimited"));
@@ -282,7 +292,7 @@ function HomePage() {
         setAnalyzing(false);
       }
     },
-    [scanFn, lang, t, speak, liveMode]
+    [scanFn, lang, t, speak, speakRaw, liveMode]
   );
 
   const askLive = useCallback(
@@ -302,7 +312,8 @@ function HomePage() {
         });
         const reply = res.reply || t("error");
         setLiveAnswer(reply);
-        speak(reply);
+        speakRaw(reply);
+
       } catch (e) {
         const msg = (e as Error).message;
         if (msg === "RATE_LIMITED") toast.error(t("rateLimited"));
@@ -312,7 +323,7 @@ function HomePage() {
         setLiveAsking(false);
       }
     },
-    [chatFn, lang, t, speak, liveAsking]
+    [chatFn, lang, t, speakRaw, liveAsking]
   );
 
   const sendMessage = useCallback(
@@ -458,7 +469,7 @@ function HomePage() {
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => (speaking ? stop() : speak(liveAnswer))}
+                onClick={() => (speaking ? stop() : speakRaw(liveAnswer))}
                 className="mt-1.5 h-7 gap-1 rounded-full px-2 text-[11px] font-semibold text-lime-300 hover:bg-white/10 hover:text-white"
               >
                 {speaking ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
