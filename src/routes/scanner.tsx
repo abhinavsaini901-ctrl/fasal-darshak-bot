@@ -323,7 +323,7 @@ function HomePage() {
         setLiveAsking(false);
       }
     },
-    [chatFn, lang, t, speak, liveAsking]
+    [chatFn, lang, t, speakRaw, liveAsking]
   );
 
   const sendMessage = useCallback(
