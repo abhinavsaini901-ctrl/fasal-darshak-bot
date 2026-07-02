@@ -469,7 +469,7 @@ function HomePage() {
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => (speaking ? stop() : speak(liveAnswer))}
+                onClick={() => (speaking ? stop() : speakRaw(liveAnswer))}
                 className="mt-1.5 h-7 gap-1 rounded-full px-2 text-[11px] font-semibold text-lime-300 hover:bg-white/10 hover:text-white"
               >
                 {speaking ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
