@@ -312,7 +312,8 @@ function HomePage() {
         });
         const reply = res.reply || t("error");
         setLiveAnswer(reply);
-        speak(reply);
+        speakRaw(reply);
+
       } catch (e) {
         const msg = (e as Error).message;
         if (msg === "RATE_LIMITED") toast.error(t("rateLimited"));
