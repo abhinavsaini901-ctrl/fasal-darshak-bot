@@ -292,7 +292,7 @@ function HomePage() {
         setAnalyzing(false);
       }
     },
-    [scanFn, lang, t, speak, liveMode]
+    [scanFn, lang, t, speak, speakRaw, liveMode]
   );
 
   const askLive = useCallback(
