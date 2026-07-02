@@ -1,14 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { Leaf, Mail, Facebook, Twitter, Youtube, Instagram } from "lucide-react";
-import { AdSlot } from "./AdSlot";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
     <footer className="mt-16 border-t border-border bg-secondary/40">
-      {/* Ad Slot #3 — Footer area */}
-      <AdSlot variant="footer" />
       <div className="mx-auto max-w-6xl px-4 py-10">
         <div className="grid gap-8 md:grid-cols-4">
           <div className="md:col-span-1">
