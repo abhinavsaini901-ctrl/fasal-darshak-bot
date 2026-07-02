@@ -267,11 +267,19 @@ function HomePage() {
         });
         if (liveMode) {
           setLiveResult(res);
+          if (res.summary) {
+            const key = `${res.cropName ?? ""}|${res.disease ?? ""}|${res.isHealthy ? "h" : "s"}`;
+            if (lastSpokenRef.current !== key) {
+              lastSpokenRef.current = key;
+              speakRaw(res.summary);
+            }
+          }
         } else {
           setResult(res);
           setView("result");
           if (res.summary) speak(res.summary);
         }
+
       } catch (e) {
         const msg = (e as Error).message;
         if (msg === "RATE_LIMITED") toast.error(t("rateLimited"));
