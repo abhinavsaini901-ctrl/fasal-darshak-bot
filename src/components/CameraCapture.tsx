@@ -14,8 +14,6 @@ type Props = {
   liveIntervalMs?: number;
   /** Optional overlay rendered on top of the camera in live mode (live result card) */
   liveOverlay?: React.ReactNode;
-  /** Optional sample image shown behind the camera feed as a preview placeholder */
-  placeholderImage?: string;
 };
 
 export function CameraCapture({
