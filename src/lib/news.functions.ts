@@ -306,29 +306,25 @@ async function generateHindiArticle(item: LiveNewsItem): Promise<string[]> {
     ];
   }
   const today = new Date().toLocaleDateString("hi-IN", { day: "numeric", month: "long", year: "numeric" });
-  const prompt = `आप अखिल भारतीय "किसान लेंस" समाचार पोर्टल के वरिष्ठ कृषि पत्रकार हैं। नीचे दिए गए शीर्षक व सारांश के आधार पर एक 100% मौलिक (plagiarism-free), विस्तृत हिंदी समाचार लेख लिखें जिसे किसान पूरी तरह वेबसाइट पर ही पढ़ सकें।
-
-सख्त नियम:
-- कुल 380-480 शब्द, केवल सरल हिंदी में।
-- 5-6 अनुच्छेद; हर अनुच्छेद को दो नई लाइनों (\\n\\n) से अलग करें।
-- कोई heading, bullet, या markdown चिह्न (#, *, -) न लगाएँ — केवल सादा गद्य।
-- मूल स्रोत के वाक्य कॉपी न करें; नई भाषा, नए उदाहरण और अखिल भारतीय परिप्रेक्ष्य जोड़ें।
-- पहला अनुच्छेद: मुख्य खबर का सार (आज की तारीख ${today} का संदर्भ)।
-- बीच के अनुच्छेद: पृष्ठभूमि, सरकारी रुख/आंकड़े, राज्यवार असर (पंजाब, यूपी, एमपी, महाराष्ट्र, बिहार आदि में से प्रासंगिक)।
-- अंतिम अनुच्छेद: "किसानों के लिए सलाह" — 3 व्यावहारिक सुझाव एक ही अनुच्छेद में।
-- तथ्यहीन/अति-दावे न करें; अनिश्चित आंकड़ों के लिए "लगभग", "सूत्रों के अनुसार" जैसे शब्द उपयोग करें।
+  const prompt = `आज की तारीख: ${today}
 
 शीर्षक: ${item.title}
 मूल सारांश: ${item.summary}
 श्रेणी: ${item.category}
-मूल स्रोत: ${item.source}`;
+मूल स्रोत: ${item.source}
+
+ऊपर दी गई जानकारी के आधार पर एक मौलिक हिंदी समाचार लेख लिखें।`;
 
   try {
-    const { generateHindiNewsArticle } = await import("@/lib/ai-gateway.server");
-    const text = await generateHindiNewsArticle(apiKey, [
-      { role: "system", content: "You are an expert Indian agricultural journalist who writes original, plagiarism-free, easy Hindi articles for farmers." },
-      { role: "user", content: prompt },
-    ]);
+    const { NEWS_SYSTEM_PROMPT } = await import("@/lib/ai-prompts");
+    const { generatePowerfulText } = await import("@/lib/ai-gateway.server");
+    const text = await generatePowerfulText({
+      apiKey,
+      system: NEWS_SYSTEM_PROMPT,
+      prompt,
+      model: "google/gemini-2.5-pro",
+      temperature: 0.5,
+    });
     const paragraphs = text
       .split(/\n\s*\n/)
       .map((p) => p.replace(/^[#*\-\s]+/, "").trim())
