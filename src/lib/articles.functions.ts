@@ -61,17 +61,7 @@ export const generateArticle = createServerFn({ method: "POST" })
       },
     });
 
-    const system = `आप एक अनुभवी कृषि लेखक हैं जो भारतीय किसानों के लिए हिंदी में SEO-अनुकूल लेख लिखते हैं।
-नियम:
-- कम से कम 1000 शब्दों का लेख लिखें।
-- कम से कम 6 sections (H2 headings) हों, हर section में 2-4 paragraphs।
-- कुछ sections में bullet points भी शामिल करें।
-- भाषा शुद्ध हिंदी में हो, सरल और किसानों के लिए व्यावहारिक।
-- meta description 150-160 अक्षरों की हो।
-- slug केवल अंग्रेज़ी lowercase अक्षर, अंक और hyphen हो (कोई हिंदी नहीं)।
-- title हिंदी में आकर्षक हो।
-- कम से कम 4 FAQ शामिल करें (हिंदी प्रश्न-उत्तर)।
-- 5-8 relevant tags हिंदी में दें।`;
+    const { ARTICLE_SYSTEM_PROMPT } = await import("@/lib/ai-prompts");
 
     const prompt = `विषय: "${data.topic}"
 श्रेणी: "${data.category}"
@@ -81,8 +71,8 @@ export const generateArticle = createServerFn({ method: "POST" })
     let aiOutput: z.infer<typeof ArticleAISchema>;
     try {
       const { experimental_output } = await generateText({
-        model: gateway("google/gemini-2.5-flash"),
-        system,
+        model: gateway("google/gemini-2.5-pro"),
+        system: ARTICLE_SYSTEM_PROMPT,
         prompt,
         experimental_output: Output.object({ schema: ArticleAISchema }),
       });

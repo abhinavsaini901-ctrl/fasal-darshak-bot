@@ -1,8 +1,18 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { z } from "zod";
+import {
+  CROP_SCAN_SYSTEM,
+  CROP_CHAT_SYSTEM,
+  FEW_SHOT_SCAN_EXAMPLES,
+  FEW_SHOT_CHAT_EXAMPLES,
+  SCAN_TOOL_SCHEMA,
+} from "@/lib/ai-prompts";
 
 const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+
+// More powerful model for image analysis and complex reasoning.
+const POWERFUL_MODEL = "google/gemini-2.5-pro";
 
 // ---- Per-IP rate limiting (defense in depth) ----
 // These endpoints are intentionally unauthenticated so any farmer can use the
@@ -115,42 +125,28 @@ export const scanCrop = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     enforceRateLimit();
     const languageName = LANG_NAMES[data.language];
-    const systemPrompt = `You are an expert agricultural scientist and plant pathologist helping Indian farmers. You analyze crop images and identify the crop, its health, diseases, pests, and recommend practical, low-cost treatments. ALWAYS respond in ${languageName}. Be warm, simple, and practical — speak like talking to a farmer who may not have technical background. Use the local crop and medicine names where possible.`;
+    const systemPrompt = CROP_SCAN_SYSTEM(languageName);
 
     const tool = {
       type: "function" as const,
       function: {
         name: "report_crop",
-        description: "Return a structured crop analysis report",
-        parameters: {
-          type: "object",
-          properties: {
-            cropName: { type: "string", description: "Name of the crop, e.g. Wheat / गेहूं" },
-            isPlant: { type: "boolean", description: "True if image clearly shows a plant/crop" },
-            isHealthy: { type: "boolean" },
-            healthScore: { type: "number", description: "0-100, plant health score" },
-            disease: { type: "string", description: "Disease/pest name, or empty if healthy" },
-            symptoms: { type: "string", description: "Visible symptoms in 1-2 sentences" },
-            treatment: { type: "string", description: "Practical step-by-step treatment, 3-6 lines" },
-            prevention: { type: "string", description: "Prevention tips, 2-4 lines" },
-            summary: { type: "string", description: "1-line friendly summary for farmer" },
-          },
-          required: ["cropName", "isPlant", "isHealthy", "healthScore", "disease", "symptoms", "treatment", "prevention", "summary"],
-          additionalProperties: false,
-        },
+        description: "Return a structured crop analysis report with chain-of-thought reasoning",
+        parameters: SCAN_TOOL_SCHEMA,
       },
     };
 
     const result = await callGateway({
-      model: "google/gemini-2.5-flash",
+      model: POWERFUL_MODEL,
       messages: [
         { role: "system", content: systemPrompt },
+        ...FEW_SHOT_SCAN_EXAMPLES,
         {
           role: "user",
           content: [
             {
               type: "text",
-              text: `Analyze this crop photo. Identify the crop, check if it is healthy or diseased, and give practical treatment in ${languageName}.`,
+              text: `Now analyze this crop photo. Follow the same step-by-step reasoning and return a complete report_crop JSON in ${languageName}.`,
             },
             { type: "image_url", image_url: { url: data.imageDataUrl } },
           ],
@@ -163,6 +159,7 @@ export const scanCrop = createServerFn({ method: "POST" })
     const call = result.choices?.[0]?.message?.tool_calls?.[0];
     if (!call?.function?.arguments) {
       return {
+        reasoning: "",
         cropName: "",
         isPlant: false,
         isHealthy: false,
@@ -170,13 +167,21 @@ export const scanCrop = createServerFn({ method: "POST" })
         disease: "",
         symptoms: "",
         treatment: "",
+        organicTreatment: "",
+        chemicalTreatment: "",
+        dosage: "",
+        safetyDays: 0,
         prevention: "",
+        whenToCallExpert: "",
+        confidence: 0,
+        urgencyLevel: "low" as const,
         summary: result.choices?.[0]?.message?.content ?? "",
       };
     }
     try {
       const parsed = JSON.parse(call.function.arguments);
       return parsed as {
+        reasoning: string;
         cropName: string;
         isPlant: boolean;
         isHealthy: boolean;
@@ -184,7 +189,14 @@ export const scanCrop = createServerFn({ method: "POST" })
         disease: string;
         symptoms: string;
         treatment: string;
+        organicTreatment: string;
+        chemicalTreatment: string;
+        dosage: string;
+        safetyDays: number;
         prevention: string;
+        whenToCallExpert: string;
+        confidence: number;
+        urgencyLevel: "low" | "medium" | "high";
         summary: string;
       };
     } catch (e) {
@@ -198,9 +210,12 @@ export const chatCrop = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     enforceRateLimit();
     const languageName = LANG_NAMES[data.language];
-    const systemPrompt = `You are Kisan Mitra — a friendly AI farming assistant for Indian farmers. ALWAYS reply in ${languageName}. Keep answers short, practical, and easy to understand. Use simple words. Give step-by-step actionable advice. If asked about diseases, suggest both organic and chemical solutions with local product names where possible.`;
+    const systemPrompt = CROP_CHAT_SYSTEM(languageName);
 
-    const messages: unknown[] = [{ role: "system", content: systemPrompt }];
+    const messages: unknown[] = [
+      { role: "system", content: systemPrompt },
+      ...FEW_SHOT_CHAT_EXAMPLES,
+    ];
 
     // Attach image to the last user message if provided
     const last = data.history[data.history.length - 1];
@@ -222,7 +237,7 @@ export const chatCrop = createServerFn({ method: "POST" })
     }
 
     const result = await callGateway({
-      model: "google/gemini-2.5-flash",
+      model: POWERFUL_MODEL,
       messages,
     });
 
