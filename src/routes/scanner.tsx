@@ -1015,7 +1015,7 @@ function ChatView({
   );
 }
 
-function buildResultText(r: ScanResult, t: (k: string) => string): string {
+function buildResultText(r: ScanResult, t: (k: string) => string, lang: LangCode): string {
   const parts: string[] = [];
   if (r.cropName) parts.push(`${t("cropName")}: ${r.cropName}.`);
   parts.push(r.isHealthy ? t("healthy") : `${t("disease")}: ${r.disease || ""}.`);
