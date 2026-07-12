@@ -152,7 +152,30 @@ export async function generateHindiNewsArticle(
   messages: Array<{ role: "system" | "user"; content: string }>,
 ): Promise<string> {
   const gateway = createLovableAiGatewayProvider(apiKey);
-  const model = gateway("google/gemini-3-flash-preview");
+  // Use the more capable model for richer, original news articles.
+  const model = gateway("google/gemini-2.5-pro");
   const result = await generateText({ model, messages });
+  return result.text;
+}
+
+export async function generatePowerfulText(
+  apiKey: string,
+  options: {
+    system?: string;
+    prompt: string;
+    model?: "google/gemini-2.5-pro" | "google/gemini-2.5-flash" | "google/gemini-3-flash-preview";
+    temperature?: number;
+  },
+): Promise<string> {
+  const gateway = createLovableAiGatewayProvider(apiKey);
+  const model = gateway(options.model ?? "google/gemini-2.5-pro");
+  const messages: Array<{ role: "system" | "user"; content: string }> = [];
+  if (options.system) messages.push({ role: "system", content: options.system });
+  messages.push({ role: "user", content: options.prompt });
+  const result = await generateText({
+    model,
+    messages,
+    temperature: options.temperature ?? 0.4,
+  });
   return result.text;
 }
