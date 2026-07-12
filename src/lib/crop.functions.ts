@@ -210,9 +210,12 @@ export const chatCrop = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     enforceRateLimit();
     const languageName = LANG_NAMES[data.language];
-    const systemPrompt = `You are Kisan Mitra — a friendly AI farming assistant for Indian farmers. ALWAYS reply in ${languageName}. Keep answers short, practical, and easy to understand. Use simple words. Give step-by-step actionable advice. If asked about diseases, suggest both organic and chemical solutions with local product names where possible.`;
+    const systemPrompt = CROP_CHAT_SYSTEM(languageName);
 
-    const messages: unknown[] = [{ role: "system", content: systemPrompt }];
+    const messages: unknown[] = [
+      { role: "system", content: systemPrompt },
+      ...FEW_SHOT_CHAT_EXAMPLES,
+    ];
 
     // Attach image to the last user message if provided
     const last = data.history[data.history.length - 1];
@@ -234,7 +237,7 @@ export const chatCrop = createServerFn({ method: "POST" })
     }
 
     const result = await callGateway({
-      model: "google/gemini-2.5-flash",
+      model: POWERFUL_MODEL,
       messages,
     });
 
