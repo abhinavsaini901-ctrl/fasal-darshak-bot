@@ -765,9 +765,33 @@ function ResultView({
               {healthy ? <CheckCircle2 className="h-6 w-6" /> : <AlertTriangle className="h-6 w-6" />}
             </div>
             <div className="flex-1">
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                {result.cropName || t("cropName")}
-              </p>
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {result.cropName || t("cropName")}
+                </p>
+                {result.confidence > 0 && (
+                  <span className="rounded-full bg-background px-2 py-0.5 text-[10px] font-bold text-foreground shadow-sm">
+                    {lang === "en" ? "AI confidence" : "AI आत्मविश्वास"}: {Math.round(result.confidence)}%
+                  </span>
+                )}
+                {!healthy && result.urgencyLevel && (
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase text-white ${
+                      result.urgencyLevel === "high"
+                        ? "bg-destructive"
+                        : result.urgencyLevel === "medium"
+                          ? "bg-warning text-warning-foreground"
+                          : "bg-primary"
+                    }`}
+                  >
+                    {result.urgencyLevel === "high"
+                      ? lang === "en" ? "Urgent" : "तुरंत करें"
+                      : result.urgencyLevel === "medium"
+                        ? lang === "en" ? "Moderate" : "जल्द करें"
+                        : lang === "en" ? "Low" : "धीरे-धीरे"}
+                  </span>
+                )}
+              </div>
               <p className={`text-lg font-bold ${healthy ? "text-success" : "text-destructive"}`}>
                 {healthy ? t("healthy") : result.disease || t("diseased")}
               </p>
@@ -790,12 +814,40 @@ function ResultView({
           )}
         </Card>
 
+        {/* AI reasoning */}
+        {result.reasoning && (
+          <DetailCard label={lang === "en" ? "AI thinking" : "AI का तर्क"} text={result.reasoning} accent="accent" />
+        )}
+
         {/* Details */}
         {result.symptoms && (
           <DetailCard label={lang === "en" ? "Symptoms" : "लक्षण"} text={result.symptoms} accent="warning" />
         )}
+        {result.organicTreatment && (
+          <DetailCard label={lang === "en" ? "Organic treatment" : "जैविक इलाज"} text={result.organicTreatment} accent="primary" />
+        )}
+        {result.chemicalTreatment && (
+          <DetailCard label={lang === "en" ? "Chemical treatment" : "रासायनिक इलाज"} text={result.chemicalTreatment} accent="primary" />
+        )}
+        {result.dosage && (
+          <DetailCard label={lang === "en" ? "Dosage" : "खुराक"} text={result.dosage} accent="warning" />
+        )}
+        {result.safetyDays > 0 && (
+          <DetailCard
+            label={lang === "en" ? "Safety before harvest" : "कटाई से पहले सुरक्षा अवधि"}
+            text={
+              lang === "en"
+                ? `Wait at least ${result.safetyDays} days after the last spray before harvesting.`
+                : `अंतिम छिड़काव के कम से कम ${result.safetyDays} दिन बाद ही कटाई करें।`
+            }
+            accent="warning"
+          />
+        )}
         {result.treatment && (
-          <DetailCard label={t("treatment")} text={result.treatment} accent="primary" />
+          <DetailCard label={lang === "en" ? "Full treatment plan" : "पूर्ण उपचार योजना"} text={result.treatment} accent="primary" />
+        )}
+        {result.whenToCallExpert && (
+          <DetailCard label={lang === "en" ? "When to see an expert" : "कब विशेषज्ञ से मिलें"} text={result.whenToCallExpert} accent="accent" />
         )}
         {result.prevention && (
           <DetailCard label={t("prevention")} text={result.prevention} accent="accent" />
