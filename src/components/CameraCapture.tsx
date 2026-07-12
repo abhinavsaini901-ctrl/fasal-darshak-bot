@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Video, ArrowUp, Mic, X, RotateCw, MoreHorizontal, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/hooks/use-language";
+import kisanBg from "@/assets/kisan-bg.jpg";
+
 
 type Props = {
   onCapture: (dataUrl: string) => void;
