@@ -30,13 +30,29 @@ export function CameraCapture({
   onToggleLive,
   liveIntervalMs = 5000,
   liveOverlay,
+  onVoiceText,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [facing, setFacing] = useState<"environment" | "user">("environment");
-  const { t } = useLanguage();
+  const { t, speechCode } = useLanguage();
+  const { sttEnabled } = useVoiceMode();
+  const [voiceHint, setVoiceHint] = useState<string | null>(null);
+  const { start: startListen, stop: stopListen, listening, supported: sttSupported } = useListen(
+    speechCode,
+    (text) => {
+      setVoiceHint(text);
+      onVoiceText?.(text);
+      window.setTimeout(() => setVoiceHint(null), 2500);
+    }
+  );
+  const toggleMic = () => {
+    if (!sttSupported || !sttEnabled) return;
+    if (listening) stopListen();
+    else startListen();
+  };
 
   useEffect(() => {
     let active = true;
