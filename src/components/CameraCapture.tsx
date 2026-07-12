@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Video, ArrowUp, Mic, X, RotateCw, MoreHorizontal, Sparkles, Loader2, Image as ImageIcon } from "lucide-react";
+import { Video, ArrowUp, Mic, X, RotateCw, MoreHorizontal, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/hooks/use-language";
 
