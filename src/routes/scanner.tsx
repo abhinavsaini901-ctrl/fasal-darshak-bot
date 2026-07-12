@@ -498,8 +498,8 @@ function HomePage() {
         }}
         liveIntervalMs={5000}
         liveOverlay={overlay}
-        placeholderImage={farmPreview}
       />
+
     );
   }
 
