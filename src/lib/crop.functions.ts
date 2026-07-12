@@ -1,8 +1,18 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { z } from "zod";
+import {
+  CROP_SCAN_SYSTEM,
+  CROP_CHAT_SYSTEM,
+  FEW_SHOT_SCAN_EXAMPLES,
+  FEW_SHOT_CHAT_EXAMPLES,
+  SCAN_TOOL_SCHEMA,
+} from "@/lib/ai-prompts";
 
 const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+
+// More powerful model for image analysis and complex reasoning.
+const POWERFUL_MODEL = "google/gemini-2.5-pro";
 
 // ---- Per-IP rate limiting (defense in depth) ----
 // These endpoints are intentionally unauthenticated so any farmer can use the
