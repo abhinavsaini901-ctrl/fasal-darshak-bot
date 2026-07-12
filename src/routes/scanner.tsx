@@ -498,6 +498,7 @@ function HomePage() {
         }}
         liveIntervalMs={5000}
         liveOverlay={overlay}
+        onVoiceText={(txt) => askLive(txt)}
       />
 
     );
