@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Camera, Image as ImageIcon, RotateCw, Loader2, X, Zap, ZapOff } from "lucide-react";
+import { Video, ArrowUp, Mic, X, RotateCw, MoreHorizontal, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/hooks/use-language";
 
@@ -143,50 +143,41 @@ export function CameraCapture({
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-black">
-      {/* Sample camera preview placeholder — farm field behind the feed */}
+      {/* Optional sample background behind the feed (used as fallback) */}
       {placeholderImage && (
         <img
           src={placeholderImage}
-          alt="Farm preview"
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-90"
+          alt=""
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-60"
           aria-hidden="true"
         />
       )}
 
-      <div className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between p-4">
-        {onClose && (
-          <Button
-            size="icon"
-            variant="secondary"
-            className="rounded-full bg-black/40 text-white backdrop-blur hover:bg-black/60"
-            onClick={onClose}
-            aria-label="Close"
-          >
-            <X className="h-5 w-5" />
-          </Button>
-        )}
-        <div className="ml-auto flex items-center gap-2">
+      {/* Top right floating controls: flip circle + pill with menu/live */}
+      <div className="absolute right-3 top-3 z-30 flex items-center gap-2">
+        <button
+          onClick={() => setFacing((f) => (f === "environment" ? "user" : "environment"))}
+          aria-label="Flip camera"
+          className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-800 shadow-lg ring-1 ring-black/5 transition hover:bg-white/90 active:scale-95"
+        >
+          <RotateCw className="h-5 w-5" />
+        </button>
+        <div className="flex items-center gap-1 rounded-full bg-white px-2 py-1.5 shadow-lg ring-1 ring-black/5">
           {onToggleLive && (
-            <Button
-              size="sm"
-              variant="secondary"
-              className={`rounded-full backdrop-blur ${liveMode ? "bg-primary text-primary-foreground hover:bg-primary/90" : "bg-black/40 text-white hover:bg-black/60"}`}
+            <button
               onClick={() => onToggleLive(!liveMode)}
               aria-label="Toggle live mode"
+              className={`flex h-8 w-8 items-center justify-center rounded-full transition ${liveMode ? "bg-red-500 text-white" : "text-slate-700 hover:bg-slate-100"}`}
             >
-              {liveMode ? <Zap className="mr-1 h-4 w-4" /> : <ZapOff className="mr-1 h-4 w-4" />}
-              {liveMode ? "Live ON" : "Live"}
-            </Button>
+              <Sparkles className="h-4 w-4" />
+            </button>
           )}
-          <Button
-            size="icon"
-            variant="secondary"
-            className="rounded-full bg-black/40 text-white backdrop-blur hover:bg-black/60"
-            onClick={() => setFacing((f) => (f === "environment" ? "user" : "environment"))}
-            aria-label="Flip camera"
+          <button
+            aria-label="More options"
+            className="flex h-8 w-8 items-center justify-center rounded-full text-slate-700 transition hover:bg-slate-100"
           >
-            <RotateCw className="h-5 w-5" />
-          </Button>
+            <MoreHorizontal className="h-4 w-4" />
+          </button>
         </div>
       </div>
 
@@ -195,17 +186,13 @@ export function CameraCapture({
         <span className={`relative flex h-2 w-2 rounded-full ${liveMode ? "bg-red-500" : "bg-emerald-400"}`}>
           {liveMode && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />}
         </span>
-        {liveMode ? "Live Scanning" : "Scanning"}
+        {liveMode ? "Live" : "Scanning"}
       </div>
 
       <div className="relative flex-1 overflow-hidden">
         {error ? (
-          <div className="flex h-full flex-col items-center justify-center p-6 text-center text-white">
-            <p className="mb-4 text-lg">{error}</p>
-            <Button onClick={() => fileRef.current?.click()} className="rounded-full">
-              <ImageIcon className="mr-2 h-4 w-4" />
-              {t("uploadPhoto")}
-            </Button>
+          <div className="flex h-full flex-col items-center justify-center p-6 text-center text-white/80">
+            <p className="mb-4 text-sm opacity-80">{error}</p>
           </div>
         ) : (
           <>
@@ -215,18 +202,10 @@ export function CameraCapture({
               muted
               className="h-full w-full object-cover"
             />
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <div className="relative h-72 w-72 max-w-[80vw] max-h-[60vh] rounded-3xl border-2 border-white/70 shadow-[0_0_0_9999px_rgba(0,0,0,0.45)]">
-                <div className="absolute inset-x-4 top-1/2 h-0.5 -translate-y-1/2 bg-primary-glow shadow-glow animate-scan-line" />
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">
-                  {liveMode ? "🔴 Live AI" : t("scanCrop")}
-                </span>
-              </div>
-            </div>
 
             {/* Live mode: small analyzing badge instead of blocking overlay */}
             {liveMode && isAnalyzing && (
-              <div className="absolute left-1/2 top-12 z-20 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/70 px-4 py-1.5 text-xs font-medium text-white backdrop-blur">
+              <div className="absolute left-1/2 top-14 z-20 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/70 px-4 py-1.5 text-xs font-medium text-white backdrop-blur">
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
                 विश्लेषण हो रहा है…
               </div>
@@ -234,7 +213,7 @@ export function CameraCapture({
 
             {/* Live result overlay supplied by parent */}
             {liveMode && liveOverlay && (
-              <div className="pointer-events-auto absolute inset-x-0 bottom-0 z-20 p-3">
+              <div className="pointer-events-auto absolute inset-x-0 bottom-28 z-20 px-3">
                 {liveOverlay}
               </div>
             )}
@@ -249,28 +228,61 @@ export function CameraCapture({
         )}
       </div>
 
-      <div className="flex items-center justify-around bg-black/90 p-6 pb-8">
-        <Button
-          size="icon"
-          variant="ghost"
-          className="h-14 w-14 rounded-full text-white hover:bg-white/10"
-          onClick={() => fileRef.current?.click()}
-          aria-label={t("uploadPhoto")}
-        >
-          <ImageIcon className="h-7 w-7" />
-        </Button>
+      {/* Bottom action bar — 5 buttons */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 pb-6 pt-4">
+        <div className="pointer-events-auto mx-auto flex max-w-md items-center justify-between px-6">
+          {/* 1. Live/video toggle — light blue circle */}
+          <button
+            onClick={() => onToggleLive?.(!liveMode)}
+            aria-label="Live camera"
+            className={`flex h-12 w-12 items-center justify-center rounded-full shadow-lg transition active:scale-95 ${liveMode ? "bg-red-500 text-white" : "bg-sky-300 text-sky-900 hover:bg-sky-200"}`}
+          >
+            <Video className="h-5 w-5" />
+          </button>
 
-        <button
-          onClick={capture}
-          disabled={!stream || isAnalyzing || liveMode}
-          className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-strong transition-smooth hover:scale-105 active:scale-95 disabled:opacity-40 animate-pulse-ring"
-          aria-label={t("capture")}
-        >
-          <div className="h-16 w-16 rounded-full bg-primary" />
-        </button>
+          {/* 2. Upload — white circle with arrow up */}
+          <button
+            onClick={() => fileRef.current?.click()}
+            aria-label={t("uploadPhoto")}
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-slate-800 shadow-lg transition hover:bg-white/90 active:scale-95"
+          >
+            <ArrowUp className="h-5 w-5" />
+          </button>
 
-        <div className="h-14 w-14" />
+          {/* 3. Center — glowing pill AI trigger (also captures) */}
+          <button
+            onClick={capture}
+            disabled={!stream || isAnalyzing}
+            aria-label={t("capture")}
+            className="relative flex h-14 min-w-[92px] items-center justify-center rounded-full px-5 shadow-[0_0_30px_rgba(125,180,255,0.65)] transition active:scale-95 disabled:opacity-60"
+            style={{
+              background:
+                "linear-gradient(135deg, #dbeafe 0%, #93c5fd 45%, #ffffff 100%)",
+            }}
+          >
+            <span className="absolute inset-0 rounded-full bg-white/40 blur-md" aria-hidden="true" />
+            <Sparkles className="relative h-6 w-6 text-sky-700" />
+          </button>
+
+          {/* 4. Mic — white circle */}
+          <button
+            aria-label="Voice"
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-slate-800 shadow-lg transition hover:bg-white/90 active:scale-95"
+          >
+            <Mic className="h-5 w-5" />
+          </button>
+
+          {/* 5. Close — white circle */}
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-slate-800 shadow-lg transition hover:bg-white/90 active:scale-95"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
       </div>
+
 
       <input
         ref={fileRef}
