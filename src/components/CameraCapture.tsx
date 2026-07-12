@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { Video, ArrowUp, Mic, X, RotateCw, MoreHorizontal, Sparkles, Loader2 } from "lucide-react";
+import { Video, ArrowUp, Mic, MicOff, X, RotateCw, MoreHorizontal, Sparkles, Loader2 } from "lucide-react";
 import { useLanguage } from "@/hooks/use-language";
+import { useListen } from "@/hooks/use-voice";
+import { useVoiceMode } from "@/hooks/use-voice-mode";
 
 
 
@@ -16,6 +18,8 @@ type Props = {
   liveIntervalMs?: number;
   /** Optional overlay rendered on top of the camera in live mode (live result card) */
   liveOverlay?: React.ReactNode;
+  /** Called when user speaks via mic button */
+  onVoiceText?: (text: string) => void;
 };
 
 export function CameraCapture({
@@ -26,13 +30,29 @@ export function CameraCapture({
   onToggleLive,
   liveIntervalMs = 5000,
   liveOverlay,
+  onVoiceText,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [facing, setFacing] = useState<"environment" | "user">("environment");
-  const { t } = useLanguage();
+  const { t, speechCode } = useLanguage();
+  const { sttEnabled } = useVoiceMode();
+  const [voiceHint, setVoiceHint] = useState<string | null>(null);
+  const { start: startListen, stop: stopListen, listening, supported: sttSupported } = useListen(
+    speechCode,
+    (text) => {
+      setVoiceHint(text);
+      onVoiceText?.(text);
+      window.setTimeout(() => setVoiceHint(null), 2500);
+    }
+  );
+  const toggleMic = () => {
+    if (!sttSupported || !sttEnabled) return;
+    if (listening) stopListen();
+    else startListen();
+  };
 
   useEffect(() => {
     let active = true;
@@ -223,6 +243,13 @@ export function CameraCapture({
 
       {/* Bottom action bar — 5 buttons */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 pb-6 pt-4">
+        {voiceHint && (
+          <div className="pointer-events-none mx-auto mb-3 max-w-md px-6">
+            <div className="rounded-2xl bg-black/75 px-3 py-2 text-center text-xs text-white shadow-lg backdrop-blur">
+              🎤 “{voiceHint}”
+            </div>
+          </div>
+        )}
         <div className="pointer-events-auto mx-auto flex max-w-md items-center justify-between px-6">
           {/* 1. Live/video toggle — light blue circle */}
           <button
@@ -257,12 +284,20 @@ export function CameraCapture({
             <Sparkles className="relative h-6 w-6 text-sky-700" />
           </button>
 
-          {/* 4. Mic — white circle */}
+          {/* 4. Mic — tap to speak */}
           <button
-            aria-label="Voice"
-            className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-slate-800 shadow-lg transition hover:bg-white/90 active:scale-95"
+            onClick={toggleMic}
+            disabled={!sttSupported || !sttEnabled}
+            aria-label={listening ? "Stop voice" : "Start voice"}
+            aria-pressed={listening}
+            className={`relative flex h-12 w-12 items-center justify-center rounded-full shadow-lg transition active:scale-95 disabled:opacity-40 ${listening ? "animate-pulse bg-red-500 text-white ring-4 ring-red-300/50" : "bg-white text-slate-800 hover:bg-white/90"}`}
           >
-            <Mic className="h-5 w-5" />
+            {listening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+            {listening && (
+              <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-red-500 px-2 py-0.5 text-[10px] font-bold text-white shadow">
+                {t("listening")}
+              </span>
+            )}
           </button>
 
           {/* 5. Close — white circle */}
