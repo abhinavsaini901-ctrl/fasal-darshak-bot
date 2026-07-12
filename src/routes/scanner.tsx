@@ -509,7 +509,7 @@ function HomePage() {
         result={result}
         image={imageData}
         speaking={speaking}
-        onSpeak={() => speak(buildResultText(result, t))}
+        onSpeak={() => speak(buildResultText(result, t, lang))}
         onStop={stop}
         onBack={() => {
           stop();
