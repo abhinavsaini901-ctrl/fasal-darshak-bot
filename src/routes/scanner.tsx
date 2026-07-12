@@ -1020,6 +1020,12 @@ function buildResultText(r: ScanResult, t: (k: string) => string): string {
   if (r.cropName) parts.push(`${t("cropName")}: ${r.cropName}.`);
   parts.push(r.isHealthy ? t("healthy") : `${t("disease")}: ${r.disease || ""}.`);
   if (r.summary) parts.push(r.summary);
-  if (r.treatment) parts.push(`${t("treatment")}: ${r.treatment}`);
+  if (r.symptoms) parts.push(`${lang === "en" ? "Symptoms" : "लक्षण"}: ${r.symptoms}`);
+  if (r.organicTreatment) parts.push(`${lang === "en" ? "Organic treatment" : "जैविक इलाज"}: ${r.organicTreatment}`);
+  if (r.chemicalTreatment) parts.push(`${lang === "en" ? "Chemical treatment" : "रासायनिक इलाज"}: ${r.chemicalTreatment}`);
+  if (r.dosage) parts.push(`${lang === "en" ? "Dosage" : "खुराक"}: ${r.dosage}`);
+  if (r.safetyDays > 0) parts.push(lang === "en" ? `Wait ${r.safetyDays} days before harvest.` : `कटाई से ${r.safetyDays} दिन पहले रुकें।`);
+  if (r.whenToCallExpert) parts.push(`${lang === "en" ? "When to see an expert" : "विशेषज्ञ से कब मिलें"}: ${r.whenToCallExpert}`);
+  if (r.prevention) parts.push(`${t("prevention")}: ${r.prevention}`);
   return parts.join(" ");
 }
