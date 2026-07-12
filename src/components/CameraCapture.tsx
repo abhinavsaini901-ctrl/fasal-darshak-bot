@@ -277,12 +277,20 @@ export function CameraCapture({
             <Sparkles className="relative h-6 w-6 text-sky-700" />
           </button>
 
-          {/* 4. Mic — white circle */}
+          {/* 4. Mic — tap to speak */}
           <button
-            aria-label="Voice"
-            className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-slate-800 shadow-lg transition hover:bg-white/90 active:scale-95"
+            onClick={toggleMic}
+            disabled={!sttSupported || !sttEnabled}
+            aria-label={listening ? "Stop voice" : "Start voice"}
+            aria-pressed={listening}
+            className={`relative flex h-12 w-12 items-center justify-center rounded-full shadow-lg transition active:scale-95 disabled:opacity-40 ${listening ? "animate-pulse bg-red-500 text-white ring-4 ring-red-300/50" : "bg-white text-slate-800 hover:bg-white/90"}`}
           >
-            <Mic className="h-5 w-5" />
+            {listening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+            {listening && (
+              <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-red-500 px-2 py-0.5 text-[10px] font-bold text-white shadow">
+                {t("listening")}
+              </span>
+            )}
           </button>
 
           {/* 5. Close — white circle */}
