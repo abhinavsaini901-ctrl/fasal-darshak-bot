@@ -18,6 +18,8 @@ type Props = {
   liveIntervalMs?: number;
   /** Optional overlay rendered on top of the camera in live mode (live result card) */
   liveOverlay?: React.ReactNode;
+  /** Called when user speaks via mic button */
+  onVoiceText?: (text: string) => void;
 };
 
 export function CameraCapture({
