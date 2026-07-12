@@ -14,8 +14,6 @@ type Props = {
   liveIntervalMs?: number;
   /** Optional overlay rendered on top of the camera in live mode (live result card) */
   liveOverlay?: React.ReactNode;
-  /** Optional sample image shown behind the camera feed as a preview placeholder */
-  placeholderImage?: string;
 };
 
 export function CameraCapture({
@@ -26,7 +24,6 @@ export function CameraCapture({
   onToggleLive,
   liveIntervalMs = 5000,
   liveOverlay,
-  placeholderImage,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -143,15 +140,8 @@ export function CameraCapture({
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-black">
-      {/* Optional sample background behind the feed (used as fallback) */}
-      {placeholderImage && (
-        <img
-          src={placeholderImage}
-          alt=""
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-60"
-          aria-hidden="true"
-        />
-      )}
+
+
 
       {/* Top right floating controls: flip circle + pill with menu/live */}
       <div className="absolute right-3 top-3 z-30 flex items-center gap-2">
