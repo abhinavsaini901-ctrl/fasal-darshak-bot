@@ -182,9 +182,15 @@ export function CameraCapture({
       </div>
 
       <div className="relative flex-1 overflow-hidden">
+        {/* Farmer background — shows behind video, visible if camera not ready or blocked */}
+        <img
+          src={kisanBg}
+          alt="Kisan in field"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
         {error ? (
-          <div className="flex h-full flex-col items-center justify-center p-6 text-center text-white/80">
-            <p className="mb-4 text-sm opacity-80">{error}</p>
+          <div className="absolute inset-0 flex h-full flex-col items-center justify-center bg-black/40 p-6 text-center text-white">
+            <p className="mb-4 text-sm opacity-90">{error}</p>
           </div>
         ) : (
           <>
@@ -192,8 +198,9 @@ export function CameraCapture({
               ref={videoRef}
               playsInline
               muted
-              className="h-full w-full object-cover"
+              className="relative h-full w-full object-cover"
             />
+
 
             {/* Live mode: small analyzing badge instead of blocking overlay */}
             {liveMode && isAnalyzing && (
