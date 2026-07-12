@@ -14,6 +14,8 @@ type Props = {
   liveIntervalMs?: number;
   /** Optional overlay rendered on top of the camera in live mode (live result card) */
   liveOverlay?: React.ReactNode;
+  /** Optional sample image shown behind the camera feed as a preview placeholder */
+  placeholderImage?: string;
 };
 
 export function CameraCapture({
@@ -24,6 +26,7 @@ export function CameraCapture({
   onToggleLive,
   liveIntervalMs = 5000,
   liveOverlay,
+  placeholderImage,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -140,6 +143,16 @@ export function CameraCapture({
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-black">
+      {/* Sample camera preview placeholder — farm field behind the feed */}
+      {placeholderImage && (
+        <img
+          src={placeholderImage}
+          alt="Farm preview"
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-90"
+          aria-hidden="true"
+        />
+      )}
+
       <div className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between p-4">
         {onClose && (
           <Button
@@ -177,6 +190,14 @@ export function CameraCapture({
         </div>
       </div>
 
+      {/* Tiny Live / Scanning indicator at the top center */}
+      <div className="pointer-events-none absolute left-1/2 top-4 z-20 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/60 px-3 py-1 text-[11px] font-semibold text-white backdrop-blur">
+        <span className={`relative flex h-2 w-2 rounded-full ${liveMode ? "bg-red-500" : "bg-emerald-400"}`}>
+          {liveMode && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />}
+        </span>
+        {liveMode ? "Live Scanning" : "Scanning"}
+      </div>
+
       <div className="relative flex-1 overflow-hidden">
         {error ? (
           <div className="flex h-full flex-col items-center justify-center p-6 text-center text-white">
@@ -205,7 +226,7 @@ export function CameraCapture({
 
             {/* Live mode: small analyzing badge instead of blocking overlay */}
             {liveMode && isAnalyzing && (
-              <div className="absolute left-1/2 top-4 z-20 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/70 px-4 py-1.5 text-xs font-medium text-white backdrop-blur">
+              <div className="absolute left-1/2 top-12 z-20 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/70 px-4 py-1.5 text-xs font-medium text-white backdrop-blur">
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
                 विश्लेषण हो रहा है…
               </div>
