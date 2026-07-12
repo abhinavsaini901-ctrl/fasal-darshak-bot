@@ -140,15 +140,8 @@ export function CameraCapture({
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-black">
-      {/* Optional sample background behind the feed (used as fallback) */}
-      {placeholderImage && (
-        <img
-          src={placeholderImage}
-          alt=""
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-60"
-          aria-hidden="true"
-        />
-      )}
+
+
 
       {/* Top right floating controls: flip circle + pill with menu/live */}
       <div className="absolute right-3 top-3 z-30 flex items-center gap-2">
