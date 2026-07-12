@@ -318,8 +318,7 @@ async function generateHindiArticle(item: LiveNewsItem): Promise<string[]> {
   try {
     const { NEWS_SYSTEM_PROMPT } = await import("@/lib/ai-prompts");
     const { generatePowerfulText } = await import("@/lib/ai-gateway.server");
-    const text = await generatePowerfulText({
-      apiKey,
+    const text = await generatePowerfulText(apiKey, {
       system: NEWS_SYSTEM_PROMPT,
       prompt,
       model: "google/gemini-2.5-pro",
