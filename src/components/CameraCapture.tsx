@@ -24,7 +24,6 @@ export function CameraCapture({
   onToggleLive,
   liveIntervalMs = 5000,
   liveOverlay,
-  liveOverlay,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
