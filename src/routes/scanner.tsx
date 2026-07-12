@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 
 import heroImg from "@/assets/hero-crop.jpg";
+import farmPreview from "@/assets/farm-preview.jpg";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
