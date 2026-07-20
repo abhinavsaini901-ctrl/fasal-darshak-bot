@@ -308,14 +308,18 @@ function HomePage() {
       setLiveAsking(true);
       setLiveAnswer(null);
       try {
-        const res = await chatFn({
-          data: {
-            language: lang,
-            languageName: LANG_NAME_FOR_AI[lang as LangCode],
-            history: [{ role: "user", content: q }],
-            imageDataUrl: lastFrameRef.current ?? undefined,
-          },
-        });
+        const res = await withRateLimitRetry(
+          () =>
+            chatFn({
+              data: {
+                language: lang,
+                languageName: LANG_NAME_FOR_AI[lang as LangCode],
+                history: [{ role: "user", content: q }],
+                imageDataUrl: lastFrameRef.current ?? undefined,
+              },
+            }),
+          { onRetry: () => toast.info(t("rateLimited")) },
+        );
         const reply = res.reply || t("error");
         setLiveAnswer(reply);
         speakRaw(reply);
