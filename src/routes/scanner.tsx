@@ -262,13 +262,17 @@ function HomePage() {
       lastFrameRef.current = dataUrl;
       setAnalyzing(true);
       try {
-        const res = await scanFn({
-          data: {
-            imageDataUrl: dataUrl,
-            language: lang,
-            languageName: LANG_NAME_FOR_AI[lang as LangCode],
-          },
-        });
+        const res = await withRateLimitRetry(
+          () =>
+            scanFn({
+              data: {
+                imageDataUrl: dataUrl,
+                language: lang,
+                languageName: LANG_NAME_FOR_AI[lang as LangCode],
+              },
+            }),
+          { onRetry: () => { if (!liveMode) toast.info(t("rateLimited")); } },
+        );
         if (liveMode) {
           setLiveResult(res);
           if (res.summary) {
