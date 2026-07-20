@@ -380,13 +380,17 @@ function HomePage() {
       setView("chat");
       setSending(true);
       try {
-        const res = await chatFn({
-          data: {
-            language: lang,
-            languageName: LANG_NAME_FOR_AI[lang as LangCode],
-            history: [userMsg],
-          },
-        });
+        const res = await withRateLimitRetry(
+          () =>
+            chatFn({
+              data: {
+                language: lang,
+                languageName: LANG_NAME_FOR_AI[lang as LangCode],
+                history: [userMsg],
+              },
+            }),
+          { onRetry: () => toast.info(t("rateLimited")) },
+        );
         const reply = res.reply || t("error");
         setMessages((m) => [...m, { role: "assistant", content: reply }]);
         speak(reply);
