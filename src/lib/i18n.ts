@@ -60,7 +60,7 @@ const HI: Dict = {
   back: "वापस",
   newScan: "नया स्कैन",
   askFollowUp: "इस फसल के बारे में और पूछें",
-  rateLimited: "अभी बहुत requests हैं, थोड़ी देर बाद कोशिश करें।",
+  rateLimited: "सर्वर व्यस्त है — कुछ सेकंड में फिर से कोशिश हो रही है...",
   paymentRequired: "AI credits खत्म हो गए। कृपया Workspace settings में credits जोड़ें।",
   voiceMode: "आवाज़ सेटिंग",
   voiceBoth: "बोलें + सुनें",
