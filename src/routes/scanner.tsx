@@ -31,6 +31,7 @@ import { useSpeak } from "@/hooks/use-voice";
 import { useVoiceMode } from "@/hooks/use-voice-mode";
 import { LANG_NAME_FOR_AI, type LangCode } from "@/lib/i18n";
 import { scanCrop, chatCrop } from "@/lib/crop.functions";
+import { withRateLimitRetry } from "@/lib/retry";
 
 type ScannerSearch = { mode?: "camera" | "live" | "chat" };
 
