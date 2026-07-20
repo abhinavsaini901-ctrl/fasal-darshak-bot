@@ -20,7 +20,7 @@ const POWERFUL_MODEL = "google/gemini-2.5-pro";
 // enforce a sliding-window per-IP cap in worker memory. Worker instances are
 // ephemeral so this is best-effort, not a hard guarantee.
 const RATE_WINDOW_MS = 60 * 60 * 1000; // 1 hour
-const RATE_MAX_PER_WINDOW = 20; // 20 AI calls / IP / hour
+const RATE_MAX_PER_WINDOW = 60; // 60 AI calls / IP / hour
 const RATE_BUCKETS = new Map<string, number[]>();
 
 function clientIp(): string {

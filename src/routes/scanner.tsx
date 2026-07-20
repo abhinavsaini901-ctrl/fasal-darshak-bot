@@ -31,6 +31,7 @@ import { useSpeak } from "@/hooks/use-voice";
 import { useVoiceMode } from "@/hooks/use-voice-mode";
 import { LANG_NAME_FOR_AI, type LangCode } from "@/lib/i18n";
 import { scanCrop, chatCrop } from "@/lib/crop.functions";
+import { withRateLimitRetry } from "@/lib/retry";
 
 type ScannerSearch = { mode?: "camera" | "live" | "chat" };
 
@@ -261,13 +262,17 @@ function HomePage() {
       lastFrameRef.current = dataUrl;
       setAnalyzing(true);
       try {
-        const res = await scanFn({
-          data: {
-            imageDataUrl: dataUrl,
-            language: lang,
-            languageName: LANG_NAME_FOR_AI[lang as LangCode],
-          },
-        });
+        const res = await withRateLimitRetry(
+          () =>
+            scanFn({
+              data: {
+                imageDataUrl: dataUrl,
+                language: lang,
+                languageName: LANG_NAME_FOR_AI[lang as LangCode],
+              },
+            }),
+          { onRetry: () => { if (!liveMode) toast.info(t("rateLimited")); } },
+        );
         if (liveMode) {
           setLiveResult(res);
           if (res.summary) {
@@ -303,14 +308,18 @@ function HomePage() {
       setLiveAsking(true);
       setLiveAnswer(null);
       try {
-        const res = await chatFn({
-          data: {
-            language: lang,
-            languageName: LANG_NAME_FOR_AI[lang as LangCode],
-            history: [{ role: "user", content: q }],
-            imageDataUrl: lastFrameRef.current ?? undefined,
-          },
-        });
+        const res = await withRateLimitRetry(
+          () =>
+            chatFn({
+              data: {
+                language: lang,
+                languageName: LANG_NAME_FOR_AI[lang as LangCode],
+                history: [{ role: "user", content: q }],
+                imageDataUrl: lastFrameRef.current ?? undefined,
+              },
+            }),
+          { onRetry: () => toast.info(t("rateLimited")) },
+        );
         const reply = res.reply || t("error");
         setLiveAnswer(reply);
         speakRaw(reply);
@@ -336,14 +345,18 @@ function HomePage() {
       setInput("");
       setSending(true);
       try {
-        const res = await chatFn({
-          data: {
-            language: lang,
-            languageName: LANG_NAME_FOR_AI[lang as LangCode],
-            history: newHistory,
-            imageDataUrl: attachImage && imageData ? imageData : undefined,
-          },
-        });
+        const res = await withRateLimitRetry(
+          () =>
+            chatFn({
+              data: {
+                language: lang,
+                languageName: LANG_NAME_FOR_AI[lang as LangCode],
+                history: newHistory,
+                imageDataUrl: attachImage && imageData ? imageData : undefined,
+              },
+            }),
+          { onRetry: () => toast.info(t("rateLimited")) },
+        );
         const reply = res.reply || t("error");
         setMessages((m) => [...m, { role: "assistant", content: reply }]);
         speak(reply);
@@ -367,13 +380,17 @@ function HomePage() {
       setView("chat");
       setSending(true);
       try {
-        const res = await chatFn({
-          data: {
-            language: lang,
-            languageName: LANG_NAME_FOR_AI[lang as LangCode],
-            history: [userMsg],
-          },
-        });
+        const res = await withRateLimitRetry(
+          () =>
+            chatFn({
+              data: {
+                language: lang,
+                languageName: LANG_NAME_FOR_AI[lang as LangCode],
+                history: [userMsg],
+              },
+            }),
+          { onRetry: () => toast.info(t("rateLimited")) },
+        );
         const reply = res.reply || t("error");
         setMessages((m) => [...m, { role: "assistant", content: reply }]);
         speak(reply);
