@@ -345,14 +345,18 @@ function HomePage() {
       setInput("");
       setSending(true);
       try {
-        const res = await chatFn({
-          data: {
-            language: lang,
-            languageName: LANG_NAME_FOR_AI[lang as LangCode],
-            history: newHistory,
-            imageDataUrl: attachImage && imageData ? imageData : undefined,
-          },
-        });
+        const res = await withRateLimitRetry(
+          () =>
+            chatFn({
+              data: {
+                language: lang,
+                languageName: LANG_NAME_FOR_AI[lang as LangCode],
+                history: newHistory,
+                imageDataUrl: attachImage && imageData ? imageData : undefined,
+              },
+            }),
+          { onRetry: () => toast.info(t("rateLimited")) },
+        );
         const reply = res.reply || t("error");
         setMessages((m) => [...m, { role: "assistant", content: reply }]);
         speak(reply);
