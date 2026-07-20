@@ -105,7 +105,7 @@ const EN: Dict = {
   back: "Back",
   newScan: "New Scan",
   askFollowUp: "Ask more about this crop",
-  rateLimited: "Too many requests, please try again later.",
+  rateLimited: "Server busy — auto-retrying in a few seconds...",
   paymentRequired: "AI credits exhausted. Please add credits in Workspace settings.",
   voiceMode: "Voice Mode",
   voiceBoth: "Speak + Listen",
