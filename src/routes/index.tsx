@@ -10,6 +10,7 @@ import {
 
 import { PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
+import pmPhoneBg from "@/assets/pm-phone-bg.jpg";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
