@@ -49,7 +49,12 @@ function HomePage() {
   return (
     <PageShell>
       {/* AI खेती गुरु — Premium Hero Section */}
-      <section className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-950 via-green-900 to-emerald-800 py-10 md:py-14">
+      <section
+        className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat py-10 md:py-14"
+        style={{ backgroundImage: `url(${pmPhoneBg})` }}
+      >
+        {/* Dark overlay for readable text */}
+        <div className="pointer-events-none absolute inset-0 bg-emerald-950/70" />
         {/* Decorative blurs */}
         <div className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-emerald-400/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 -right-20 h-72 w-72 rounded-full bg-lime-400/20 blur-3xl" />
