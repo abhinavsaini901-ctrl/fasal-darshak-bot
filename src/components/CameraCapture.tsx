@@ -270,19 +270,25 @@ export function CameraCapture({
             <ArrowUp className="h-5 w-5" />
           </button>
 
-          {/* 3. Center — glowing pill AI trigger (also captures) */}
+          {/* 3. Center — glowing pill AI trigger (hand holding phone) */}
           <button
             onClick={capture}
             disabled={!stream || isAnalyzing}
             aria-label={t("capture")}
-            className="relative flex h-14 min-w-[92px] items-center justify-center rounded-full px-5 shadow-[0_0_30px_rgba(125,180,255,0.65)] transition active:scale-95 disabled:opacity-60"
+            className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-2 border-white/40 shadow-[0_0_30px_rgba(125,180,255,0.65)] transition active:scale-95 disabled:opacity-60"
             style={{
               background:
                 "linear-gradient(135deg, #dbeafe 0%, #93c5fd 45%, #ffffff 100%)",
             }}
           >
             <span className="absolute inset-0 rounded-full bg-white/40 blur-md" aria-hidden="true" />
-            <Sparkles className="relative h-6 w-6 text-sky-700" />
+            <img
+              src={handPhone}
+              alt="Live scan"
+              className="relative h-12 w-12 object-contain"
+              width={48}
+              height={48}
+            />
           </button>
 
           {/* 4. Mic — tap to speak */}
