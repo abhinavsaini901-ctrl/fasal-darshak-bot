@@ -66,8 +66,8 @@ export function LiveKisanNews() {
   const { data, isLoading, isFetching, refetch, dataUpdatedAt } = useQuery({
     queryKey: ["live-agri-news"],
     queryFn: () => fetchNews(),
-    staleTime: 3 * 60 * 60 * 1000, // 3 hours
-    refetchInterval: 3 * 60 * 60 * 1000, // auto refresh every 3 hours
+    staleTime: 60 * 60 * 1000, // 1 hour
+    refetchInterval: 60 * 60 * 1000, // auto refresh every hour
     refetchOnWindowFocus: false,
   });
 
@@ -137,7 +137,7 @@ export function LiveKisanNews() {
             📰 आज की कृषि खबरें
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            खेती, मौसम, मंडी भाव और सरकारी योजनाओं की ताज़ा जानकारी — हर 3 घंटे अपडेट
+            खेती, मौसम, मंडी भाव और सरकारी योजनाओं की ताज़ा जानकारी — हर घंटे अपडेट
           </p>
         </div>
         <button
