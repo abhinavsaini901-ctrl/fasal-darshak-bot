@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { PageShell } from "@/components/PageShell";
+import { LiveKisanNews } from "@/components/LiveKisanNews";
 import { Button } from "@/components/ui/button";
 import pmPhoneBg from "@/assets/pm-phone-bg.jpg";
 
