@@ -140,6 +140,9 @@ function HomePage() {
           </p>
         </div>
       </section>
+
+      {/* ताज़ा कृषि खबरें — हर घंटे अपडेट */}
+      <LiveKisanNews />
     </PageShell>
   );
 }
