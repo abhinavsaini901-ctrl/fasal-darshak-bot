@@ -59,7 +59,23 @@ export const Route = createRootRoute({
           sameAs: [],
         }),
       },
+      {
+        async: true,
+        type: "application/javascript",
+        src: "https://news.google.com/swg/js/v1/swg-basic.js",
+      },
+      {
+        children: `(self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
+  basicSubscriptions.init({
+    type: "NewsArticle",
+    isPartOfType: ["Product"],
+    isPartOfProductId: "CAowgbrHDA:openaccess",
+    clientOptions: { theme: "light", lang: "hi" },
+  });
+});`,
+      },
     ],
+
   }),
   shellComponent: RootShell,
   component: RootComponent,
