@@ -251,7 +251,7 @@ function fallbackItems(): LiveNewsItem[] {
 
 type Cache = { at: number; data: LiveNewsItem[] };
 let CACHE: Cache | null = null;
-const TTL_MS = 3 * 60 * 60 * 1000; // 3 hours — fresh news every 3 hrs
+const TTL_MS = 60 * 60 * 1000; // 1 hour — fresh news every hour
 
 async function ensureNewsCache(): Promise<LiveNewsItem[]> {
   const now = Date.now();
