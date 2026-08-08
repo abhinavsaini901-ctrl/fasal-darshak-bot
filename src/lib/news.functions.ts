@@ -55,23 +55,30 @@ const CAT_META: Record<LiveNewsCategory, CatMeta> = {
 const GN = (q: string) =>
   `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=hi&gl=IN&ceid=IN:hi`;
 
+// Bing News RSS works from the server runtime (Google News blocks it with 503)
+const BN = (q: string) =>
+  `https://www.bing.com/news/search?q=${encodeURIComponent(q)}&format=RSS&cc=in&setmkt=hi-IN&setlang=hi`;
+
 const FEEDS: { url: string; source: string }[] = [
+  // Direct Hindi agriculture publishers
+  { url: "https://www.kisantak.in/rss/all.xml", source: "Kisan Tak" },
+  { url: "https://www.krishakjagat.org/feed/", source: "Krishak Jagat" },
+  // Topic-wise all-India Hindi agriculture news
+  { url: BN("किसान भारत खेती"), source: "किसान समाचार" },
+  { url: BN("मंडी भाव आज"), source: "मंडी भाव" },
+  { url: BN("मौसम किसान बारिश चेतावनी"), source: "मौसम" },
+  { url: BN("पीएम किसान सम्मान निधि योजना"), source: "सरकारी योजना" },
+  { url: BN("कृषि मंत्रालय भारत MSP"), source: "कृषि मंत्रालय" },
+  { url: BN("गेहूं धान सरसों भाव"), source: "फसल भाव" },
+  { url: BN("फसल रोग कीट सलाह"), source: "फसल सलाह" },
+  { url: BN("कृषि तकनीक ड्रोन स्मार्ट खेती"), source: "कृषि तकनीक" },
+  { url: BN("पंजाब हरियाणा किसान"), source: "किसान समाचार" },
+  { url: BN("उत्तर प्रदेश बिहार किसान"), source: "किसान समाचार" },
+  { url: BN("महाराष्ट्र मध्य प्रदेश किसान"), source: "किसान समाचार" },
+  { url: BN("राजस्थान गुजरात किसान"), source: "किसान समाचार" },
   { url: GN("किसान भारत"), source: "Google News" },
-  { url: GN("खेती भारत"), source: "Google News" },
-  { url: GN("मंडी भाव आज"), source: "Google News" },
-  { url: GN("मौसम किसान बारिश"), source: "Google News" },
-  { url: GN("पीएम किसान योजना"), source: "Google News" },
-  { url: GN("कृषि मंत्रालय भारत"), source: "Google News" },
-  { url: GN("MSP फसल"), source: "Google News" },
-  { url: GN("गेहूं धान सरसों भाव"), source: "Google News" },
-  { url: GN("ICAR कृषि अनुसंधान"), source: "Google News" },
-  { url: GN("कृषि तकनीक ड्रोन"), source: "Google News" },
-  { url: GN("पंजाब हरियाणा किसान"), source: "Google News" },
-  { url: GN("उत्तर प्रदेश बिहार किसान"), source: "Google News" },
-  { url: GN("महाराष्ट्र मध्य प्रदेश किसान"), source: "Google News" },
-  { url: GN("राजस्थान गुजरात किसान"), source: "Google News" },
-  { url: GN("दक्षिण भारत कृषि"), source: "Google News" },
 ];
+
 
 function decodeEntities(s: string): string {
   return s
