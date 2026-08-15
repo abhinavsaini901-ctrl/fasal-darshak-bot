@@ -17,6 +17,7 @@ import { Route as PestControlRouteImport } from './routes/pest-control'
 import { Route as MarketPricesRouteImport } from './routes/market-prices'
 import { Route as KrishiYantraRouteImport } from './routes/krishi-yantra'
 import { Route as GovernmentSchemesRouteImport } from './routes/government-schemes'
+import { Route as EbookRouteImport } from './routes/ebook'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as DawaStoreRouteImport } from './routes/dawa-store'
 import { Route as CropDiseasesRouteImport } from './routes/crop-diseases'
@@ -74,6 +75,11 @@ const KrishiYantraRoute = KrishiYantraRouteImport.update({
 const GovernmentSchemesRoute = GovernmentSchemesRouteImport.update({
   id: '/government-schemes',
   path: '/government-schemes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EbookRoute = EbookRouteImport.update({
+  id: '/ebook',
+  path: '/ebook',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DisclaimerRoute = DisclaimerRouteImport.update({
@@ -178,6 +184,7 @@ export interface FileRoutesByFullPath {
   '/crop-diseases': typeof CropDiseasesRoute
   '/dawa-store': typeof DawaStoreRoute
   '/disclaimer': typeof DisclaimerRoute
+  '/ebook': typeof EbookRoute
   '/government-schemes': typeof GovernmentSchemesRoute
   '/krishi-yantra': typeof KrishiYantraRoute
   '/market-prices': typeof MarketPricesRoute
@@ -204,6 +211,7 @@ export interface FileRoutesByTo {
   '/crop-diseases': typeof CropDiseasesRoute
   '/dawa-store': typeof DawaStoreRoute
   '/disclaimer': typeof DisclaimerRoute
+  '/ebook': typeof EbookRoute
   '/government-schemes': typeof GovernmentSchemesRoute
   '/krishi-yantra': typeof KrishiYantraRoute
   '/market-prices': typeof MarketPricesRoute
@@ -233,6 +241,7 @@ export interface FileRoutesById {
   '/crop-diseases': typeof CropDiseasesRoute
   '/dawa-store': typeof DawaStoreRoute
   '/disclaimer': typeof DisclaimerRoute
+  '/ebook': typeof EbookRoute
   '/government-schemes': typeof GovernmentSchemesRoute
   '/krishi-yantra': typeof KrishiYantraRoute
   '/market-prices': typeof MarketPricesRoute
@@ -262,6 +271,7 @@ export interface FileRouteTypes {
     | '/crop-diseases'
     | '/dawa-store'
     | '/disclaimer'
+    | '/ebook'
     | '/government-schemes'
     | '/krishi-yantra'
     | '/market-prices'
@@ -288,6 +298,7 @@ export interface FileRouteTypes {
     | '/crop-diseases'
     | '/dawa-store'
     | '/disclaimer'
+    | '/ebook'
     | '/government-schemes'
     | '/krishi-yantra'
     | '/market-prices'
@@ -316,6 +327,7 @@ export interface FileRouteTypes {
     | '/crop-diseases'
     | '/dawa-store'
     | '/disclaimer'
+    | '/ebook'
     | '/government-schemes'
     | '/krishi-yantra'
     | '/market-prices'
@@ -345,6 +357,7 @@ export interface RootRouteChildren {
   CropDiseasesRoute: typeof CropDiseasesRoute
   DawaStoreRoute: typeof DawaStoreRoute
   DisclaimerRoute: typeof DisclaimerRoute
+  EbookRoute: typeof EbookRoute
   GovernmentSchemesRoute: typeof GovernmentSchemesRoute
   KrishiYantraRoute: typeof KrishiYantraRoute
   MarketPricesRoute: typeof MarketPricesRoute
@@ -415,6 +428,13 @@ declare module '@tanstack/react-router' {
       path: '/government-schemes'
       fullPath: '/government-schemes'
       preLoaderRoute: typeof GovernmentSchemesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ebook': {
+      id: '/ebook'
+      path: '/ebook'
+      fullPath: '/ebook'
+      preLoaderRoute: typeof EbookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/disclaimer': {
@@ -582,6 +602,7 @@ const rootRouteChildren: RootRouteChildren = {
   CropDiseasesRoute: CropDiseasesRoute,
   DawaStoreRoute: DawaStoreRoute,
   DisclaimerRoute: DisclaimerRoute,
+  EbookRoute: EbookRoute,
   GovernmentSchemesRoute: GovernmentSchemesRoute,
   KrishiYantraRoute: KrishiYantraRoute,
   MarketPricesRoute: MarketPricesRoute,
