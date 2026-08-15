@@ -165,6 +165,90 @@ function HomePage() {
         </div>
       </section>
 
+      {/* Featured Ebook — Kisan Lens */}
+      <section id="ebook" className="relative overflow-hidden bg-gradient-hero py-10 md:py-16">
+        <div className="pointer-events-none absolute -left-24 top-0 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 -right-24 h-80 w-80 rounded-full bg-accent/20 blur-3xl" />
+
+        <div className="relative mx-auto max-w-6xl px-4">
+          <div className="flex flex-col items-center gap-8 rounded-3xl border border-border bg-card p-6 shadow-soft md:flex-row md:items-start md:gap-10 md:p-10">
+            {/* Book Cover */}
+            <div className="w-full max-w-[220px] shrink-0 md:max-w-[260px]">
+              <div className="group relative mx-auto w-fit">
+                <div className="absolute -inset-3 rounded-2xl bg-gradient-to-br from-primary/30 to-accent/20 opacity-60 blur-2xl transition-opacity group-hover:opacity-80" />
+                <img
+                  src={bookCover}
+                  alt="Kisan Lens: A Farmer's Son's Dream book cover"
+                  width={520}
+                  height={520}
+                  loading="lazy"
+                  className="relative z-10 w-full rounded-2xl shadow-strong transition-transform duration-500 group-hover:-translate-y-1 group-hover:scale-[1.02]"
+                />
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 text-center md:text-left">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                <Sparkles className="h-3.5 w-3.5" /> नई ई-बुक
+              </span>
+
+              <h2 className="mt-4 text-2xl font-extrabold leading-tight text-foreground md:text-4xl">
+                Kisan Lens:
+                <br />
+                <span className="text-primary">A Farmer's Son's Dream</span>
+              </h2>
+
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground md:text-lg">
+                एक किसान के बेटे की असली कहानी — जिसने AI और मेहनत से भारतीय किसानों की ज़िंदगी बदलने का सपना देखा।
+                यह किताब हर उस युवा के लिए प्रेरणा है जो कृषि और टेक्नोलॉजी से भारत बदलना चाहता है।
+              </p>
+
+              <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row md:justify-start">
+                <Button
+                  size="lg"
+                  className="h-12 w-full rounded-xl bg-gradient-primary px-6 text-base font-bold text-primary-foreground shadow-soft transition-transform hover:scale-[1.02] sm:w-auto"
+                  asChild
+                >
+                  <a href={PLAY_BOOKS_URL} target="_blank" rel="noopener noreferrer">
+                    <ShoppingCart className="mr-2 h-5 w-5" /> Buy Now
+                  </a>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="h-12 w-full rounded-xl border-primary/30 px-6 text-base font-semibold text-primary hover:bg-primary/5 sm:w-auto"
+                  asChild
+                >
+                  <Link to="/ebook">
+                    <BookOpen className="mr-2 h-5 w-5" /> ई-बुक पेज देखें
+                  </Link>
+                </Button>
+              </div>
+            </div>
+
+            {/* QR Code */}
+            <div className="flex shrink-0 flex-col items-center rounded-2xl border border-border bg-background p-5 shadow-soft md:w-fit">
+              <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-foreground">
+                <QrCode className="h-4 w-4 text-primary" />
+                <span>QR कोड से खोलें</span>
+              </div>
+              <img
+                src={bookQr}
+                alt="QR code to open Kisan Lens book on Google Play Books"
+                width={200}
+                height={200}
+                loading="lazy"
+                className="h-36 w-36 rounded-xl border border-border bg-white p-2 md:h-40 md:w-40"
+              />
+              <p className="mt-3 max-w-[180px] text-center text-xs text-muted-foreground">
+                स्कैन करें और सीधे Google Play Books पर खरीदें।
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ताज़ा कृषि खबरें — हर घंटे अपडेट */}
       <LiveKisanNews />
     </PageShell>
