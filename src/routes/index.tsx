@@ -30,10 +30,10 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "भारतीय किसानों के लिए AI-संचालित कृषि पोर्टल। फसल स्कैन, रोग पहचान, मंडी भाव, सरकारी योजनाएं और कृषि लेख — सब हिंदी में।",
+          "भारतीय किसानों के लिए AI-संचालित कृषि पोर्टल। फसल स्कैन, रोग पहचान, मंडी भाव, सरकारी योजनाएं, कृषि लेख और Kisan Lens ई-बुक — सब हिंदी में।",
       },
       { property: "og:title", content: "किसान मित्र — AI कृषि पोर्टल" },
-      { property: "og:description", content: "फसल स्कैन, मंडी भाव, योजनाएं — एक ही जगह।" },
+      { property: "og:description", content: "फसल स्कैन, मंडी भाव, योजनाएं और Kisan Lens ई-बुक — एक ही जगह।" },
       { property: "og:url", content: "https://kisanlens.com/" },
       { property: "og:type", content: "website" },
     ],
@@ -49,6 +49,21 @@ export const Route = createFileRoute("/")({
           inLanguage: "hi-IN",
           description:
             "AI-संचालित भारतीय कृषि पोर्टल — फसल रोग पहचान, मंडी भाव, सरकारी योजनाएं और किसानों के लिए विस्तृत लेख।",
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Book",
+          name: "Kisan Lens: A Farmer's Son's Dream",
+          author: { "@type": "Person", name: "Abhinav Saini" },
+          url: "https://kisanlens.com/ebook",
+          offers: {
+            "@type": "Offer",
+            url: PLAY_BOOKS_URL,
+            availability: "https://schema.org/InStock",
+          },
         }),
       },
     ],
