@@ -6,12 +6,21 @@ import {
   Mic,
   Leaf,
   TreePine,
+  BookOpen,
+  ShoppingCart,
+  QrCode,
+  Sparkles,
 } from "lucide-react";
 
 import { PageShell } from "@/components/PageShell";
 import { LiveKisanNews } from "@/components/LiveKisanNews";
 import { Button } from "@/components/ui/button";
 import pmPhoneBg from "@/assets/pm-phone-bg.jpg";
+import bookCover from "@/assets/kisan-lens-book-cover.jpg";
+import bookQr from "@/assets/kisan-lens-book-qr.png";
+
+const PLAY_BOOKS_URL =
+  "https://play.google.com/store/books/details/Abhinav_Saini_Kisan_Lens_A_Farmer_s_Son_s_Dream?id=qCr_EQAAQBAJ";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
