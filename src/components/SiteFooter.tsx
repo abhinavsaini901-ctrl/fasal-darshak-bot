@@ -52,6 +52,7 @@ export function SiteFooter() {
               <li><Link to="/about" className="hover:text-primary">हमारे बारे में</Link></li>
               <li><Link to="/contact" className="hover:text-primary">संपर्क करें</Link></li>
               <li><Link to="/scanner" className="hover:text-primary">AI फसल डॉक्टर</Link></li>
+              <li><Link to="/ebook" className="hover:text-primary">ई-बुक</Link></li>
               <li><a href="/sitemap.xml" className="hover:text-primary">साइटमैप</a></li>
             </ul>
           </div>
