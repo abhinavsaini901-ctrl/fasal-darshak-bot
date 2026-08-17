@@ -15,7 +15,7 @@ import {
 import { PageShell } from "@/components/PageShell";
 import { LiveKisanNews } from "@/components/LiveKisanNews";
 import { Button } from "@/components/ui/button";
-import pmPhoneBg from "@/assets/pm-phone-bg.jpg";
+import kisanPhoneBg from "@/assets/kisan-phone-bg.jpg";
 import bookCover from "@/assets/kisan-lens-book-cover.jpg";
 import bookQr from "@/assets/kisan-lens-book-qr.png";
 
@@ -76,7 +76,7 @@ function HomePage() {
       {/* AI खेती गुरु — Premium Hero Section */}
       <section
         className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat py-10 md:py-14"
-        style={{ backgroundImage: `url(${pmPhoneBg})` }}
+        style={{ backgroundImage: `url(${kisanPhoneBg})` }}
       >
         {/* Dark overlay for readable text */}
         <div className="pointer-events-none absolute inset-0 bg-emerald-950/70" />
