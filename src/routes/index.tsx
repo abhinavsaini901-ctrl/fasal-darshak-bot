@@ -204,6 +204,15 @@ function HomePage() {
                 यह किताब हर उस युवा के लिए प्रेरणा है जो कृषि और टेक्नोलॉजी से भारत बदलना चाहता है।
               </p>
 
+              <div className="mt-5 rounded-2xl border border-amber-200/60 bg-amber-50/60 p-4 dark:bg-amber-950/20">
+                <p className="text-center text-base font-semibold text-amber-800 dark:text-amber-200 md:text-left md:text-lg">
+                  🚀 अगर आप भी ऐसी Smart कृषि वेबसाइट/ऐप बनाना चाहते हैं, तो इस बुक को ज़रूर खरीदें!
+                </p>
+                <p className="mt-1 text-center text-sm text-amber-700/80 dark:text-amber-300/80 md:text-left">
+                  इसमें AI + कृषि + डिजिटल इंडिया की पूरी यात्रा सीखें।
+                </p>
+              </div>
+
               <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row md:justify-start">
                 <Button
                   size="lg"
