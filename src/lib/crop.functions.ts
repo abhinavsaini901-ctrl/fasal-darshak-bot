@@ -77,7 +77,14 @@ const ScanInput = z.object({
   language: LanguageCode,
   // languageName is accepted for backward compatibility but ignored on the server.
   languageName: z.string().max(60).optional(),
+  // Optional farmer-provided context to sharpen the diagnosis.
+  cropHint: z.string().max(60).optional(),
+  leafStage: z.enum(["old", "new", "middle", "unknown"]).optional(),
+  daysSinceSowing: z.number().int().min(0).max(400).optional(),
+  location: z.string().max(80).optional(),
+  weatherNote: z.string().max(120).optional(),
 });
+
 
 const ChatInput = z.object({
   language: LanguageCode,
