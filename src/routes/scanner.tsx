@@ -222,8 +222,14 @@ function HomePage() {
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
+  // Farmer-provided context (Dual Model System) — makes diagnosis sharper
+  const [cropHint, setCropHint] = useState("");
+  const [leafStage, setLeafStage] = useState<"old" | "new" | "middle" | "unknown">("unknown");
+  const [daysSinceSowing, setDaysSinceSowing] = useState("");
+  const [location, setLocation] = useState("");
   const scanFn = useServerFn(scanCrop);
   const chatFn = useServerFn(chatCrop);
+
   const { speak: speakRaw, stop, speaking } = useSpeak(speechCode);
   const speak = useCallback(
     (text: string) => {
