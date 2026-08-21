@@ -311,8 +311,9 @@ function HomePage() {
         setAnalyzing(false);
       }
     },
-    [scanFn, lang, t, speak, speakRaw, liveMode]
+    [scanFn, lang, t, speak, speakRaw, liveMode, cropHint, leafStage, daysSinceSowing, location]
   );
+
 
   const askLive = useCallback(
     async (question: string) => {
