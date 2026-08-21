@@ -222,8 +222,14 @@ function HomePage() {
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
+  // Farmer-provided context (Dual Model System) — makes diagnosis sharper
+  const [cropHint, setCropHint] = useState("");
+  const [leafStage, setLeafStage] = useState<"old" | "new" | "middle" | "unknown">("unknown");
+  const [daysSinceSowing, setDaysSinceSowing] = useState("");
+  const [location, setLocation] = useState("");
   const scanFn = useServerFn(scanCrop);
   const chatFn = useServerFn(chatCrop);
+
   const { speak: speakRaw, stop, speaking } = useSpeak(speechCode);
   const speak = useCallback(
     (text: string) => {
@@ -269,8 +275,15 @@ function HomePage() {
                 imageDataUrl: dataUrl,
                 language: lang,
                 languageName: LANG_NAME_FOR_AI[lang as LangCode],
+                ...(cropHint.trim() ? { cropHint: cropHint.trim() } : {}),
+                ...(leafStage !== "unknown" ? { leafStage } : {}),
+                ...(daysSinceSowing.trim() && Number.isFinite(Number(daysSinceSowing))
+                  ? { daysSinceSowing: Math.min(400, Math.max(0, Math.round(Number(daysSinceSowing)))) }
+                  : {}),
+                ...(location.trim() ? { location: location.trim() } : {}),
               },
             }),
+
           { onRetry: () => { if (!liveMode) toast.info(t("rateLimited")); } },
         );
         if (liveMode) {
@@ -298,8 +311,9 @@ function HomePage() {
         setAnalyzing(false);
       }
     },
-    [scanFn, lang, t, speak, speakRaw, liveMode]
+    [scanFn, lang, t, speak, speakRaw, liveMode, cropHint, leafStage, daysSinceSowing, location]
   );
+
 
   const askLive = useCallback(
     async (question: string) => {
@@ -625,6 +639,68 @@ function HomePage() {
         </Card>
       </section>
 
+      {/* Farmer context — sharper AI diagnosis */}
+      <section className="px-5 pt-5">
+        <Card className="border border-border/60 bg-card p-4 shadow-soft">
+          <p className="text-sm font-bold text-foreground">
+            {lang === "en" ? "Extra details (optional) — better accuracy" : "थोड़ी जानकारी दें (वैकल्पिक) — जांच और सटीक होगी"}
+          </p>
+          <p className="mt-1 text-[11px] text-muted-foreground">
+            {lang === "en"
+              ? "Tell the crop and which leaf you photographed. Open a rolled leaf and take a close-up (macro) photo of the inside."
+              : "फसल का नाम और कौन सा पत्ता है — यह बताएं। लिपटा हुआ पत्ता खोलकर अंदर से पास (macro) फोटो लें।"}
+          </p>
+
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <Input
+              value={cropHint}
+              onChange={(e) => setCropHint(e.target.value)}
+              placeholder={lang === "en" ? "Crop e.g. Paddy" : "फसल जैसे धान"}
+              className="rounded-xl"
+            />
+            <Input
+              value={daysSinceSowing}
+              onChange={(e) => setDaysSinceSowing(e.target.value.replace(/\D/g, "").slice(0, 3))}
+              inputMode="numeric"
+              placeholder={lang === "en" ? "Days since sowing" : "बोने के कितने दिन"}
+              className="rounded-xl"
+            />
+            <Input
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder={lang === "en" ? "District / State" : "जिला / राज्य"}
+              className="col-span-2 rounded-xl"
+            />
+          </div>
+
+          <p className="mt-3 text-xs font-semibold text-muted-foreground">
+            {lang === "en" ? "Which leaf is in the photo?" : "फोटो में कौन सा पत्ता है?"}
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {([
+              ["old", lang === "en" ? "Old / lower leaf" : "पुरानी / नीचे की पत्ती"],
+              ["middle", lang === "en" ? "Middle leaf" : "बीच की पत्ती"],
+              ["new", lang === "en" ? "New / upper leaf" : "नई / ऊपर की पत्ती"],
+              ["unknown", lang === "en" ? "Not sure" : "पता नहीं"],
+            ] as const).map(([val, label]) => (
+              <button
+                key={val}
+                onClick={() => setLeafStage(val)}
+                className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition-smooth ${
+                  leafStage === val
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border bg-background text-foreground"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </Card>
+      </section>
+
+
+
       {/* Quick actions */}
       <section className="grid grid-cols-2 gap-3 px-5 pt-5">
         <button
@@ -831,6 +907,55 @@ function ResultView({
             <p className="mt-3 text-sm leading-relaxed text-foreground">{result.summary}</p>
           )}
         </Card>
+
+        {/* Issue type + primary issue */}
+        {result.issueType && result.issueType !== "healthy" && (
+          <Card className="mt-4 border-0 p-4 shadow-soft">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">
+                {result.issueType === "pest"
+                  ? lang === "en" ? "Insect attack" : "कीट का हमला"
+                  : result.issueType === "disease"
+                    ? lang === "en" ? "Disease" : "बीमारी"
+                    : result.issueType === "nutrient"
+                      ? lang === "en" ? "Nutrient deficiency" : "पोषक तत्व की कमी"
+                      : lang === "en" ? "Not clear" : "स्पष्ट नहीं"}
+              </span>
+              {result.primaryIssue && (
+                <span className="text-sm font-bold text-foreground">{result.primaryIssue}</span>
+              )}
+            </div>
+            {result.secondaryIssue && (
+              <p className="mt-2 text-xs text-muted-foreground">
+                {lang === "en" ? "Secondary issue" : "दूसरी समस्या"}: {result.secondaryIssue}
+              </p>
+            )}
+          </Card>
+        )}
+
+        {result.visualEvidence && (
+          <DetailCard
+            label={lang === "en" ? "Visual evidence" : "दृश्य प्रमाण"}
+            text={result.visualEvidence}
+            accent="warning"
+          />
+        )}
+        {result.differentialNote && (
+          <DetailCard
+            label={lang === "en" ? "Why not something else" : "यह और क्या नहीं है"}
+            text={result.differentialNote}
+            accent="accent"
+          />
+        )}
+        {result.photoTip && (
+          <DetailCard
+            label={lang === "en" ? "Better photo next time" : "अगली बार बेहतर फोटो"}
+            text={result.photoTip}
+            accent="primary"
+          />
+        )}
+
+
 
         {/* AI reasoning */}
         {result.reasoning && (
