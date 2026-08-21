@@ -908,6 +908,55 @@ function ResultView({
           )}
         </Card>
 
+        {/* Issue type + primary issue */}
+        {result.issueType && result.issueType !== "healthy" && (
+          <Card className="mt-4 border-0 p-4 shadow-soft">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">
+                {result.issueType === "pest"
+                  ? lang === "en" ? "Insect attack" : "कीट का हमला"
+                  : result.issueType === "disease"
+                    ? lang === "en" ? "Disease" : "बीमारी"
+                    : result.issueType === "nutrient"
+                      ? lang === "en" ? "Nutrient deficiency" : "पोषक तत्व की कमी"
+                      : lang === "en" ? "Not clear" : "स्पष्ट नहीं"}
+              </span>
+              {result.primaryIssue && (
+                <span className="text-sm font-bold text-foreground">{result.primaryIssue}</span>
+              )}
+            </div>
+            {result.secondaryIssue && (
+              <p className="mt-2 text-xs text-muted-foreground">
+                {lang === "en" ? "Secondary issue" : "दूसरी समस्या"}: {result.secondaryIssue}
+              </p>
+            )}
+          </Card>
+        )}
+
+        {result.visualEvidence && (
+          <DetailCard
+            label={lang === "en" ? "Visual evidence" : "दृश्य प्रमाण"}
+            text={result.visualEvidence}
+            accent="warning"
+          />
+        )}
+        {result.differentialNote && (
+          <DetailCard
+            label={lang === "en" ? "Why not something else" : "यह और क्या नहीं है"}
+            text={result.differentialNote}
+            accent="accent"
+          />
+        )}
+        {result.photoTip && (
+          <DetailCard
+            label={lang === "en" ? "Better photo next time" : "अगली बार बेहतर फोटो"}
+            text={result.photoTip}
+            accent="primary"
+          />
+        )}
+
+
+
         {/* AI reasoning */}
         {result.reasoning && (
           <DetailCard label={lang === "en" ? "AI thinking" : "AI का तर्क"} text={result.reasoning} accent="accent" />
