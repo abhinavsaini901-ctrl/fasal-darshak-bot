@@ -202,6 +202,35 @@ export const SCAN_TOOL_SCHEMA = {
       type: "string",
       description: "1-line friendly summary for the farmer.",
     },
+    issueType: {
+      type: "string",
+      enum: ["disease", "pest", "nutrient", "healthy", "unclear"],
+      description: "Classification of the PRIMARY issue.",
+    },
+    primaryIssue: {
+      type: "string",
+      description: "Primary problem name in local language + English.",
+    },
+    visualEvidence: {
+      type: "string",
+      description:
+        "Exact visual clues seen in the photo (rolled leaf, white scraping streaks, webbing, uniform yellowing of old leaves, spots with halo, etc.).",
+    },
+    secondaryIssue: {
+      type: "string",
+      description:
+        "Second problem if genuinely visible (e.g. nitrogen/zinc deficiency alongside pest). Empty string if none.",
+    },
+    differentialNote: {
+      type: "string",
+      description:
+        "Short note on what it is NOT and why (e.g. why this is leaf folder and not nitrogen deficiency).",
+    },
+    photoTip: {
+      type: "string",
+      description:
+        "How the farmer should take a better photo next time (open the rolled leaf, macro close-up, old vs new leaf, good light).",
+    },
   },
   required: [
     "reasoning",
@@ -221,7 +250,14 @@ export const SCAN_TOOL_SCHEMA = {
     "confidence",
     "urgencyLevel",
     "summary",
+    "issueType",
+    "primaryIssue",
+    "visualEvidence",
+    "secondaryIssue",
+    "differentialNote",
+    "photoTip",
   ],
+
   additionalProperties: false,
 } as const;
 
