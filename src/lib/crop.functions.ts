@@ -239,7 +239,7 @@ export const scanCrop = createServerFn({ method: "POST" })
     }
   });
 
-  });
+
 
 export const chatCrop = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => ChatInput.parse(d))
