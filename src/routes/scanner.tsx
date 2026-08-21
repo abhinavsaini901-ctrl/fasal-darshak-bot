@@ -275,8 +275,15 @@ function HomePage() {
                 imageDataUrl: dataUrl,
                 language: lang,
                 languageName: LANG_NAME_FOR_AI[lang as LangCode],
+                ...(cropHint.trim() ? { cropHint: cropHint.trim() } : {}),
+                ...(leafStage !== "unknown" ? { leafStage } : {}),
+                ...(daysSinceSowing.trim() && Number.isFinite(Number(daysSinceSowing))
+                  ? { daysSinceSowing: Math.min(400, Math.max(0, Math.round(Number(daysSinceSowing)))) }
+                  : {}),
+                ...(location.trim() ? { location: location.trim() } : {}),
               },
             }),
+
           { onRetry: () => { if (!liveMode) toast.info(t("rateLimited")); } },
         );
         if (liveMode) {
