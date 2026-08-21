@@ -143,6 +143,19 @@ export const scanCrop = createServerFn({ method: "POST" })
       },
     };
 
+    const ctx: string[] = [];
+    if (data.cropHint) ctx.push(`Crop (told by farmer): ${data.cropHint}`);
+    if (data.leafStage && data.leafStage !== "unknown")
+      ctx.push(
+        `Leaf position in photo: ${
+          data.leafStage === "old" ? "old / lower leaf" : data.leafStage === "new" ? "new / upper leaf" : "middle leaf"
+        }`
+      );
+    if (typeof data.daysSinceSowing === "number")
+      ctx.push(`Days since sowing: ${data.daysSinceSowing}`);
+    if (data.location) ctx.push(`Location: ${data.location}`);
+    if (data.weatherNote) ctx.push(`Weather now: ${data.weatherNote}`);
+
     const result = await callGateway({
       model: POWERFUL_MODEL,
       messages: [
@@ -153,7 +166,9 @@ export const scanCrop = createServerFn({ method: "POST" })
           content: [
             {
               type: "text",
-              text: `Now analyze this crop photo. Follow the same step-by-step reasoning and return a complete report_crop JSON in ${languageName}.`,
+              text: `Now analyze this crop photo with the 3-stage analysis (structural inspection → differential diagnosis → farmer output) and return a complete report_crop JSON in ${languageName}.${
+                ctx.length ? `\n\nFarmer context:\n- ${ctx.join("\n- ")}` : ""
+              }`,
             },
             { type: "image_url", image_url: { url: data.imageDataUrl } },
           ],
@@ -183,6 +198,12 @@ export const scanCrop = createServerFn({ method: "POST" })
         confidence: 0,
         urgencyLevel: "low" as const,
         summary: result.choices?.[0]?.message?.content ?? "",
+        issueType: "unclear" as const,
+        primaryIssue: "",
+        visualEvidence: "",
+        secondaryIssue: "",
+        differentialNote: "",
+        photoTip: "",
       };
     }
     try {
@@ -205,11 +226,19 @@ export const scanCrop = createServerFn({ method: "POST" })
         confidence: number;
         urgencyLevel: "low" | "medium" | "high";
         summary: string;
+        issueType: "disease" | "pest" | "nutrient" | "healthy" | "unclear";
+        primaryIssue: string;
+        visualEvidence: string;
+        secondaryIssue: string;
+        differentialNote: string;
+        photoTip: string;
       };
     } catch (e) {
       console.error("Parse failed", e);
       throw new Error("AI_ERROR");
     }
+  });
+
   });
 
 export const chatCrop = createServerFn({ method: "POST" })
