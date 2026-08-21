@@ -639,6 +639,68 @@ function HomePage() {
         </Card>
       </section>
 
+      {/* Farmer context — sharper AI diagnosis */}
+      <section className="px-5 pt-5">
+        <Card className="border border-border/60 bg-card p-4 shadow-soft">
+          <p className="text-sm font-bold text-foreground">
+            {lang === "en" ? "Extra details (optional) — better accuracy" : "थोड़ी जानकारी दें (वैकल्पिक) — जांच और सटीक होगी"}
+          </p>
+          <p className="mt-1 text-[11px] text-muted-foreground">
+            {lang === "en"
+              ? "Tell the crop and which leaf you photographed. Open a rolled leaf and take a close-up (macro) photo of the inside."
+              : "फसल का नाम और कौन सा पत्ता है — यह बताएं। लिपटा हुआ पत्ता खोलकर अंदर से पास (macro) फोटो लें।"}
+          </p>
+
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <Input
+              value={cropHint}
+              onChange={(e) => setCropHint(e.target.value)}
+              placeholder={lang === "en" ? "Crop e.g. Paddy" : "फसल जैसे धान"}
+              className="rounded-xl"
+            />
+            <Input
+              value={daysSinceSowing}
+              onChange={(e) => setDaysSinceSowing(e.target.value.replace(/\D/g, "").slice(0, 3))}
+              inputMode="numeric"
+              placeholder={lang === "en" ? "Days since sowing" : "बोने के कितने दिन"}
+              className="rounded-xl"
+            />
+            <Input
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder={lang === "en" ? "District / State" : "जिला / राज्य"}
+              className="col-span-2 rounded-xl"
+            />
+          </div>
+
+          <p className="mt-3 text-xs font-semibold text-muted-foreground">
+            {lang === "en" ? "Which leaf is in the photo?" : "फोटो में कौन सा पत्ता है?"}
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {([
+              ["old", lang === "en" ? "Old / lower leaf" : "पुरानी / नीचे की पत्ती"],
+              ["middle", lang === "en" ? "Middle leaf" : "बीच की पत्ती"],
+              ["new", lang === "en" ? "New / upper leaf" : "नई / ऊपर की पत्ती"],
+              ["unknown", lang === "en" ? "Not sure" : "पता नहीं"],
+            ] as const).map(([val, label]) => (
+              <button
+                key={val}
+                onClick={() => setLeafStage(val)}
+                className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition-smooth ${
+                  leafStage === val
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border bg-background text-foreground"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </Card>
+      </section>
+
+
+
       {/* Quick actions */}
       <section className="grid grid-cols-2 gap-3 px-5 pt-5">
         <button
