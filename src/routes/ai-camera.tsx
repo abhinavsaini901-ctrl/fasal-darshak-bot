@@ -11,13 +11,13 @@ export const Route = createFileRoute("/ai-camera")({
   component: AiCameraPage,
   head: () => ({
     meta: [
-      { title: "Live AI Camera Assistant — बोलकर पूछें, Kisan Lens देखकर बताए" },
+      { title: "Kisan Lens Smart Eye 👁️ — बोलकर पूछें, Kisan Lens देखकर बताए" },
       {
         name: "description",
         content:
-          "Kisan Lens का Live AI Camera Assistant — कैमरा खोलिए और हिंदी में बोलकर पूछिए: यह कौन सी फसल है, बीमारी है क्या, पानी कब दें, दवा की कितनी मात्रा डालें।",
+          "Kisan Lens का Kisan Lens Smart Eye 👁️ — कैमरा खोलिए और हिंदी में बोलकर पूछिए: यह कौन सी फसल है, बीमारी है क्या, पानी कब दें, दवा की कितनी मात्रा डालें।",
       },
-      { property: "og:title", content: "Live AI Camera Assistant — Kisan Lens" },
+      { property: "og:title", content: "Kisan Lens Smart Eye 👁️ — Kisan Lens" },
       {
         property: "og:description",
         content: "कैमरा + आवाज़ से खेती के सवालों के तुरंत हिंदी जवाब।",
@@ -49,7 +49,7 @@ function AiCameraPage() {
           <Sparkles className="h-4 w-4" /> नया फीचर
         </div>
         <h1 className="mt-2 text-2xl font-extrabold text-foreground sm:text-3xl">
-          Live AI Camera Assistant
+          Kisan Lens Smart Eye 👁️
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
           कैमरा खोलिए और बस बोलिए। AI सामने दिख रही फसल, पत्ती, पेड़, फल, सब्ज़ी, कृषि यंत्र या दवा की
