@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Video, ArrowUp, Mic, MicOff, X, RotateCw, MoreHorizontal, Sparkles, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { useLanguage } from "@/hooks/use-language";
 import { useListen } from "@/hooks/use-voice";
 import { useVoiceMode } from "@/hooks/use-voice-mode";
 import handPhone from "@/assets/kisan-hand-phone.png";
+
 
 
 
@@ -41,14 +43,27 @@ export function CameraCapture({
   const { t, speechCode } = useLanguage();
   const { sttEnabled } = useVoiceMode();
   const [voiceHint, setVoiceHint] = useState<string | null>(null);
-  const { start: startListen, stop: stopListen, listening, supported: sttSupported } = useListen(
+  const { start: startListen, stop: stopListen, listening, supported: sttSupported, interim } = useListen(
     speechCode,
     (text) => {
+      if (text.trim().length < 2) {
+        toast.error("मैं आपकी बात ठीक से समझ नहीं पाया, कृपया दोबारा बोलें।");
+        return;
+      }
       setVoiceHint(text);
       onVoiceText?.(text);
       window.setTimeout(() => setVoiceHint(null), 2500);
+    },
+    {
+      onError: (code) => {
+        if (code === "not-allowed") toast.error("Microphone permission allow करें।");
+        else if (code === "no-speech") toast.error("मैं आपकी आवाज नहीं सुन पाया। कृपया दोबारा बोलें।");
+        else if (code === "network") toast.error("इंटरनेट की दिक्कत है। कृपया दोबारा कोशिश करें।");
+        else toast.error("आवाज़ नहीं पकड़ पाए। कृपया दोबारा बोलें।");
+      },
     }
   );
+
   const toggleMic = () => {
     if (!sttSupported || !sttEnabled) return;
     if (listening) stopListen();
@@ -244,13 +259,21 @@ export function CameraCapture({
 
       {/* Bottom action bar — 5 buttons */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 pb-6 pt-4">
-        {voiceHint && (
+        {(listening || voiceHint) && (
           <div className="pointer-events-none mx-auto mb-3 max-w-md px-6">
             <div className="rounded-2xl bg-black/75 px-3 py-2 text-center text-xs text-white shadow-lg backdrop-blur">
-              🎤 “{voiceHint}”
+              {listening ? (
+                <>
+                  <span className="mr-1 inline-block h-2 w-2 animate-pulse rounded-full bg-red-500 align-middle" />
+                  {interim ? `“${interim}”` : `${t("listening")}…`}
+                </>
+              ) : (
+                <>🎤 “{voiceHint}”</>
+              )}
             </div>
           </div>
         )}
+
         <div className="pointer-events-auto mx-auto flex max-w-md items-center justify-between px-6">
           {/* 1. Live/video toggle — light blue circle */}
           <button

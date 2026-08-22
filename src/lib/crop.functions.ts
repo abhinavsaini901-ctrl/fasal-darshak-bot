@@ -7,7 +7,9 @@ import {
   FEW_SHOT_SCAN_EXAMPLES,
   FEW_SHOT_CHAT_EXAMPLES,
   SCAN_TOOL_SCHEMA,
+  formatScanContext,
 } from "@/lib/ai-prompts";
+
 
 const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
 
@@ -86,6 +88,22 @@ const ScanInput = z.object({
 });
 
 
+const ScanContextInput = z.object({
+  cropName: z.string().max(120).optional(),
+  disease: z.string().max(200).optional(),
+  issueType: z.string().max(40).optional(),
+  confidence: z.number().min(0).max(100).optional(),
+  healthScore: z.number().min(0).max(100).optional(),
+  symptoms: z.string().max(1500).optional(),
+  organicTreatment: z.string().max(1500).optional(),
+  chemicalTreatment: z.string().max(1500).optional(),
+  dosage: z.string().max(400).optional(),
+  safetyDays: z.number().min(0).max(365).optional(),
+  prevention: z.string().max(1500).optional(),
+  summary: z.string().max(1500).optional(),
+  visualEvidence: z.string().max(1500).optional(),
+});
+
 const ChatInput = z.object({
   language: LanguageCode,
   languageName: z.string().max(60).optional(),
@@ -98,7 +116,9 @@ const ChatInput = z.object({
     )
     .max(30),
   imageDataUrl: ImageDataUrl.optional(),
+  scanContext: ScanContextInput.optional(),
 });
+
 
 type GatewayResponse = {
   choices?: { message?: { content?: string; tool_calls?: { function: { name: string; arguments: string } }[] } }[];
@@ -246,7 +266,11 @@ export const chatCrop = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     enforceRateLimit();
     const languageName = LANG_NAMES[data.language];
-    const systemPrompt = CROP_CHAT_SYSTEM(languageName);
+    const systemPrompt = CROP_CHAT_SYSTEM(
+      languageName,
+      data.scanContext ? formatScanContext(data.scanContext) : undefined,
+    );
+
 
     const messages: unknown[] = [
       { role: "system", content: systemPrompt },

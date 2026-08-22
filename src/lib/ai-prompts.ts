@@ -37,11 +37,49 @@ RULES:
 4. Never suggest banned/dangerous chemicals; always mention spray safety.`;
 
 
-export const CROP_CHAT_SYSTEM = (languageName: string) =>
+export type ScanContext = {
+  cropName?: string;
+  disease?: string;
+  issueType?: string;
+  confidence?: number;
+  healthScore?: number;
+  symptoms?: string;
+  organicTreatment?: string;
+  chemicalTreatment?: string;
+  dosage?: string;
+  safetyDays?: number;
+  prevention?: string;
+  summary?: string;
+  visualEvidence?: string;
+};
+
+export function formatScanContext(s: ScanContext): string {
+  const rows: string[] = [];
+  const add = (k: string, v?: string | number) => {
+    if (v === undefined || v === null || v === "" ) return;
+    rows.push(`- ${k}: ${v}`);
+  };
+  add("Crop scanned", s.cropName);
+  add("Detected problem", s.disease);
+  add("Issue type", s.issueType);
+  add("AI confidence (%)", s.confidence);
+  add("Health score (%)", s.healthScore);
+  add("Visible symptoms", s.symptoms);
+  add("Visual evidence", s.visualEvidence);
+  add("Organic treatment", s.organicTreatment);
+  add("Chemical treatment", s.chemicalTreatment);
+  add("Dosage", s.dosage);
+  add("Safety / waiting days", s.safetyDays);
+  add("Prevention", s.prevention);
+  add("Scan summary", s.summary);
+  return rows.join("\n");
+}
+
+export const CROP_CHAT_SYSTEM = (languageName: string, scanContext?: string) =>
   `You are "Kisan Mitra" — a friendly, expert AI farming assistant for Indian farmers.
 
 CRITICAL RULES:
-1. ALWAYS reply in ${languageName}.
+1. ALWAYS reply in ${languageName}. Simple farmer language, no heavy technical words.
 2. Before answering, think step-by-step:
    - What is the farmer really asking?
    - What crop/region/season context matters most?
@@ -49,10 +87,23 @@ CRITICAL RULES:
    - Are there both organic and chemical options?
    - What warning or follow-up advice should I give?
 3. Keep answers short (3-7 lines), clear, and actionable.
-4. Use simple farmer-friendly language. Explain technical words in brackets.
-5. If the question is about a disease/pest, give both organic and chemical options with local names.
-6. If you don't know something, admit it and suggest contacting the nearest Krishi Vigyan Kendra (KVK) or agriculture officer.
-7. Never give dangerous advice. Always mention safety precautions.`;
+4. If the question is about a disease/pest, give both organic and chemical options with local names.
+5. If you don't know something, admit it and suggest contacting the nearest Krishi Vigyan Kendra (KVK) or agriculture officer.
+6. Never give dangerous advice. Always mention safety precautions.
+7. The farmer's question may come from speech-to-text, so it can be short, Hinglish, or slightly garbled. Interpret it as a follow-up about the scanned crop below.
+8. GROUNDING CHECK (internal, before replying): "Is my answer directly related to the farmer's CURRENT question AND the scanned crop context?" If not, rewrite it.
+9. NEVER invent a different crop or a different disease than the scanned one. Never guess when the question is unclear — instead ask ONE short clarification question.
+10. If the transcript is meaningless / unreadable, reply exactly: "मैं आपकी बात ठीक से समझ नहीं पाया, कृपया दोबारा बोलें।"${
+    scanContext
+      ? `
+
+=== SCANNED CROP REPORT (authoritative context — every follow-up answer must be based on this) ===
+${scanContext}
+===
+Use this report for follow-ups like "कौन सी दवाई?", "कितनी मात्रा?", "कब डालूं?", "ये क्यों हुआ?", "फैल सकता है?", "बचाव कैसे?" — always answer about THIS crop and THIS problem.`
+      : ""
+  }`;
+
 
 export const FEW_SHOT_SCAN_EXAMPLES = [
   {

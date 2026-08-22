@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Mic, MicOff } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useListen } from "@/hooks/use-voice";
 import { useLanguage } from "@/hooks/use-language";
@@ -14,13 +15,35 @@ export function VoiceInputButton({
   className?: string;
   pushToTalk?: boolean;
 }) {
-  const { speechCode, t } = useLanguage();
+  const { speechCode, t, lang } = useLanguage();
   const { sttEnabled } = useVoiceMode();
   const [hint, setHint] = useState(false);
   const [pressed, setPressed] = useState(false);
-  const { start, stop, listening, supported } = useListen(speechCode, (text) => {
-    onText(text);
-  });
+  const en = lang === "en";
+  const { start, stop, listening, supported, interim } = useListen(
+    speechCode,
+    (text) => {
+      // Only fires once speech has actually finished.
+      if (text.trim().length < 2) {
+        toast.error(en ? "I couldn't understand that. Please speak again." : "मैं आपकी बात ठीक से समझ नहीं पाया, कृपया दोबारा बोलें।");
+        return;
+      }
+      onText(text);
+    },
+    {
+      onError: (code) => {
+        if (code === "not-allowed") {
+          toast.error(en ? "Please allow microphone permission." : "Microphone permission allow करें।");
+        } else if (code === "no-speech") {
+          toast.error(en ? "I couldn't hear you. Please speak again." : "मैं आपकी आवाज नहीं सुन पाया। कृपया दोबारा बोलें।");
+        } else if (code === "network") {
+          toast.error(en ? "Network problem. Please try again." : "इंटरनेट की दिक्कत है। कृपया दोबारा कोशिश करें।");
+        } else {
+          toast.error(en ? "Voice input failed. Please try again." : "आवाज़ नहीं पकड़ पाए। कृपया दोबारा बोलें।");
+        }
+      },
+    }
+  );
 
   if (!supported || !sttEnabled) return null;
 
@@ -84,11 +107,10 @@ export function VoiceInputButton({
     >
       {isActive ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
       {hint && isActive && (
-        <span className="absolute -top-9 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground shadow-soft">
-          {t("listening")}
+        <span className="absolute -top-9 left-1/2 z-20 max-w-[60vw] -translate-x-1/2 truncate whitespace-nowrap rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground shadow-soft">
+          {interim ? interim : t("listening")}
         </span>
       )}
     </Button>
   );
 }
-
