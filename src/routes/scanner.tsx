@@ -32,6 +32,8 @@ import { useVoiceMode } from "@/hooks/use-voice-mode";
 import { LANG_NAME_FOR_AI, type LangCode } from "@/lib/i18n";
 import { scanCrop, chatCrop } from "@/lib/crop.functions";
 import { withRateLimitRetry } from "@/lib/retry";
+import { RefImageCard } from "@/components/RefImageCard";
+import { findDiseaseImage, findMedicineImage } from "@/lib/visual-library";
 
 type ScannerSearch = { mode?: "camera" | "live" | "chat" };
 
@@ -865,6 +867,22 @@ function ResultView({
   const { t, lang } = useLanguage();
   const healthy = result.isHealthy;
   const score = Math.max(0, Math.min(100, Math.round(result.healthScore || 0)));
+  const lowConfidence = !result.confidence || result.confidence < 70;
+  const diseaseImage = healthy
+    ? null
+    : findDiseaseImage({
+        disease: result.disease,
+        primaryIssue: result.primaryIssue,
+        issueType: result.issueType,
+        symptoms: result.symptoms,
+      });
+  const medicineImage = findMedicineImage({
+    chemicalTreatment: result.chemicalTreatment,
+    organicTreatment: result.organicTreatment,
+    dosage: result.dosage,
+    treatment: result.treatment,
+    issueType: result.issueType,
+  });
 
   return (
     <main className="min-h-screen bg-gradient-hero pb-28">
