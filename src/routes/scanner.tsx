@@ -218,6 +218,8 @@ function HomePage() {
   const [liveAsking, setLiveAsking] = useState(false);
   const lastFrameRef = useRef<string | null>(null);
   const lastSpokenRef = useRef<string | null>(null);
+  const liveHistoryRef = useRef<ChatMsg[]>([]);
+
 
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
