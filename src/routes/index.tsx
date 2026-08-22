@@ -73,7 +73,7 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   return (
     <PageShell>
-      {/* AI खेती गुरु — Premium Hero Section */}
+      {/* Kisan Lens Smart Eye — Premium Hero Section */}
       <section
         className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat py-10 md:py-14"
         style={{ backgroundImage: `url(${kisanPhoneBg})` }}
@@ -87,15 +87,16 @@ function HomePage() {
         <div className="relative mx-auto max-w-6xl px-4">
           <div className="mx-auto max-w-3xl text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300/30 bg-white/10 px-3 py-1 text-xs font-semibold text-emerald-100 backdrop-blur">
-              🌾 AI खेती गुरु
+              👁️ Kisan Lens Smart Eye
             </span>
-            <h1 className="mt-4 text-4xl font-extrabold leading-tight text-white drop-shadow md:text-5xl">
-              AI <span className="bg-gradient-to-r from-lime-300 to-emerald-300 bg-clip-text text-transparent">खेती गुरु</span>
+            <h1 className="mt-4 text-3xl font-extrabold leading-tight text-white drop-shadow md:text-5xl">
+              Kisan Lens <span className="bg-gradient-to-r from-lime-300 to-emerald-300 bg-clip-text text-transparent">Smart Eye</span> 👁️
             </h1>
             <p className="mx-auto mt-3 max-w-2xl text-base text-emerald-50/90 md:text-lg">
-              कैमरा खोलें, फसल, पेड़, पौधा या फल दिखाएं और AI से तुरंत जानकारी प्राप्त करें
+              कैमरा खोलें, सामने की फसल या पेड़ दिखाएं और AI से तुरंत पूछें।
             </p>
           </div>
+
 
           {/* Animated AI Camera Logo — clickable */}
           <Link
