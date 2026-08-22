@@ -73,7 +73,7 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   return (
     <PageShell>
-      {/* AI खेती गुरु — Premium Hero Section */}
+      {/* Kisan Lens Smart Eye — Premium Hero Section */}
       <section
         className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat py-10 md:py-14"
         style={{ backgroundImage: `url(${kisanPhoneBg})` }}
@@ -87,21 +87,21 @@ function HomePage() {
         <div className="relative mx-auto max-w-6xl px-4">
           <div className="mx-auto max-w-3xl text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300/30 bg-white/10 px-3 py-1 text-xs font-semibold text-emerald-100 backdrop-blur">
-              🌾 AI खेती गुरु
+              👁️ Kisan Lens Smart Eye
             </span>
-            <h1 className="mt-4 text-4xl font-extrabold leading-tight text-white drop-shadow md:text-5xl">
-              AI <span className="bg-gradient-to-r from-lime-300 to-emerald-300 bg-clip-text text-transparent">खेती गुरु</span>
+            <h1 className="mt-4 text-3xl font-extrabold leading-tight text-white drop-shadow md:text-5xl">
+              Kisan Lens <span className="bg-gradient-to-r from-lime-300 to-emerald-300 bg-clip-text text-transparent">Smart Eye</span> 👁️
             </h1>
             <p className="mx-auto mt-3 max-w-2xl text-base text-emerald-50/90 md:text-lg">
-              कैमरा खोलें, फसल, पेड़, पौधा या फल दिखाएं और AI से तुरंत जानकारी प्राप्त करें
+              कैमरा खोलें, सामने की फसल या पेड़ दिखाएं और AI से तुरंत पूछें।
             </p>
           </div>
 
+
           {/* Animated AI Camera Logo — clickable */}
           <Link
-            to="/scanner"
-            search={{ mode: "live" }}
-            aria-label="लाइव कैमरा शुरू करें"
+            to="/ai-camera"
+            aria-label="Smart Eye शुरू करें"
             className="group relative mx-auto mt-8 flex h-48 w-48 items-center justify-center md:h-56 md:w-56"
           >
             <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/30" />
@@ -142,7 +142,7 @@ function HomePage() {
                 size="lg"
                 className="h-14 rounded-2xl bg-gradient-to-r from-lime-400 to-emerald-500 px-8 text-base font-bold text-emerald-950 shadow-xl shadow-emerald-500/30 transition-transform hover:scale-105 md:text-lg"
               >
-                <Camera className="mr-2 h-6 w-6" /> 🎥 AI Camera Assistant
+                <Camera className="mr-2 h-6 w-6" /> 👁️ Smart Eye शुरू करें
               </Button>
             </Link>
             <Link to="/scanner" search={{ mode: "live" }} className="text-xs font-semibold text-emerald-100/90 underline">
@@ -163,9 +163,52 @@ function HomePage() {
             </div>
           </div>
 
+          {/* Smart Eye क्या-क्या समझता है */}
+          <div className="mx-auto mt-8 grid max-w-3xl grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
+            {[
+              "🌾 फसल पहचान",
+              "🌳 पेड़ पहचान",
+              "🍎 फल/सब्जी पहचान",
+              "🍃 पत्तियों की समस्या",
+              "🦠 संभावित बीमारी",
+              "🐛 कीट/नुकसान के संकेत",
+              "💧 सिंचाई से जुड़े सवाल",
+              "🌱 खाद/पोषण जानकारी",
+              "💊 दवा लेबल पढ़ने में मदद",
+              "📅 फसल की growth/stage",
+            ].map((f) => (
+              <span
+                key={f}
+                className="rounded-xl border border-emerald-300/25 bg-white/10 px-2.5 py-2 text-center text-[11px] font-semibold text-emerald-50 backdrop-blur"
+              >
+                {f}
+              </span>
+            ))}
+          </div>
+
+          {/* Voice examples */}
+          <div className="mx-auto mt-5 max-w-2xl rounded-2xl border border-emerald-300/25 bg-white/10 p-4 backdrop-blur">
+            <p className="text-center text-xs font-bold text-lime-200">🎙️ बोलकर ऐसे पूछिए</p>
+            <div className="mt-2 flex flex-wrap justify-center gap-2">
+              {[
+                "ये कौन सी फसल है?",
+                "इसमें बीमारी दिखाई दे रही है?",
+                "इस पेड़ पर फल क्यों नहीं लग रहे?",
+                "इस पत्ते का रंग पीला क्यों है?",
+                "इस दवा का इस्तेमाल कैसे करना है?",
+                "इसमें कितनी मात्रा डालनी है?",
+              ].map((q) => (
+                <span key={q} className="rounded-full bg-emerald-900/40 px-3 py-1 text-[11px] text-emerald-50">
+                  “{q}”
+                </span>
+              ))}
+            </div>
+          </div>
+
           <p className="mt-4 text-center text-xs text-emerald-100/70">
             Gemini Vision • Voice AI • Real-time Chat • हिंदी सपोर्ट
           </p>
+
         </div>
       </section>
 

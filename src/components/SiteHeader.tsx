@@ -6,7 +6,7 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 
 const NAV = [
   { to: "/", label: "होम" },
-  { to: "/ai-camera", label: "AI कैमरा" },
+  { to: "/ai-camera", label: "👁️ Smart Eye" },
   { to: "/ebook", label: "ई-बुक" },
 
   { to: "/blog", label: "ब्लॉग" },
@@ -50,7 +50,12 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <LanguageSelector compact />
-          <Link to="/scanner" className="hidden sm:block">
+          <Link to="/ai-camera" className="hidden sm:block">
+            <Button size="sm" className="rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 font-bold text-emerald-950">
+              👁️ Smart Eye
+            </Button>
+          </Link>
+          <Link to="/scanner" className="hidden md:block">
             <Button size="sm" className="rounded-full bg-gradient-primary">
               फसल स्कैन
             </Button>
@@ -80,6 +85,13 @@ export function SiteHeader() {
                 {n.label}
               </Link>
             ))}
+            <Link
+              to="/ai-camera"
+              onClick={() => setOpen(false)}
+              className="col-span-2 mt-1 rounded-xl bg-gradient-to-r from-lime-400 to-emerald-500 px-3 py-3 text-center text-sm font-bold text-emerald-950"
+            >
+              👁️ Kisan Lens Smart Eye — कैमरा खोलें
+            </Link>
             <Link
               to="/scanner"
               onClick={() => setOpen(false)}
