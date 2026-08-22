@@ -315,12 +315,38 @@ function HomePage() {
   );
 
 
+  // Build the authoritative scan context so every voice follow-up stays on topic.
+  const buildScanContext = useCallback(
+    (r: ScanResult | null) => {
+      if (!r) return undefined;
+      return {
+        ...(r.cropName ? { cropName: r.cropName } : {}),
+        ...(r.disease ? { disease: r.disease } : {}),
+        ...(r.issueType ? { issueType: r.issueType } : {}),
+        ...(typeof r.confidence === "number" ? { confidence: r.confidence } : {}),
+        ...(typeof r.healthScore === "number" ? { healthScore: r.healthScore } : {}),
+        ...(r.symptoms ? { symptoms: r.symptoms } : {}),
+        ...(r.organicTreatment ? { organicTreatment: r.organicTreatment } : {}),
+        ...(r.chemicalTreatment ? { chemicalTreatment: r.chemicalTreatment } : {}),
+        ...(r.dosage ? { dosage: r.dosage } : {}),
+        ...(typeof r.safetyDays === "number" ? { safetyDays: r.safetyDays } : {}),
+        ...(r.prevention ? { prevention: r.prevention } : {}),
+        ...(r.summary ? { summary: r.summary } : {}),
+        ...(r.visualEvidence ? { visualEvidence: r.visualEvidence } : {}),
+      };
+    },
+    []
+  );
+
   const askLive = useCallback(
     async (question: string) => {
       const q = question.trim();
       if (!q || liveAsking) return;
+      stop();
       setLiveAsking(true);
       setLiveAnswer(null);
+      // Conversation memory — keep previous turns so follow-ups keep context.
+      const history: ChatMsg[] = [...liveHistoryRef.current, { role: "user", content: q }].slice(-12);
       try {
         const res = await withRateLimitRetry(
           () =>
@@ -328,27 +354,42 @@ function HomePage() {
               data: {
                 language: lang,
                 languageName: LANG_NAME_FOR_AI[lang as LangCode],
-                history: [{ role: "user", content: q }],
+                history,
                 imageDataUrl: lastFrameRef.current ?? undefined,
+                ...(buildScanContext(liveResult ?? result)
+                  ? { scanContext: buildScanContext(liveResult ?? result) }
+                  : {}),
               },
             }),
           { onRetry: () => toast.info(t("rateLimited")) },
         );
-        const reply = res.reply || t("error");
+        const reply = res.reply?.trim();
+        if (!reply) {
+          toast.error(lang === "en" ? "No answer from AI right now. Please try again." : "अभी AI से जवाब नहीं मिल पा रहा है। कृपया थोड़ी देर बाद फिर कोशिश करें।");
+          return;
+        }
+        liveHistoryRef.current = [...history, { role: "assistant", content: reply }].slice(-12);
         setLiveAnswer(reply);
+        // Speak only after the full answer is ready.
         speakRaw(reply);
 
       } catch (e) {
         const msg = (e as Error).message;
         if (msg === "RATE_LIMITED") toast.error(t("rateLimited"));
         else if (msg === "PAYMENT_REQUIRED") toast.error(t("paymentRequired"));
-        else toast.error(t("error"));
+        else
+          toast.error(
+            lang === "en"
+              ? "Can't reach AI right now. Please try again in a moment."
+              : "अभी AI से जवाब नहीं मिल पा रहा है। कृपया थोड़ी देर बाद फिर कोशिश करें।"
+          );
       } finally {
         setLiveAsking(false);
       }
     },
-    [chatFn, lang, t, speakRaw, liveAsking]
+    [chatFn, lang, t, speakRaw, liveAsking, stop, liveResult, result, buildScanContext]
   );
+
 
   const sendMessage = useCallback(
     async (text: string, attachImage = false) => {
