@@ -7,7 +7,9 @@ import {
   FEW_SHOT_SCAN_EXAMPLES,
   FEW_SHOT_CHAT_EXAMPLES,
   SCAN_TOOL_SCHEMA,
+  formatScanContext,
 } from "@/lib/ai-prompts";
+
 
 const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
 
