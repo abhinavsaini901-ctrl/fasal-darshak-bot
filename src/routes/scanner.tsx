@@ -410,6 +410,8 @@ function HomePage() {
                 languageName: LANG_NAME_FOR_AI[lang as LangCode],
                 history: newHistory,
                 imageDataUrl: attachImage && imageData ? imageData : undefined,
+                ...(buildScanContext(result) ? { scanContext: buildScanContext(result) } : {}),
+
               },
             }),
           { onRetry: () => toast.info(t("rateLimited")) },
