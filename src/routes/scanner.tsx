@@ -428,8 +428,9 @@ function HomePage() {
         setSending(false);
       }
     },
-    [chatFn, lang, messages, sending, t, imageData, speak]
+    [chatFn, lang, messages, sending, t, imageData, speak, result, buildScanContext]
   );
+
 
   const askPreset = useCallback(
     async (topic: string) => {
