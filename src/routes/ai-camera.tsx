@@ -15,9 +15,9 @@ export const Route = createFileRoute("/ai-camera")({
       {
         name: "description",
         content:
-          "Kisan Lens का Kisan Lens Smart Eye 👁️ — कैमरा खोलिए और हिंदी में बोलकर पूछिए: यह कौन सी फसल है, बीमारी है क्या, पानी कब दें, दवा की कितनी मात्रा डालें।",
+          "Kisan Lens Smart Eye 👁️ — कैमरा खोलिए और हिंदी में बोलकर पूछिए: यह कौन सी फसल है, बीमारी है क्या, पानी कब दें, दवा की कितनी मात्रा डालें।",
       },
-      { property: "og:title", content: "Kisan Lens Smart Eye 👁️ — Kisan Lens" },
+      { property: "og:title", content: "Kisan Lens Smart Eye 👁️" },
       {
         property: "og:description",
         content: "कैमरा + आवाज़ से खेती के सवालों के तुरंत हिंदी जवाब।",
