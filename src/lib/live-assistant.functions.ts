@@ -49,7 +49,7 @@ const LANG_NAMES = {
   mr: "Marathi (मराठी)",
   pa: "Punjabi (ਪੰਜਾਬੀ)",
   bn: "Bengali (বাংলা)",
-  ta: "Tamil (தமিழ்)",
+  ta: "Tamil (தமிழ்)",
   te: "Telugu (తెలుగు)",
   gu: "Gujarati (ગુજરાતી)",
 } as const;
