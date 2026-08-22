@@ -348,7 +348,7 @@ function HomePage() {
       setLiveAsking(true);
       setLiveAnswer(null);
       // Conversation memory — keep previous turns so follow-ups keep context.
-      const history: ChatMsg[] = [...liveHistoryRef.current, { role: "user", content: q }].slice(-12);
+      const history: ChatMsg[] = [...liveHistoryRef.current, { role: "user" as const, content: q }].slice(-12);
       try {
         const res = await withRateLimitRetry(
           () =>
@@ -370,7 +370,7 @@ function HomePage() {
           toast.error(lang === "en" ? "No answer from AI right now. Please try again." : "अभी AI से जवाब नहीं मिल पा रहा है। कृपया थोड़ी देर बाद फिर कोशिश करें।");
           return;
         }
-        liveHistoryRef.current = [...history, { role: "assistant", content: reply }].slice(-12);
+        liveHistoryRef.current = [...history, { role: "assistant" as const, content: reply }].slice(-12);
         setLiveAnswer(reply);
         // Speak only after the full answer is ready.
         speakRaw(reply);
