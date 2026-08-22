@@ -100,9 +100,8 @@ function HomePage() {
 
           {/* Animated AI Camera Logo — clickable */}
           <Link
-            to="/scanner"
-            search={{ mode: "live" }}
-            aria-label="लाइव कैमरा शुरू करें"
+            to="/ai-camera"
+            aria-label="Smart Eye शुरू करें"
             className="group relative mx-auto mt-8 flex h-48 w-48 items-center justify-center md:h-56 md:w-56"
           >
             <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/30" />
