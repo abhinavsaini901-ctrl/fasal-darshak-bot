@@ -142,7 +142,7 @@ function HomePage() {
                 size="lg"
                 className="h-14 rounded-2xl bg-gradient-to-r from-lime-400 to-emerald-500 px-8 text-base font-bold text-emerald-950 shadow-xl shadow-emerald-500/30 transition-transform hover:scale-105 md:text-lg"
               >
-                <Camera className="mr-2 h-6 w-6" /> 🎥 AI Camera Assistant
+                <Camera className="mr-2 h-6 w-6" /> 👁️ Smart Eye शुरू करें
               </Button>
             </Link>
             <Link to="/scanner" search={{ mode: "live" }} className="text-xs font-semibold text-emerald-100/90 underline">
@@ -163,9 +163,52 @@ function HomePage() {
             </div>
           </div>
 
+          {/* Smart Eye क्या-क्या समझता है */}
+          <div className="mx-auto mt-8 grid max-w-3xl grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
+            {[
+              "🌾 फसल पहचान",
+              "🌳 पेड़ पहचान",
+              "🍎 फल/सब्जी पहचान",
+              "🍃 पत्तियों की समस्या",
+              "🦠 संभावित बीमारी",
+              "🐛 कीट/नुकसान के संकेत",
+              "💧 सिंचाई से जुड़े सवाल",
+              "🌱 खाद/पोषण जानकारी",
+              "💊 दवा लेबल पढ़ने में मदद",
+              "📅 फसल की growth/stage",
+            ].map((f) => (
+              <span
+                key={f}
+                className="rounded-xl border border-emerald-300/25 bg-white/10 px-2.5 py-2 text-center text-[11px] font-semibold text-emerald-50 backdrop-blur"
+              >
+                {f}
+              </span>
+            ))}
+          </div>
+
+          {/* Voice examples */}
+          <div className="mx-auto mt-5 max-w-2xl rounded-2xl border border-emerald-300/25 bg-white/10 p-4 backdrop-blur">
+            <p className="text-center text-xs font-bold text-lime-200">🎙️ बोलकर ऐसे पूछिए</p>
+            <div className="mt-2 flex flex-wrap justify-center gap-2">
+              {[
+                "ये कौन सी फसल है?",
+                "इसमें बीमारी दिखाई दे रही है?",
+                "इस पेड़ पर फल क्यों नहीं लग रहे?",
+                "इस पत्ते का रंग पीला क्यों है?",
+                "इस दवा का इस्तेमाल कैसे करना है?",
+                "इसमें कितनी मात्रा डालनी है?",
+              ].map((q) => (
+                <span key={q} className="rounded-full bg-emerald-900/40 px-3 py-1 text-[11px] text-emerald-50">
+                  “{q}”
+                </span>
+              ))}
+            </div>
+          </div>
+
           <p className="mt-4 text-center text-xs text-emerald-100/70">
             Gemini Vision • Voice AI • Real-time Chat • हिंदी सपोर्ट
           </p>
+
         </div>
       </section>
 
