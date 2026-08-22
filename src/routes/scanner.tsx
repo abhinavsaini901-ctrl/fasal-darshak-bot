@@ -1138,6 +1138,12 @@ function ResultView({
   );
 }
 
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <h3 className="mt-6 mb-2 text-sm font-extrabold tracking-wide text-foreground">{children}</h3>
+  );
+}
+
 function DetailCard({
   label,
   text,
