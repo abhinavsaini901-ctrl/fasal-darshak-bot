@@ -264,7 +264,11 @@ export const chatCrop = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     enforceRateLimit();
     const languageName = LANG_NAMES[data.language];
-    const systemPrompt = CROP_CHAT_SYSTEM(languageName);
+    const systemPrompt = CROP_CHAT_SYSTEM(
+      languageName,
+      data.scanContext ? formatScanContext(data.scanContext) : undefined,
+    );
+
 
     const messages: unknown[] = [
       { role: "system", content: systemPrompt },
