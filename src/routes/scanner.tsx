@@ -884,10 +884,14 @@ function ResultView({
       </header>
 
       <div className="px-4 pt-2">
+        {/* 📸 Scanned crop */}
         {image && (
-          <Card className="overflow-hidden border-0 shadow-soft">
-            <img src={image} alt="Scanned crop" className="h-56 w-full object-cover" />
-          </Card>
+          <>
+            <SectionTitle>{lang === "en" ? "📸 Scanned crop" : "📸 स्कैन की गई फसल"}</SectionTitle>
+            <Card className="overflow-hidden border-0 shadow-soft">
+              <img src={image} alt="Scanned crop" className="h-56 w-full object-cover" />
+            </Card>
+          </>
         )}
 
         {/* Status banner */}
@@ -954,31 +958,56 @@ function ResultView({
           )}
         </Card>
 
-        {/* Issue type + primary issue */}
-        {result.issueType && result.issueType !== "healthy" && (
-          <Card className="mt-4 border-0 p-4 shadow-soft">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">
-                {result.issueType === "pest"
-                  ? lang === "en" ? "Insect attack" : "कीट का हमला"
-                  : result.issueType === "disease"
-                    ? lang === "en" ? "Disease" : "बीमारी"
-                    : result.issueType === "nutrient"
-                      ? lang === "en" ? "Nutrient deficiency" : "पोषक तत्व की कमी"
-                      : lang === "en" ? "Not clear" : "स्पष्ट नहीं"}
-              </span>
-              {result.primaryIssue && (
-                <span className="text-sm font-bold text-foreground">{result.primaryIssue}</span>
+        {/* 🦠 Disease / issue + reference image */}
+        {!healthy && (
+          <>
+            <SectionTitle>{lang === "en" ? "🦠 Disease / problem" : "🦠 बीमारी / समस्या"}</SectionTitle>
+            <Card className="border-0 p-4 shadow-soft">
+              <div className="flex flex-wrap items-center gap-2">
+                {result.issueType && result.issueType !== "healthy" && (
+                  <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">
+                    {result.issueType === "pest"
+                      ? lang === "en" ? "Insect attack" : "कीट का हमला"
+                      : result.issueType === "disease"
+                        ? lang === "en" ? "Disease" : "बीमारी"
+                        : result.issueType === "nutrient"
+                          ? lang === "en" ? "Nutrient deficiency" : "पोषक तत्व की कमी"
+                          : lang === "en" ? "Not clear" : "स्पष्ट नहीं"}
+                  </span>
+                )}
+                <span className="text-base font-bold text-foreground">
+                  {result.disease || result.primaryIssue || t("diseased")}
+                </span>
+              </div>
+              {result.secondaryIssue && (
+                <p className="mt-2 text-xs text-muted-foreground">
+                  {lang === "en" ? "Secondary issue" : "दूसरी समस्या"}: {result.secondaryIssue}
+                </p>
               )}
-            </div>
-            {result.secondaryIssue && (
-              <p className="mt-2 text-xs text-muted-foreground">
-                {lang === "en" ? "Secondary issue" : "दूसरी समस्या"}: {result.secondaryIssue}
-              </p>
-            )}
-          </Card>
+            </Card>
+            <RefImageCard
+              image={diseaseImage}
+              lang={lang}
+              reference={lowConfidence || !result.disease}
+              alt={
+                lang === "en"
+                  ? `Reference image of ${result.disease || "crop problem"} symptoms`
+                  : `${result.disease || "फसल समस्या"} के लक्षणों का संदर्भ चित्र`
+              }
+              emptyNote={
+                lang === "en"
+                  ? "No reliable reference image for this problem — showing text details only."
+                  : "इस समस्या का भरोसेमंद संदर्भ चित्र उपलब्ध नहीं है — केवल जानकारी दिखाई जा रही है।"
+              }
+            />
+          </>
         )}
 
+        {/* 📋 Disease details */}
+        <SectionTitle>{lang === "en" ? "📋 Problem details" : "📋 बीमारी की जानकारी"}</SectionTitle>
+        {result.symptoms && (
+          <DetailCard label={lang === "en" ? "Symptoms" : "लक्षण"} text={result.symptoms} accent="warning" />
+        )}
         {result.visualEvidence && (
           <DetailCard
             label={lang === "en" ? "Visual evidence" : "दृश्य प्रमाण"}
@@ -993,6 +1022,9 @@ function ResultView({
             accent="accent"
           />
         )}
+        {result.reasoning && (
+          <DetailCard label={lang === "en" ? "Cause / AI thinking" : "कारण / AI का तर्क"} text={result.reasoning} accent="accent" />
+        )}
         {result.photoTip && (
           <DetailCard
             label={lang === "en" ? "Better photo next time" : "अगली बार बेहतर फोटो"}
@@ -1001,22 +1033,38 @@ function ResultView({
           />
         )}
 
-
-
-        {/* AI reasoning */}
-        {result.reasoning && (
-          <DetailCard label={lang === "en" ? "AI thinking" : "AI का तर्क"} text={result.reasoning} accent="accent" />
+        {/* 💊 Treatment / medicine + reference image */}
+        {(result.organicTreatment || result.chemicalTreatment || result.treatment) && (
+          <>
+            <SectionTitle>{lang === "en" ? "💊 Treatment / medicine" : "💊 उपचार / दवा"}</SectionTitle>
+            <RefImageCard
+              image={medicineImage}
+              lang={lang}
+              reference
+              alt={
+                lang === "en"
+                  ? "Representative image of the recommended treatment product type"
+                  : "सुझाई गई दवा के प्रकार का प्रतीकात्मक चित्र"
+              }
+              emptyNote={
+                lang === "en"
+                  ? "No matching product image — follow the written advice and the product label."
+                  : "मिलती-जुलती दवा की तस्वीर उपलब्ध नहीं — लिखी सलाह और प्रोडक्ट लेबल का पालन करें।"
+              }
+            />
+            {result.organicTreatment && (
+              <DetailCard label={lang === "en" ? "Organic treatment" : "जैविक इलाज"} text={result.organicTreatment} accent="primary" />
+            )}
+            {result.chemicalTreatment && (
+              <DetailCard label={lang === "en" ? "Chemical treatment" : "रासायनिक इलाज"} text={result.chemicalTreatment} accent="primary" />
+            )}
+          </>
         )}
 
-        {/* Details */}
-        {result.symptoms && (
-          <DetailCard label={lang === "en" ? "Symptoms" : "लक्षण"} text={result.symptoms} accent="warning" />
-        )}
-        {result.organicTreatment && (
-          <DetailCard label={lang === "en" ? "Organic treatment" : "जैविक इलाज"} text={result.organicTreatment} accent="primary" />
-        )}
-        {result.chemicalTreatment && (
-          <DetailCard label={lang === "en" ? "Chemical treatment" : "रासायनिक इलाज"} text={result.chemicalTreatment} accent="primary" />
+        {/* 📝 How to use */}
+        <SectionTitle>{lang === "en" ? "📝 How to use" : "📝 इस्तेमाल की जानकारी"}</SectionTitle>
+        {result.treatment && (
+          <DetailCard label={lang === "en" ? "Full treatment plan" : "पूर्ण उपचार योजना"} text={result.treatment} accent="primary" />
         )}
         {result.dosage && (
           <DetailCard label={lang === "en" ? "Dosage" : "खुराक"} text={result.dosage} accent="warning" />
@@ -1032,16 +1080,28 @@ function ResultView({
             accent="warning"
           />
         )}
-        {result.treatment && (
-          <DetailCard label={lang === "en" ? "Full treatment plan" : "पूर्ण उपचार योजना"} text={result.treatment} accent="primary" />
-        )}
+        <DetailCard
+          label={lang === "en" ? "Precautions" : "सावधानियां"}
+          text={
+            lang === "en"
+              ? "Images here are only for reference — a medicine cannot be identified from a photo. Always read the product label, use the dose printed on it, wear a mask and gloves while spraying, and confirm with your local agriculture expert / KVK before use."
+              : "यहाँ दी गई तस्वीरें केवल संदर्भ के लिए हैं — फोटो देखकर दवा की पहचान नहीं की जा सकती। हमेशा प्रोडक्ट लेबल पढ़ें, उस पर लिखी मात्रा ही इस्तेमाल करें, छिड़काव के समय मास्क-दस्ताने पहनें, और उपयोग से पहले अपने नज़दीकी कृषि विशेषज्ञ / KVK से पुष्टि करें।"
+          }
+          accent="warning"
+        />
         {result.whenToCallExpert && (
           <DetailCard label={lang === "en" ? "When to see an expert" : "कब विशेषज्ञ से मिलें"} text={result.whenToCallExpert} accent="accent" />
         )}
+
+        {/* 🛡️ Prevention */}
         {result.prevention && (
-          <DetailCard label={t("prevention")} text={result.prevention} accent="accent" />
+          <>
+            <SectionTitle>{lang === "en" ? "🛡️ Prevention" : "🛡️ बचाव के उपाय"}</SectionTitle>
+            <DetailCard label={t("prevention")} text={result.prevention} accent="accent" />
+          </>
         )}
       </div>
+
 
       {/* Bottom actions */}
       <div className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-background/95 p-3 backdrop-blur">
