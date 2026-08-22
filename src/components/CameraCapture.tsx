@@ -41,14 +41,27 @@ export function CameraCapture({
   const { t, speechCode } = useLanguage();
   const { sttEnabled } = useVoiceMode();
   const [voiceHint, setVoiceHint] = useState<string | null>(null);
-  const { start: startListen, stop: stopListen, listening, supported: sttSupported } = useListen(
+  const { start: startListen, stop: stopListen, listening, supported: sttSupported, interim } = useListen(
     speechCode,
     (text) => {
+      if (text.trim().length < 2) {
+        toast.error("मैं आपकी बात ठीक से समझ नहीं पाया, कृपया दोबारा बोलें।");
+        return;
+      }
       setVoiceHint(text);
       onVoiceText?.(text);
       window.setTimeout(() => setVoiceHint(null), 2500);
+    },
+    {
+      onError: (code) => {
+        if (code === "not-allowed") toast.error("Microphone permission allow करें।");
+        else if (code === "no-speech") toast.error("मैं आपकी आवाज नहीं सुन पाया। कृपया दोबारा बोलें।");
+        else if (code === "network") toast.error("इंटरनेट की दिक्कत है। कृपया दोबारा कोशिश करें।");
+        else toast.error("आवाज़ नहीं पकड़ पाए। कृपया दोबारा बोलें।");
+      },
     }
   );
+
   const toggleMic = () => {
     if (!sttSupported || !sttEnabled) return;
     if (listening) stopListen();
