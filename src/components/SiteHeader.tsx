@@ -6,7 +6,9 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 
 const NAV = [
   { to: "/", label: "होम" },
+  { to: "/ai-camera", label: "AI कैमरा" },
   { to: "/ebook", label: "ई-बुक" },
+
   { to: "/blog", label: "ब्लॉग" },
   { to: "/crop-diseases", label: "फसल रोग" },
   { to: "/pest-control", label: "कीट नियंत्रण" },

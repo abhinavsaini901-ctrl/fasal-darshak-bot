@@ -137,14 +137,18 @@ function HomePage() {
 
           {/* Main CTA */}
           <div className="mt-6 flex flex-col items-center gap-3">
-            <Link to="/scanner" search={{ mode: "live" }}>
+            <Link to="/ai-camera">
               <Button
                 size="lg"
                 className="h-14 rounded-2xl bg-gradient-to-r from-lime-400 to-emerald-500 px-8 text-base font-bold text-emerald-950 shadow-xl shadow-emerald-500/30 transition-transform hover:scale-105 md:text-lg"
               >
-                <Camera className="mr-2 h-6 w-6" /> 📷 लाइव कैमरा शुरू करें
+                <Camera className="mr-2 h-6 w-6" /> 🎥 AI Camera Assistant
               </Button>
             </Link>
+            <Link to="/scanner" search={{ mode: "live" }} className="text-xs font-semibold text-emerald-100/90 underline">
+              📷 फसल स्कैनर (लाइव कैमरा)
+            </Link>
+
             <div className="flex flex-wrap items-center justify-center gap-3">
               <Link to="/scanner" search={{ mode: "chat" }}>
                 <Button variant="outline" className="h-10 rounded-xl border-emerald-300/40 bg-white/10 text-emerald-50 backdrop-blur hover:bg-white/20 hover:text-white">
