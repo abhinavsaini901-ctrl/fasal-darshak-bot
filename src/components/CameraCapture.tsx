@@ -259,13 +259,21 @@ export function CameraCapture({
 
       {/* Bottom action bar — 5 buttons */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 pb-6 pt-4">
-        {voiceHint && (
+        {(listening || voiceHint) && (
           <div className="pointer-events-none mx-auto mb-3 max-w-md px-6">
             <div className="rounded-2xl bg-black/75 px-3 py-2 text-center text-xs text-white shadow-lg backdrop-blur">
-              🎤 “{voiceHint}”
+              {listening ? (
+                <>
+                  <span className="mr-1 inline-block h-2 w-2 animate-pulse rounded-full bg-red-500 align-middle" />
+                  {interim ? `“${interim}”` : `${t("listening")}…`}
+                </>
+              ) : (
+                <>🎤 “{voiceHint}”</>
+              )}
             </div>
           </div>
         )}
+
         <div className="pointer-events-auto mx-auto flex max-w-md items-center justify-between px-6">
           {/* 1. Live/video toggle — light blue circle */}
           <button
