@@ -120,7 +120,7 @@ function HomePage() {
           {/* Animated AI Camera Logo — clickable */}
           <Link
             to="/ai-camera"
-            aria-label="Smart Eye शुरू करें"
+            aria-label="AI Camera Assistant खोलें"
             className="group relative mx-auto mt-8 flex h-48 w-48 items-center justify-center md:h-56 md:w-56"
           >
             <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/30" />
@@ -161,7 +161,7 @@ function HomePage() {
                 size="lg"
                 className="h-14 rounded-2xl bg-gradient-to-r from-lime-400 to-emerald-500 px-8 text-base font-bold text-emerald-950 shadow-xl shadow-emerald-500/30 transition-transform hover:scale-105 md:text-lg"
               >
-                <Camera className="mr-2 h-6 w-6" /> 👁️ Smart Eye शुरू करें
+                <Camera className="mr-2 h-6 w-6" /> 🎥 AI Camera Assistant
               </Button>
             </Link>
             <Link to="/scanner" search={{ mode: "live" }} className="text-xs font-semibold text-emerald-100/90 underline">
@@ -182,7 +182,7 @@ function HomePage() {
             </div>
           </div>
 
-          {/* Smart Eye क्या-क्या समझता है */}
+          {/* AI क्या-क्या समझता है */}
           <div className="mx-auto mt-8 grid max-w-3xl grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
             {[
               "🌾 फसल पहचान",
