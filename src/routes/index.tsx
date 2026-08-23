@@ -73,7 +73,25 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   return (
     <PageShell>
-      {/* Kisan Lens Smart Eye — Premium Hero Section */}
+      {/* 👁️ Kisan Lens Smart Eye — छोटा prominent banner (नया अलग feature) */}
+      <section className="border-b border-emerald-900/10 bg-gradient-to-r from-emerald-900 to-emerald-700 px-4 py-3">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 text-center sm:flex-row sm:justify-between sm:text-left">
+          <div>
+            <p className="text-sm font-bold text-white">👁️ Kisan Lens Smart Eye</p>
+            <p className="text-xs text-emerald-50/85">कैमरा दिखाएं और AI से खेती के बारे में पूछें</p>
+          </div>
+          <Link to="/smart-eye" className="w-full sm:w-auto">
+            <Button
+              size="sm"
+              className="w-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-400 font-bold text-emerald-950 sm:w-auto"
+            >
+              Smart Eye खोलें
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* AI खेती गुरु — Premium Hero Section */}
       <section
         className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat py-10 md:py-14"
         style={{ backgroundImage: `url(${kisanPhoneBg})` }}
@@ -87,15 +105,16 @@ function HomePage() {
         <div className="relative mx-auto max-w-6xl px-4">
           <div className="mx-auto max-w-3xl text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300/30 bg-white/10 px-3 py-1 text-xs font-semibold text-emerald-100 backdrop-blur">
-              👁️ Kisan Lens Smart Eye
+              <Sparkles className="h-3.5 w-3.5" /> AI कृषि सहायक
             </span>
             <h1 className="mt-4 text-3xl font-extrabold leading-tight text-white drop-shadow md:text-5xl">
-              Kisan Lens <span className="bg-gradient-to-r from-lime-300 to-emerald-300 bg-clip-text text-transparent">Smart Eye</span> 👁️
+              AI <span className="bg-gradient-to-r from-lime-300 to-emerald-300 bg-clip-text text-transparent">खेती गुरु</span>
             </h1>
             <p className="mx-auto mt-3 max-w-2xl text-base text-emerald-50/90 md:text-lg">
               कैमरा खोलें, सामने की फसल या पेड़ दिखाएं और AI से तुरंत पूछें।
             </p>
           </div>
+
 
 
           {/* Animated AI Camera Logo — clickable */}
