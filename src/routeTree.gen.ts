@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as SmartEyeRouteImport } from './routes/smart-eye'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ScannerRouteImport } from './routes/scanner'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -41,6 +42,11 @@ import { Route as ApiPublicHooksSendMorningPushRouteImport } from './routes/api/
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SmartEyeRoute = SmartEyeRouteImport.update({
+  id: '/smart-eye',
+  path: '/smart-eye',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -199,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/scanner': typeof ScannerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/smart-eye': typeof SmartEyeRoute
   '/terms': typeof TermsRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -227,6 +234,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/scanner': typeof ScannerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/smart-eye': typeof SmartEyeRoute
   '/terms': typeof TermsRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -258,6 +266,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/scanner': typeof ScannerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/smart-eye': typeof SmartEyeRoute
   '/terms': typeof TermsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -289,6 +298,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/scanner'
     | '/sitemap.xml'
+    | '/smart-eye'
     | '/terms'
     | '/admin'
     | '/blog/$slug'
@@ -317,6 +327,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/scanner'
     | '/sitemap.xml'
+    | '/smart-eye'
     | '/terms'
     | '/admin'
     | '/blog/$slug'
@@ -347,6 +358,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/scanner'
     | '/sitemap.xml'
+    | '/smart-eye'
     | '/terms'
     | '/_authenticated/admin'
     | '/blog/$slug'
@@ -378,6 +390,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ScannerRoute: typeof ScannerRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SmartEyeRoute: typeof SmartEyeRoute
   TermsRoute: typeof TermsRoute
   KnowledgeCenterSlugRoute: typeof KnowledgeCenterSlugRoute
   NewsSlugRoute: typeof NewsSlugRoute
@@ -392,6 +405,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/smart-eye': {
+      id: '/smart-eye'
+      path: '/smart-eye'
+      fullPath: '/smart-eye'
+      preLoaderRoute: typeof SmartEyeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -631,6 +651,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ScannerRoute: ScannerRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SmartEyeRoute: SmartEyeRoute,
   TermsRoute: TermsRoute,
   KnowledgeCenterSlugRoute: KnowledgeCenterSlugRoute,
   NewsSlugRoute: NewsSlugRoute,
