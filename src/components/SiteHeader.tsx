@@ -6,7 +6,7 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 
 const NAV = [
   { to: "/", label: "होम" },
-  { to: "/ai-camera", label: "👁️ Smart Eye" },
+  { to: "/smart-eye", label: "👁️ Smart Eye" },
   { to: "/ebook", label: "ई-बुक" },
 
   { to: "/blog", label: "ब्लॉग" },
@@ -50,7 +50,7 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <LanguageSelector compact />
-          <Link to="/ai-camera" className="hidden sm:block">
+          <Link to="/smart-eye" className="hidden sm:block">
             <Button size="sm" className="rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 font-bold text-emerald-950">
               👁️ Smart Eye
             </Button>
@@ -86,7 +86,7 @@ export function SiteHeader() {
               </Link>
             ))}
             <Link
-              to="/ai-camera"
+              to="/smart-eye"
               onClick={() => setOpen(false)}
               className="col-span-2 mt-1 rounded-xl bg-gradient-to-r from-lime-400 to-emerald-500 px-3 py-3 text-center text-sm font-bold text-emerald-950"
             >
