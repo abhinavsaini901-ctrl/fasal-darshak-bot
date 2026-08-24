@@ -410,14 +410,20 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
 
         {/* top: AI status */}
         <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-3">
-          <div className="flex items-center gap-2 rounded-full bg-black/60 px-3 py-1.5 text-[11px] font-semibold text-white backdrop-blur">
-            {status === "watching" ? (
-              <Eye className="h-3.5 w-3.5 text-emerald-300" />
-            ) : (
-              <Loader2 className="h-3.5 w-3.5 animate-spin text-emerald-300" />
-            )}
-            👁 {STATUS_TEXT[status]}
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2 rounded-full bg-black/60 px-3 py-1.5 text-[11px] font-semibold text-white backdrop-blur">
+              {status === "CAMERA_ANALYZING" ? (
+                <Eye className="h-3.5 w-3.5 text-emerald-300" />
+              ) : (
+                <Loader2 className="h-3.5 w-3.5 animate-spin text-emerald-300" />
+              )}
+              👁 {MODE_TEXT[status]}
+            </div>
+            <span className="w-fit rounded-full bg-black/50 px-2 py-0.5 text-[10px] font-semibold text-white/90 backdrop-blur">
+              {voiceBusy ? "📷 Camera Analysis: 🔇 Silent" : "📷 Camera Analysis: 👁️ Active"}
+            </span>
           </div>
+
           <div className="pointer-events-auto flex items-center gap-2">
             <button
               onClick={() => {
