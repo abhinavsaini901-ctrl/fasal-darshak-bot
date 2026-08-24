@@ -91,6 +91,10 @@ function HomePage() {
         </div>
       </section>
 
+      {/* ❤️ Kisan Lens को Support करें */}
+      <SupportSection />
+
+
       {/* AI खेती गुरु — Premium Hero Section */}
       <section
         className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat py-10 md:py-14"
