@@ -26,21 +26,31 @@ import { scanCrop } from "@/lib/crop.functions";
 type Scene = Awaited<ReturnType<typeof observeScene>>;
 type ScanResult = Awaited<ReturnType<typeof scanCrop>>;
 type Turn = { role: "user" | "assistant"; content: string };
-type Status = "starting" | "watching" | "looking" | "listening" | "thinking" | "speaking";
+
+/** Explicit state machine — only ONE voice output is ever allowed at a time. */
+type Mode =
+  | "STARTING"
+  | "IDLE"
+  | "CAMERA_ANALYZING"
+  | "LISTENING"
+  | "PROCESSING_QUESTION"
+  | "SPEAKING_ANSWER";
 
 /** Live scene pass timing — deliberately conservative to save data/battery/API. */
 const SAMPLE_MS = 2000; // how often we *peek* at the camera locally (no API call)
 const MIN_OBSERVE_GAP_MS = 9000; // minimum gap between two AI scene calls
 const SCENE_CHANGE_THRESHOLD = 10; // mean pixel delta on a 32x32 grayscale thumb
 const MAX_AUTO_OBSERVES = 20; // hard cap per session
+/** After an answer finishes, keep camera voice quiet for a moment. */
+const CAMERA_VOICE_COOLDOWN_MS = 4000;
 
-const STATUS_TEXT: Record<Status, string> = {
-  starting: "कैमरा शुरू हो रहा है…",
-  watching: "AI देख रहा है…",
-  looking: "AI समझ रहा है…",
-  listening: "सुन रहा हूं…",
-  thinking: "समझ रहा हूं…",
-  speaking: "जवाब दे रहा हूं…",
+const MODE_TEXT: Record<Mode, string> = {
+  STARTING: "कैमरा शुरू हो रहा है…",
+  IDLE: "AI तैयार है…",
+  CAMERA_ANALYZING: "AI देख रहा है…",
+  LISTENING: "सुन रहा हूं…",
+  PROCESSING_QUESTION: "समझ रहा हूं…",
+  SPEAKING_ANSWER: "जवाब दे रहा हूं…",
 };
 
 export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
@@ -53,10 +63,12 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [camError, setCamError] = useState<string | null>(null);
 
-  const [status, setStatus] = useState<Status>("starting");
+  const [mode, setMode] = useState<Mode>("STARTING");
+  const modeRef = useRef<Mode>("STARTING");
+  modeRef.current = mode;
   const [scene, setScene] = useState<Scene | null>(null);
+  const [sceneAt, setSceneAt] = useState<number>(0);
   const [turns, setTurns] = useState<Turn[]>([]);
-  const [answering, setAnswering] = useState(false);
   const [muted, setMuted] = useState(!ttsEnabled);
   const [tip, setTip] = useState<string | null>(null);
 
@@ -67,18 +79,39 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
   const lastObserveRef = useRef(0);
   const observingRef = useRef(false);
   const observeCountRef = useRef(0);
-  const spokenRef = useRef<string>("");
+  /** last announced camera fact (object + issue) — prevents duplicate announcements */
+  const lastAnnouncedRef = useRef<string>("");
+  const cameraVoiceBlockedUntilRef = useRef(0);
   const sceneRef = useRef<Scene | null>(null);
   sceneRef.current = scene;
   const turnsRef = useRef<Turn[]>([]);
   turnsRef.current = turns;
 
-  const say = useCallback(
+  /** Voice question / answer is the highest priority; camera voice is lowest. */
+  const voiceBusy =
+    mode === "LISTENING" || mode === "PROCESSING_QUESTION" || mode === "SPEAKING_ANSWER";
+  const voiceBusyRef = useRef(false);
+  voiceBusyRef.current = voiceBusy;
+
+  /** Mode B voice — the farmer's question answer. Always allowed. */
+  const sayAnswer = useCallback(
     (text: string) => {
-      spokenRef.current = text;
       if (muted || !text) return;
-      setStatus("speaking");
+      setMode("SPEAKING_ANSWER");
       speak(text);
+    },
+    [muted, speak],
+  );
+
+  /** Mode A voice — camera analysis. Lowest priority, deduped, short only. */
+  const sayCamera = useCallback(
+    (text: string, key: string) => {
+      if (muted || !text) return;
+      if (voiceBusyRef.current) return; // user question / answer owns the speaker
+      if (Date.now() < cameraVoiceBlockedUntilRef.current) return;
+      if (!key || key === lastAnnouncedRef.current) return; // no repeats
+      lastAnnouncedRef.current = key;
+      speak(text.slice(0, 180));
     },
     [muted, speak],
   );
@@ -102,7 +135,7 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
         }
         setStream(s);
         setCamError(null);
-        setStatus("watching");
+        setMode("CAMERA_ANALYZING");
         if (videoRef.current) {
           videoRef.current.srcObject = s;
           await videoRef.current.play().catch(() => {});
@@ -170,13 +203,12 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
   }, []);
 
   const runObserve = useCallback(async () => {
-    if (observingRef.current || answering) return;
+    if (observingRef.current || voiceBusyRef.current) return;
     const frame = grabFrame();
     if (!frame) return;
     observingRef.current = true;
     lastObserveRef.current = Date.now();
     observeCountRef.current += 1;
-    setStatus("looking");
     try {
       const res = await withRateLimitRetry(() =>
         observeScene({
@@ -184,8 +216,18 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
         }),
       );
       setScene(res);
+      setSceneAt(Date.now());
       setTip(res.guidance || null);
-      if (res.spokenLine && res.spokenLine !== spokenRef.current) say(res.spokenLine);
+      // Camera analysis is primarily a silent UI card. It speaks only a SHORT
+      // new alert, only when the visual fact actually changed, and never while
+      // the farmer is asking or the answer is being spoken.
+      const key = `${res.name || ""}|${res.issueVisible ? res.possibleIssue || "issue" : "ok"}`;
+      const shortLine = res.issueVisible && res.possibleIssue
+        ? `संभावित समस्या: ${res.possibleIssue}`
+        : res.name
+          ? `सामने ${res.name} दिखाई दे रही है।`
+          : "";
+      if (shortLine) sayCamera(shortLine, key);
     } catch (e) {
       const msg = (e as Error)?.message ?? "";
       if (msg === "PAYMENT_REQUIRED") toast.error("AI credits खत्म हैं। कृपया बाद में कोशिश करें।");
@@ -194,15 +236,14 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
         toast.error("Internet connection check करें और फिर कोशिश करें।");
     } finally {
       observingRef.current = false;
-      setStatus((s) => (s === "looking" ? "watching" : s));
     }
-  }, [answering, grabFrame, lang, say]);
+  }, [grabFrame, lang, sayCamera]);
 
   // ---------- smart sampling loop: only call AI when the scene really changes ----------
   useEffect(() => {
     if (!stream || camError) return;
     const id = setInterval(() => {
-      if (answering || observingRef.current) return;
+      if (voiceBusyRef.current || observingRef.current) return;
       if (observeCountRef.current >= MAX_AUTO_OBSERVES) return;
       const st = thumbStats();
       if (!st) return;
@@ -217,27 +258,34 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
       }
     }, SAMPLE_MS);
     return () => clearInterval(id);
-  }, [stream, camError, answering, thumbStats, runObserve]);
+  }, [stream, camError, thumbStats, runObserve]);
 
+  // When the answer finishes speaking → camera analysis resumes (after cooldown).
   useEffect(() => {
-    if (!speaking) setStatus((s) => (s === "speaking" ? "watching" : s));
+    if (speaking) return;
+    setMode((m) => {
+      if (m !== "SPEAKING_ANSWER") return m;
+      cameraVoiceBlockedUntilRef.current = Date.now() + CAMERA_VOICE_COOLDOWN_MS;
+      return "CAMERA_ANALYZING";
+    });
   }, [speaking]);
 
-  // ---------- voice question ----------
+  // ---------- Mode B: voice question ----------
   const handleQuestion = useCallback(
     async (question: string) => {
       const q = question.trim();
       if (q.length < 2) {
         toast.error("मैं आपकी बात ठीक से समझ नहीं पाया, कृपया दोबारा बोलें।");
+        setMode("CAMERA_ANALYZING");
         return;
       }
       if (typeof navigator !== "undefined" && !navigator.onLine) {
         toast.error("Internet connection check करें और फिर कोशिश करें।");
+        setMode("CAMERA_ANALYZING");
         return;
       }
-      stopSpeak();
-      setAnswering(true);
-      setStatus("thinking");
+      stopSpeak(); // kill any camera voice immediately
+      setMode("PROCESSING_QUESTION");
       setTurns((t) => [...t, { role: "user", content: q }]);
       const frame = grabFrame();
       try {
@@ -247,13 +295,15 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
               language: lang,
               question: q,
               imageDataUrl: frame ?? undefined,
+              // camera scene is used only as CONTEXT, never merged into the answer voice
               scene: sceneRef.current ?? undefined,
               history: turnsRef.current.slice(-10),
             },
           }),
         );
         setTurns((t) => [...t, { role: "assistant", content: res.reply }]);
-        say(res.reply);
+        sayAnswer(res.reply);
+        if (muted) setMode("CAMERA_ANALYZING");
       } catch (e) {
         const msg = (e as Error)?.message ?? "";
         const friendly =
@@ -264,12 +314,10 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
               : "जवाब नहीं मिल पाया। Internet connection check करें और दोबारा बोलें।";
         toast.error(friendly);
         setTurns((t) => [...t, { role: "assistant", content: friendly }]);
-      } finally {
-        setAnswering(false);
-        setStatus((s) => (s === "thinking" ? "watching" : s));
+        setMode("CAMERA_ANALYZING");
       }
     },
-    [grabFrame, lang, say, stopSpeak],
+    [grabFrame, lang, muted, sayAnswer, stopSpeak],
   );
 
   const {
@@ -280,6 +328,7 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
     interim,
   } = useListen(speechCode, (text) => void handleQuestion(text), {
     onError: (code) => {
+      setMode("CAMERA_ANALYZING");
       if (code === "not-allowed")
         toast.error("Microphone permission allow करें ताकि आप मुझसे बोलकर सवाल पूछ सकें।");
       else if (code === "no-speech") toast.error("मैं आपकी आवाज नहीं सुन पाया। कृपया दोबारा बोलें।");
@@ -289,8 +338,7 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
   });
 
   useEffect(() => {
-    if (listening) setStatus("listening");
-    else setStatus((s) => (s === "listening" ? "watching" : s));
+    if (listening) setMode("LISTENING");
   }, [listening]);
 
   const toggleMic = () => {
@@ -304,7 +352,8 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
     }
     if (listening) stopListen();
     else {
-      stopSpeak();
+      stopSpeak(); // camera analysis voice → silent
+      setMode("LISTENING");
       startListen();
     }
   };
@@ -321,7 +370,7 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
     try {
       const res = await withRateLimitRetry(() => scanCrop({ data: { imageDataUrl: frame, language: lang } }));
       setDetail(res);
-      if (res.summary) say(res.summary);
+      if (res.summary) sayAnswer(res.summary);
     } catch (e) {
       const msg = (e as Error)?.message ?? "";
       toast.error(
@@ -336,8 +385,12 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
     }
   };
 
+  const lastUserQuestion = [...turns].reverse().find((t) => t.role === "user")?.content;
   const lastAnswer = [...turns].reverse().find((t) => t.role === "assistant")?.content;
   const confidence = Math.round(scene?.confidence ?? 0);
+  const status = mode;
+  const answering = mode === "PROCESSING_QUESTION";
+
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-black">
