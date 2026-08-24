@@ -524,12 +524,53 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
             </Button>
           </div>
 
+          {/* Mode A — 📷 Camera Analysis (silent card, never merged with answers) */}
+          {scene && (scene.name || scene.possibleIssue) && (
+            <Card className="mt-3 border border-emerald-500/30 bg-emerald-500/5 p-3 shadow-soft">
+              <p className="text-xs font-bold text-emerald-700 dark:text-emerald-300">
+                📷 Camera Analysis {voiceBusy && <span className="opacity-70">· 🔇 Silent</span>}
+              </p>
+              <p className="mt-1 text-sm font-semibold text-foreground">
+                🌾 {scene.name || "पहचान अस्पष्ट"}{" "}
+                <span className="text-xs font-normal text-muted-foreground">({confidence}% भरोसा)</span>
+              </p>
+              <p className="mt-0.5 text-sm text-foreground">
+                {scene.issueVisible && scene.possibleIssue
+                  ? `🦠 संभावित समस्या: ${scene.possibleIssue}`
+                  : "🦠 कोई स्पष्ट बीमारी नहीं"}
+              </p>
+              {sceneAt > 0 && (
+                <p className="mt-1 text-[10px] text-muted-foreground">
+                  अपडेट: {new Date(sceneAt).toLocaleTimeString("hi-IN")}
+                </p>
+              )}
+            </Card>
+          )}
+
+          {/* Mode B — 🎙️ आपका सवाल */}
+          {lastUserQuestion && (
+            <Card className="mt-3 border border-primary/30 bg-primary/5 p-3 shadow-soft">
+              <p className="text-xs font-bold text-primary">🎙️ आपका सवाल</p>
+              <p className="mt-1 text-sm leading-relaxed text-foreground">“{lastUserQuestion}”</p>
+            </Card>
+          )}
+
+          {/* Mode B — 🤖 AI जवाब */}
           {lastAnswer && (
-            <Card className="mt-3 border-0 bg-secondary/60 p-3 shadow-soft">
-              <p className="text-xs font-bold text-primary">🔊 AI का जवाब</p>
+            <Card className="mt-3 border border-border bg-secondary/60 p-3 shadow-soft">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-xs font-bold text-foreground">🤖 AI जवाब</p>
+                <button
+                  onClick={() => sayAnswer(lastAnswer)}
+                  className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary"
+                >
+                  🔊 सुनें
+                </button>
+              </div>
               <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-foreground">{lastAnswer}</p>
             </Card>
           )}
+
 
           {turns.length > 0 && (
             <div className="mt-3 space-y-2">
