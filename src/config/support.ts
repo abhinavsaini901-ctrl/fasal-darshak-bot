@@ -8,7 +8,7 @@ import upiQrPlaceholder from "@/assets/upi-qr-placeholder.png";
  */
 export const SUPPORT_CONFIG = {
   /** Public UPI ID (यहाँ अपनी UPI ID लिखें) */
-  upiId: "yourname@upi",
+  upiId: "8607581241@ptaxis",
   /** Payee name जो UPI app में दिखेगा */
   payeeName: "Kisan Lens",
   /** Suggested (optional) support amount in INR */
