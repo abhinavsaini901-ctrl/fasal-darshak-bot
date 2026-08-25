@@ -1,10 +1,8 @@
-import upiQrPlaceholder from "@/assets/upi-qr-placeholder.png";
+import upiQrAsset from "@/assets/upi-qr-code.jpg.asset.json";
 
 /**
  * Kisan Lens Support (donation) settings.
  * इन values को बदलकर QR image और UPI ID अपडेट कर सकते हैं।
- *
- * QR बदलने के लिए: अपनी QR image `src/assets/` में रखें और नीचे import बदल दें।
  */
 export const SUPPORT_CONFIG = {
   /** Public UPI ID (यहाँ अपनी UPI ID लिखें) */
@@ -13,10 +11,10 @@ export const SUPPORT_CONFIG = {
   payeeName: "Kisan Lens",
   /** Suggested (optional) support amount in INR */
   suggestedAmount: 200,
-  /** QR image — अपनी UPI QR image से replace करें */
-  qrImage: upiQrPlaceholder,
-  /** true रखें जब तक असली QR image अपलोड न हो */
-  qrIsPlaceholder: true,
+  /** QR image — CDN asset URL */
+  qrImage: upiQrAsset.url,
+  /** true = placeholder warning दिखेगा; false = असली QR */
+  qrIsPlaceholder: false,
 };
 
 export function buildUpiLink({
