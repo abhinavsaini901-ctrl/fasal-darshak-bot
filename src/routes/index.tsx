@@ -95,6 +95,11 @@ function HomePage() {
       {/* ❤️ Kisan Lens को Support करें */}
       <SupportSection />
 
+      {/* 📱 Android App Download — तीसरा section */}
+      <AppDownloadSection />
+
+
+
 
       {/* AI खेती गुरु — Premium Hero Section */}
       <section
