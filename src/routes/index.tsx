@@ -15,6 +15,7 @@ import {
 import { PageShell } from "@/components/PageShell";
 import { LiveKisanNews } from "@/components/LiveKisanNews";
 import { SupportSection } from "@/components/SupportSection";
+import { AppDownloadSection } from "@/components/AppDownloadSection";
 import { Button } from "@/components/ui/button";
 import kisanPhoneBg from "@/assets/kisan-phone-bg.jpg";
 import bookCover from "@/assets/kisan-lens-book-cover.jpg";
