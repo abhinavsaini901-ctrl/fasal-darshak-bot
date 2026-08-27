@@ -60,6 +60,7 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const [facing, setFacing] = useState<"environment" | "user">("environment");
+  const [retryKey, setRetryKey] = useState(0);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [camError, setCamError] = useState<string | null>(null);
 
