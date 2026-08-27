@@ -60,6 +60,7 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const [facing, setFacing] = useState<"environment" | "user">("environment");
+  const [retryKey, setRetryKey] = useState(0);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [camError, setCamError] = useState<string | null>(null);
 
@@ -153,7 +154,7 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
         return null;
       });
     };
-  }, [facing]);
+  }, [facing, retryKey]);
 
   const grabFrame = useCallback((maxSide = 900): string | null => {
     const v = videoRef.current;
@@ -400,7 +401,7 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
           <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center text-white">
             <Camera className="h-10 w-10 opacity-70" />
             <p className="text-sm opacity-90">{camError}</p>
-            <Button variant="secondary" onClick={() => setFacing((f) => f)}>
+            <Button variant="secondary" onClick={() => { setCamError(null); setRetryKey((k) => k + 1); }}>
               दोबारा कोशिश करें
             </Button>
           </div>
