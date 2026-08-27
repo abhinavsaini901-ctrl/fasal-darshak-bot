@@ -50,7 +50,7 @@ export const Route = createFileRoute("/about")({
           contactPoint: {
             "@type": "ContactPoint",
             contactType: "customer support",
-            email: "support@kisanlens.com",
+            email: "info@kisanlens.com",
             availableLanguage: ["Hindi", "English"],
           },
         }),

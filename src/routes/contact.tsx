@@ -64,8 +64,8 @@ function ContactPage() {
             <Card className="border border-border bg-card p-5">
               <Mail className="h-5 w-5 text-primary" />
               <p className="mt-2 text-sm font-bold">ईमेल</p>
-              <a href="mailto:support@kisanlens.com" className="mt-1 block text-sm text-muted-foreground hover:text-primary">
-                support@kisanlens.com
+              <a href="mailto:info@kisanlens.com" className="mt-1 block text-sm text-muted-foreground hover:text-primary">
+                info@kisanlens.com
               </a>
             </Card>
             <Card className="border border-border bg-card p-5">
