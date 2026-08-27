@@ -66,8 +66,8 @@ export function SiteFooter() {
             </ul>
             <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
               <Mail className="h-3.5 w-3.5" />
-              <a href="mailto:support@kisanlens.com" className="hover:text-primary">
-                support@kisanlens.com
+              <a href="mailto:info@kisanlens.com" className="hover:text-primary">
+                info@kisanlens.com
               </a>
             </div>
           </div>

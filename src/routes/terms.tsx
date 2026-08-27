@@ -170,8 +170,8 @@ function TermsPage() {
               legal@kisanlens.com
             </a>{" "}
             · सामान्य प्रश्न:{" "}
-            <a className="text-primary hover:underline" href="mailto:support@kisanlens.com">
-              support@kisanlens.com
+            <a className="text-primary hover:underline" href="mailto:info@kisanlens.com">
+              info@kisanlens.com
             </a>
           </p>
         </div>

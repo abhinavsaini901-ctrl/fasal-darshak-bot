@@ -169,7 +169,7 @@ function DisclaimerPage() {
 
           <h2 className="text-xl font-bold">13. संपर्क</h2>
           <p>
-            किसी भी प्रश्न के लिए: <a className="text-primary hover:underline" href="mailto:support@kisanlens.com">support@kisanlens.com</a>
+            किसी भी प्रश्न के लिए: <a className="text-primary hover:underline" href="mailto:info@kisanlens.com">info@kisanlens.com</a>
           </p>
         </div>
       </article>

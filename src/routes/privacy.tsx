@@ -53,7 +53,7 @@ function PrivacyPage() {
             किसान मित्र (आगे "हम", "हमारा", "वेबसाइट" या "सेवा") एक डिजिटल कृषि सूचना मंच है, जो
             kisanlens.com और इसके सब-डोमेन के माध्यम से संचालित होता है। हमारा संचालन भारत से होता
             है और यह नीति भारतीय कानूनों के अधीन है। डेटा से जुड़े किसी भी प्रश्न के लिए हमारा
-            संपर्क ईमेल <a className="text-primary hover:underline" href="mailto:support@kisanlens.com">support@kisanlens.com</a> है।
+            संपर्क ईमेल <a className="text-primary hover:underline" href="mailto:info@kisanlens.com">info@kisanlens.com</a> है।
           </p>
 
           <h2 className="text-xl font-bold">2. हम कौन-सी जानकारी एकत्र करते हैं</h2>
@@ -226,7 +226,7 @@ function PrivacyPage() {
             गोपनीयता या डेटा से जुड़े किसी भी प्रश्न के लिए:
           </p>
           <ul className="list-disc space-y-1.5 pl-6">
-            <li>सामान्य: <a className="text-primary hover:underline" href="mailto:support@kisanlens.com">support@kisanlens.com</a></li>
+            <li>सामान्य: <a className="text-primary hover:underline" href="mailto:info@kisanlens.com">info@kisanlens.com</a></li>
             <li>गोपनीयता / डेटा अधिकार: <a className="text-primary hover:underline" href="mailto:privacy@kisanlens.com">privacy@kisanlens.com</a></li>
             <li>संपादकीय: <a className="text-primary hover:underline" href="mailto:editor@kisanlens.com">editor@kisanlens.com</a></li>
           </ul>
