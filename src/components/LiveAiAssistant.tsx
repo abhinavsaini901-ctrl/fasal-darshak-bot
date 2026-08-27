@@ -400,7 +400,7 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
           <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center text-white">
             <Camera className="h-10 w-10 opacity-70" />
             <p className="text-sm opacity-90">{camError}</p>
-            <Button variant="secondary" onClick={() => setFacing((f) => f)}>
+            <Button variant="secondary" onClick={() => { setCamError(null); setRetryKey((k) => k + 1); }}>
               दोबारा कोशिश करें
             </Button>
           </div>
