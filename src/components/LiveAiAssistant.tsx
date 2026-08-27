@@ -153,7 +153,7 @@ export function LiveAiAssistant({ onClose }: { onClose?: () => void }) {
         return null;
       });
     };
-  }, [facing]);
+  }, [facing, retryKey]);
 
   const grabFrame = useCallback((maxSide = 900): string | null => {
     const v = videoRef.current;
