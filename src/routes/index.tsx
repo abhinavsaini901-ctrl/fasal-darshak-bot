@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   Camera,
   MessageCircle,
@@ -10,16 +11,21 @@ import {
   ShoppingCart,
   QrCode,
   Sparkles,
+  Video,
+  ScanLine,
 } from "lucide-react";
 
 import { PageShell } from "@/components/PageShell";
 import { LiveKisanNews } from "@/components/LiveKisanNews";
 import { SupportSection } from "@/components/SupportSection";
 import { AppDownloadSection } from "@/components/AppDownloadSection";
+import { LiveAiAssistant } from "@/components/LiveAiAssistant";
+import { QuickScanModal } from "@/components/QuickScanModal";
 import { Button } from "@/components/ui/button";
 import kisanPhoneBg from "@/assets/kisan-phone-bg.jpg";
 import bookCover from "@/assets/kisan-lens-book-cover.jpg";
 import bookQr from "@/assets/kisan-lens-book-qr.png";
+
 
 const PLAY_BOOKS_URL =
   "https://play.google.com/store/books/details/Abhinav_Saini_Kisan_Lens_A_Farmer_s_Son_s_Dream?id=qCr_EQAAQBAJ";
