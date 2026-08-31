@@ -350,6 +350,11 @@ function HomePage() {
 
       {/* ताज़ा कृषि खबरें — हर घंटे अपडेट */}
       <LiveKisanNews />
+
+      {/* इसी पेज पर खुलने वाले tools */}
+      {openAssistant && <LiveAiAssistant onClose={() => setOpenAssistant(false)} />}
+      {openScanner && <QuickScanModal onClose={() => setOpenScanner(false)} />}
     </PageShell>
+
   );
 }
