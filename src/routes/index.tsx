@@ -128,56 +128,58 @@ function HomePage() {
 
 
 
-          {/* Animated AI Camera Logo — clickable */}
-          <Link
-            to="/ai-camera"
-            aria-label="AI Camera Assistant खोलें"
-            className="group relative mx-auto mt-8 flex h-48 w-48 items-center justify-center md:h-56 md:w-56"
-          >
-            <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/30" />
-            <span className="absolute inset-4 animate-pulse rounded-full bg-emerald-300/20 blur-2xl" />
-            <span className="absolute inset-0 rounded-full border-2 border-dashed border-emerald-300/40 [animation:spin_12s_linear_infinite]" />
-            <span className="absolute inset-3 rounded-full border border-lime-300/30" />
+          {/* दो अलग icons — दोनों इसी पेज पर काम करते हैं, कहीं जाना नहीं पड़ता */}
+          <div className="mx-auto mt-8 grid max-w-2xl grid-cols-2 gap-4">
+            {/* 🎥 AI Camera Assistant */}
+            <button
+              type="button"
+              onClick={() => setOpenAssistant(true)}
+              aria-label="AI Camera Assistant खोलें"
+              className="group relative flex flex-col items-center gap-3 rounded-3xl border border-emerald-300/30 bg-white/10 p-4 backdrop-blur transition-transform hover:scale-[1.03]"
+            >
+              <span className="relative flex h-24 w-24 items-center justify-center md:h-28 md:w-28">
+                <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/25" />
+                <span className="absolute inset-0 rounded-full border-2 border-dashed border-emerald-300/40 [animation:spin_12s_linear_infinite]" />
+                <span className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-700 shadow-xl shadow-emerald-500/40 md:h-20 md:w-20">
+                  <Video className="h-8 w-8 text-white md:h-9 md:w-9" />
+                  <span className="absolute right-2 top-2 h-2 w-2 animate-pulse rounded-full bg-lime-300" />
+                </span>
+              </span>
+              <span className="text-sm font-bold text-white">🎥 AI Camera Assistant</span>
+              <span className="text-[11px] leading-snug text-emerald-100/80">बोलकर पूछें, AI देखकर बताए</span>
+            </button>
 
-            {/* Camera body */}
-            <div className="relative flex h-28 w-32 items-center justify-center rounded-3xl bg-gradient-to-br from-emerald-500 via-green-600 to-emerald-800 shadow-2xl shadow-emerald-500/40 transition-transform group-hover:scale-105 md:h-32 md:w-36">
-              <div className="absolute -top-3 left-1/2 h-4 w-16 -translate-x-1/2 rounded-t-xl bg-emerald-700" />
-              <div className="absolute right-3 top-3 h-2 w-2 animate-pulse rounded-full bg-lime-300 shadow-[0_0_8px_2px_rgba(190,242,100,0.8)]" />
-              <div className="absolute left-3 top-3 h-1.5 w-1.5 rounded-full bg-red-400 shadow-[0_0_6px_2px_rgba(248,113,113,0.7)]" />
-
-              {/* Lens */}
-              <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-100 via-white to-emerald-200 ring-4 ring-emerald-900/40 md:h-24 md:w-24">
-                <div className="absolute inset-2 rounded-full bg-gradient-to-br from-emerald-700 to-emerald-950" />
-                {/* Scanning sweep line */}
-                <span className="absolute inset-x-0 top-0 h-px bg-lime-300/80 shadow-[0_0_8px_2px_rgba(190,242,100,0.7)] [animation:lens-scan_2.2s_ease-in-out_infinite]" />
-                {/* Plant icons inside the lens */}
-                <Sprout className="absolute h-5 w-5 -translate-x-4 -translate-y-1 text-lime-300 drop-shadow md:h-6 md:w-6" />
-                <TreePine className="absolute h-6 w-6 translate-x-3 -translate-y-2 text-emerald-200 drop-shadow md:h-7 md:w-7" />
-                <Leaf className="absolute h-4 w-4 translate-y-4 text-emerald-300 drop-shadow md:h-5 md:w-5" />
-                <span className="absolute left-3 top-3 h-3 w-3 rounded-full bg-white/70 blur-[1px]" />
-              </div>
-            </div>
-
-            {/* AI scanner corner brackets */}
-            <span className="pointer-events-none absolute left-2 top-2 h-5 w-5 border-l-2 border-t-2 border-lime-300/80" />
-            <span className="pointer-events-none absolute right-2 top-2 h-5 w-5 border-r-2 border-t-2 border-lime-300/80" />
-            <span className="pointer-events-none absolute bottom-2 left-2 h-5 w-5 border-b-2 border-l-2 border-lime-300/80" />
-            <span className="pointer-events-none absolute bottom-2 right-2 h-5 w-5 border-b-2 border-r-2 border-lime-300/80" />
-          </Link>
+            {/* 📷 फसल स्कैनर */}
+            <button
+              type="button"
+              onClick={() => setOpenScanner(true)}
+              aria-label="फसल स्कैनर खोलें"
+              className="group relative flex flex-col items-center gap-3 rounded-3xl border border-lime-300/30 bg-white/10 p-4 backdrop-blur transition-transform hover:scale-[1.03]"
+            >
+              <span className="relative flex h-24 w-24 items-center justify-center md:h-28 md:w-28">
+                <span className="absolute inset-0 rounded-full border border-lime-300/30" />
+                <span className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-lime-400 to-green-700 shadow-xl shadow-lime-500/30 md:h-20 md:w-20">
+                  <ScanLine className="h-8 w-8 text-emerald-950 md:h-9 md:w-9" />
+                </span>
+                <span className="pointer-events-none absolute left-1 top-1 h-4 w-4 border-l-2 border-t-2 border-lime-300/80" />
+                <span className="pointer-events-none absolute right-1 top-1 h-4 w-4 border-r-2 border-t-2 border-lime-300/80" />
+                <span className="pointer-events-none absolute bottom-1 left-1 h-4 w-4 border-b-2 border-l-2 border-lime-300/80" />
+                <span className="pointer-events-none absolute bottom-1 right-1 h-4 w-4 border-b-2 border-r-2 border-lime-300/80" />
+              </span>
+              <span className="text-sm font-bold text-white">📷 फसल स्कैनर</span>
+              <span className="text-[11px] leading-snug text-emerald-100/80">फोटो से रोग की जांच</span>
+            </button>
+          </div>
 
           {/* Main CTA */}
           <div className="mt-6 flex flex-col items-center gap-3">
-            <Link to="/ai-camera">
-              <Button
-                size="lg"
-                className="h-14 rounded-2xl bg-gradient-to-r from-lime-400 to-emerald-500 px-8 text-base font-bold text-emerald-950 shadow-xl shadow-emerald-500/30 transition-transform hover:scale-105 md:text-lg"
-              >
-                <Camera className="mr-2 h-6 w-6" /> 🎥 AI Camera Assistant
-              </Button>
-            </Link>
-            <Link to="/scanner" search={{ mode: "live" }} className="text-xs font-semibold text-emerald-100/90 underline">
-              📷 फसल स्कैनर (लाइव कैमरा)
-            </Link>
+            <Button
+              size="lg"
+              onClick={() => setOpenAssistant(true)}
+              className="h-14 rounded-2xl bg-gradient-to-r from-lime-400 to-emerald-500 px-8 text-base font-bold text-emerald-950 shadow-xl shadow-emerald-500/30 transition-transform hover:scale-105 md:text-lg"
+            >
+              <Camera className="mr-2 h-6 w-6" /> 🎥 AI Camera Assistant
+            </Button>
 
             <div className="flex flex-wrap items-center justify-center gap-3">
               <Link to="/scanner" search={{ mode: "chat" }}>
@@ -192,6 +194,7 @@ function HomePage() {
               </Link>
             </div>
           </div>
+
 
           {/* AI क्या-क्या समझता है */}
           <div className="mx-auto mt-8 grid max-w-3xl grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
