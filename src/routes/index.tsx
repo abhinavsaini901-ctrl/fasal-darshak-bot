@@ -85,13 +85,6 @@ function HomePage() {
   return (
     <PageShell>
 
-      {/* Thanks banner */}
-      <section className="bg-gradient-to-r from-lime-400 to-emerald-500 px-4 py-2 text-center">
-        <p className="text-xs font-bold text-emerald-950 sm:text-sm">
-          Thanks for Plantix — my review site
-        </p>
-      </section>
-
       {/* 👁️ Kisan Lens Smart Eye — छोटा prominent banner (नया अलग feature) */}
       <section className="border-b border-emerald-900/10 bg-gradient-to-r from-emerald-900 to-emerald-700 px-4 py-3">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 text-center sm:flex-row sm:justify-between sm:text-left">
