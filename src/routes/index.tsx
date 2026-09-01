@@ -104,6 +104,9 @@ function HomePage() {
         </div>
       </section>
 
+      {/* 📨 Plantix Review Request — professional open message */}
+      <PlantixReviewSection />
+
       {/* ❤️ Kisan Lens को Support करें */}
       <SupportSection />
 
