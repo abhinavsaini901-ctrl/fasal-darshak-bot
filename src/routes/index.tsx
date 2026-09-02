@@ -22,6 +22,7 @@ import { AppDownloadSection } from "@/components/AppDownloadSection";
 import { LiveAiAssistant } from "@/components/LiveAiAssistant";
 import { QuickScanModal } from "@/components/QuickScanModal";
 import { PlantixReviewSection } from "@/components/PlantixReviewSection";
+import { YoutubePromoSection } from "@/components/YoutubePromoSection";
 import { Button } from "@/components/ui/button";
 import kisanPhoneBg from "@/assets/kisan-phone-bg.jpg";
 import bookCover from "@/assets/kisan-lens-book-cover.jpg";
@@ -85,6 +86,9 @@ function HomePage() {
 
   return (
     <PageShell>
+
+      {/* ▶️ YouTube Channel Promotion — Farming Leader Official */}
+      <YoutubePromoSection />
 
       {/* 👁️ Kisan Lens Smart Eye — छोटा prominent banner (नया अलग feature) */}
       <section className="border-b border-emerald-900/10 bg-gradient-to-r from-emerald-900 to-emerald-700 px-4 py-3">
