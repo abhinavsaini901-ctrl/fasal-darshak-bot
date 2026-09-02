@@ -22,6 +22,7 @@ import { AppDownloadSection } from "@/components/AppDownloadSection";
 import { LiveAiAssistant } from "@/components/LiveAiAssistant";
 import { QuickScanModal } from "@/components/QuickScanModal";
 import { PlantixReviewSection } from "@/components/PlantixReviewSection";
+import { YoutubePromoSection } from "@/components/YoutubePromoSection";
 import { Button } from "@/components/ui/button";
 import kisanPhoneBg from "@/assets/kisan-phone-bg.jpg";
 import bookCover from "@/assets/kisan-lens-book-cover.jpg";
