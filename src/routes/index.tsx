@@ -21,7 +21,6 @@ import { SupportSection } from "@/components/SupportSection";
 import { AppDownloadSection } from "@/components/AppDownloadSection";
 import { LiveAiAssistant } from "@/components/LiveAiAssistant";
 import { QuickScanModal } from "@/components/QuickScanModal";
-import { PlantixReviewSection } from "@/components/PlantixReviewSection";
 import { SeedsPromoBanner } from "@/components/SeedsPromoBanner";
 import { Button } from "@/components/ui/button";
 import kisanPhoneBg from "@/assets/kisan-phone-bg.jpg";
@@ -107,9 +106,6 @@ function HomePage() {
           </Link>
         </div>
       </section>
-
-      {/* 📨 Plantix Review Request — professional open message */}
-      <PlantixReviewSection />
 
       {/* ❤️ Kisan Lens को Support करें */}
       <SupportSection />
