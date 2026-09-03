@@ -1076,8 +1076,12 @@ function ResultView({
             {result.chemicalTreatment && (
               <DetailCard label={lang === "en" ? "Chemical treatment" : "रासायनिक इलाज"} text={result.chemicalTreatment} accent="primary" />
             )}
+            {!result.isHealthy && (
+              <BiotechRecommendCard lang={lang} problem={result.disease || result.primaryIssue} />
+            )}
           </>
         )}
+
 
         {/* 📝 How to use */}
         <SectionTitle>{lang === "en" ? "📝 How to use" : "📝 इस्तेमाल की जानकारी"}</SectionTitle>
