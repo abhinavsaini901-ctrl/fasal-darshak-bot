@@ -87,6 +87,9 @@ function HomePage() {
   return (
     <PageShell>
 
+      {/* 🌱 Seeds partner banner — Sagar Biotech */}
+      <SeedsPromoBanner />
+
       {/* 👁️ Kisan Lens Smart Eye — छोटा prominent banner (नया अलग feature) */}
       <section className="border-b border-emerald-900/10 bg-gradient-to-r from-emerald-900 to-emerald-700 px-4 py-3">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 text-center sm:flex-row sm:justify-between sm:text-left">
