@@ -23,7 +23,8 @@ import { LiveAiAssistant } from "@/components/LiveAiAssistant";
 import { QuickScanModal } from "@/components/QuickScanModal";
 import { SeedsPromoBanner } from "@/components/SeedsPromoBanner";
 import { Button } from "@/components/ui/button";
-import kisanPhoneBg from "@/assets/kisan-phone-bg.jpg";
+import kisanPhoneBgAsset from "@/assets/kisan-phone-bg.png.asset.json";
+const kisanPhoneBg = kisanPhoneBgAsset.url;
 import bookCover from "@/assets/kisan-lens-book-cover.jpg";
 import bookQr from "@/assets/kisan-lens-book-qr.png";
 
