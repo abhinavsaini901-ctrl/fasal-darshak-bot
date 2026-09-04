@@ -4,6 +4,8 @@ import { toast } from "sonner";
 import { Loader2, X } from "lucide-react";
 
 import { CameraCapture } from "@/components/CameraCapture";
+import { BiotechRecommendCard } from "@/components/BiotechRecommendCard";
+
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/hooks/use-language";
 import { useSpeak } from "@/hooks/use-voice";
