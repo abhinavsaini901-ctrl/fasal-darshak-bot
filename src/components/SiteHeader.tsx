@@ -7,6 +7,7 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 const NAV = [
   { to: "/", label: "होम" },
   { to: "/smart-eye", label: "👁️ Smart Eye" },
+  { to: "/soil-lens", label: "🌱 Soil Lens" },
   { to: "/ebook", label: "ई-बुक" },
 
   { to: "/blog", label: "ब्लॉग" },
