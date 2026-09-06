@@ -58,6 +58,35 @@ function readAsDataUrl(file: File): Promise<string> {
   });
 }
 
+// Re-encode a photo through canvas so a high-resolution phone picture stays well
+// under the server's data-URL limit (same approach as the camera components).
+async function compressImage(file: File, maxSide = 1600, quality = 0.8): Promise<string> {
+  const raw = await readAsDataUrl(file);
+  try {
+    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const el = new Image();
+      el.onload = () => resolve(el);
+      el.onerror = () => reject(new Error("IMG_DECODE_FAILED"));
+      el.src = raw;
+    });
+    const scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+    const w = Math.max(1, Math.round(img.naturalWidth * scale));
+    const h = Math.max(1, Math.round(img.naturalHeight * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return raw;
+    ctx.drawImage(img, 0, 0, w, h);
+    let out = canvas.toDataURL("image/jpeg", quality);
+    if (out.length > 5_500_000) out = canvas.toDataURL("image/jpeg", 0.6);
+    return out.length < raw.length ? out : raw;
+  } catch {
+    return raw;
+  }
+}
+
+
 function SoilLensPage() {
   const { lang } = useLanguage();
   const run = useServerFn(analyzeSoil);
