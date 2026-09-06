@@ -21,7 +21,6 @@ import { SupportSection } from "@/components/SupportSection";
 import { AppDownloadSection } from "@/components/AppDownloadSection";
 import { LiveAiAssistant } from "@/components/LiveAiAssistant";
 import { QuickScanModal } from "@/components/QuickScanModal";
-import { SeedsPromoBanner } from "@/components/SeedsPromoBanner";
 import { Button } from "@/components/ui/button";
 import kisanPhoneBgAsset from "@/assets/kisan-phone-bg.png.asset.json";
 const kisanPhoneBg = kisanPhoneBgAsset.url;
@@ -86,9 +85,6 @@ function HomePage() {
 
   return (
     <PageShell>
-
-      {/* 🌱 Seeds partner banner — Sagar Biotech */}
-      <SeedsPromoBanner />
 
       {/* 👁️ Kisan Lens Smart Eye — छोटा prominent banner (नया अलग feature) */}
       <section className="border-b border-emerald-900/10 bg-gradient-to-r from-emerald-900 to-emerald-700 px-4 py-3">
