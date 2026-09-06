@@ -21,7 +21,6 @@ import { SupportSection } from "@/components/SupportSection";
 import { AppDownloadSection } from "@/components/AppDownloadSection";
 import { LiveAiAssistant } from "@/components/LiveAiAssistant";
 import { QuickScanModal } from "@/components/QuickScanModal";
-import { SeedsPromoBanner } from "@/components/SeedsPromoBanner";
 import { Button } from "@/components/ui/button";
 import kisanPhoneBgAsset from "@/assets/kisan-phone-bg.png.asset.json";
 const kisanPhoneBg = kisanPhoneBgAsset.url;
