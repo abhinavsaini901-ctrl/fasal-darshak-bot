@@ -108,6 +108,24 @@ function HomePage() {
         </div>
       </section>
 
+      {/* 🌱 Kisan Soil Lens 🔍 — नया अलग feature */}
+      <section className="border-b border-amber-900/10 bg-gradient-to-r from-amber-800 via-stone-700 to-amber-900 px-4 py-3">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 text-center sm:flex-row sm:justify-between sm:text-left">
+          <div>
+            <p className="text-sm font-bold text-white">🌱 Kisan Soil Lens 🔍</p>
+            <p className="text-xs text-amber-50/85">अपनी मिट्टी को समझें, बेहतर फसल उगाएँ</p>
+          </div>
+          <Link to="/soil-lens" className="w-full sm:w-auto">
+            <Button
+              size="sm"
+              className="w-full rounded-full bg-gradient-to-r from-amber-300 to-amber-500 font-bold text-amber-950 sm:w-auto"
+            >
+              🌱 Kisan Soil Lens 🔍
+            </Button>
+          </Link>
+        </div>
+      </section>
+
       {/* ❤️ Kisan Lens को Support करें */}
       <SupportSection />
 

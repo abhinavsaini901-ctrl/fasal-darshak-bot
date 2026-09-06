@@ -7,6 +7,7 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 const NAV = [
   { to: "/", label: "होम" },
   { to: "/smart-eye", label: "👁️ Smart Eye" },
+  { to: "/soil-lens", label: "🌱 Soil Lens" },
   { to: "/ebook", label: "ई-बुक" },
 
   { to: "/blog", label: "ब्लॉग" },
@@ -91,6 +92,13 @@ export function SiteHeader() {
               className="col-span-2 mt-1 rounded-xl bg-gradient-to-r from-lime-400 to-emerald-500 px-3 py-3 text-center text-sm font-bold text-emerald-950"
             >
               👁️ Kisan Lens Smart Eye — कैमरा खोलें
+            </Link>
+            <Link
+              to="/soil-lens"
+              onClick={() => setOpen(false)}
+              className="col-span-2 mt-1 rounded-xl bg-gradient-to-r from-amber-400 to-amber-600 px-3 py-3 text-center text-sm font-bold text-amber-950"
+            >
+              🌱 Kisan Soil Lens 🔍 — मिट्टी जांचें
             </Link>
             <Link
               to="/scanner"
