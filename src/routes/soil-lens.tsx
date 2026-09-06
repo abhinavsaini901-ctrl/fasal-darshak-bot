@@ -58,6 +58,35 @@ function readAsDataUrl(file: File): Promise<string> {
   });
 }
 
+// Re-encode a photo through canvas so a high-resolution phone picture stays well
+// under the server's data-URL limit (same approach as the camera components).
+async function compressImage(file: File, maxSide = 1600, quality = 0.8): Promise<string> {
+  const raw = await readAsDataUrl(file);
+  try {
+    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const el = new Image();
+      el.onload = () => resolve(el);
+      el.onerror = () => reject(new Error("IMG_DECODE_FAILED"));
+      el.src = raw;
+    });
+    const scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+    const w = Math.max(1, Math.round(img.naturalWidth * scale));
+    const h = Math.max(1, Math.round(img.naturalHeight * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return raw;
+    ctx.drawImage(img, 0, 0, w, h);
+    let out = canvas.toDataURL("image/jpeg", quality);
+    if (out.length > 5_500_000) out = canvas.toDataURL("image/jpeg", 0.6);
+    return out.length < raw.length ? out : raw;
+  } catch {
+    return raw;
+  }
+}
+
+
 function SoilLensPage() {
   const { lang } = useLanguage();
   const run = useServerFn(analyzeSoil);
@@ -73,15 +102,23 @@ function SoilLensPage() {
   const galleryRef = useRef<HTMLInputElement>(null);
   const reportRef = useRef<HTMLInputElement>(null);
 
+  function clearInputs() {
+    if (cameraRef.current) cameraRef.current.value = "";
+    if (galleryRef.current) galleryRef.current.value = "";
+    if (reportRef.current) reportRef.current.value = "";
+  }
+
   async function handleFile(file: File | undefined, nextMode: "photo" | "report") {
+    clearInputs();
     if (!file) return;
-    if (file.size > 9_000_000) {
-      toast.error("फ़ाइल बहुत बड़ी है — 9MB से छोटी फ़ाइल चुनें।");
-      return;
-    }
     const isPdf = file.type === "application/pdf";
     if (nextMode === "photo" && isPdf) {
       toast.error("फोटो स्कैन के लिए इमेज चुनें।");
+      return;
+    }
+    // PDFs can't be compressed in the browser, so keep them under the server limit.
+    if (isPdf && file.size > 8_000_000) {
+      toast.error("रिपोर्ट बहुत बड़ी है — 8MB से छोटी PDF चुनें।");
       return;
     }
     setMode(nextMode);
@@ -89,7 +126,7 @@ function SoilLensPage() {
     setBusy(true);
     setFileLabel(file.name);
     try {
-      const dataUrl = await readAsDataUrl(file);
+      const dataUrl = isPdf ? await readAsDataUrl(file) : await compressImage(file);
       setPreview(isPdf ? null : dataUrl);
       const res = await withRateLimitRetry(
         () =>
@@ -118,7 +155,9 @@ function SoilLensPage() {
     setResult(null);
     setPreview(null);
     setFileLabel(null);
+    clearInputs();
   }
+
 
   return (
     <PageShell>
