@@ -94,6 +94,13 @@ export function SiteHeader() {
               👁️ Kisan Lens Smart Eye — कैमरा खोलें
             </Link>
             <Link
+              to="/soil-lens"
+              onClick={() => setOpen(false)}
+              className="col-span-2 mt-1 rounded-xl bg-gradient-to-r from-amber-400 to-amber-600 px-3 py-3 text-center text-sm font-bold text-amber-950"
+            >
+              🌱 Kisan Soil Lens 🔍 — मिट्टी जांचें
+            </Link>
+            <Link
               to="/scanner"
               onClick={() => setOpen(false)}
               className="col-span-2 mt-1 rounded-lg bg-gradient-primary px-3 py-2.5 text-center text-sm font-bold text-primary-foreground"
