@@ -308,13 +308,18 @@ const ARTICLE_TTL_MS = 24 * 60 * 60 * 1000;
 const DEGRADED_TTL_MS = 10 * 60 * 1000;
 
 
-async function generateHindiArticle(item: LiveNewsItem): Promise<string[]> {
+async function generateHindiArticle(
+  item: LiveNewsItem,
+): Promise<{ paragraphs: string[]; degraded: boolean }> {
   const apiKey = process.env.LOVABLE_API_KEY;
   if (!apiKey) {
-    return [
-      item.summary,
-      `यह खबर ${item.source} द्वारा प्रकाशित की गई है। पूरी जानकारी के लिए मूल स्रोत देखें।`,
-    ];
+    return {
+      degraded: true,
+      paragraphs: [
+        item.summary,
+        `यह खबर ${item.source} द्वारा प्रकाशित की गई है। पूरी जानकारी के लिए मूल स्रोत देखें।`,
+      ],
+    };
   }
   const today = new Date().toLocaleDateString("hi-IN", { day: "numeric", month: "long", year: "numeric" });
   const prompt = `आज की तारीख: ${today}
@@ -340,13 +345,16 @@ async function generateHindiArticle(item: LiveNewsItem): Promise<string[]> {
       .map((p) => p.replace(/^[#*\-\s]+/, "").trim())
       .filter((p) => p.length > 0);
     if (paragraphs.length === 0) throw new Error("empty article");
-    return paragraphs;
+    return { paragraphs, degraded: false };
   } catch (e) {
     console.error("generateHindiArticle failed", e);
-    return [
-      item.summary,
-      `यह खबर ${item.source} द्वारा प्रकाशित की गई है। हमारी टीम पूरा विवरण जल्द अपडेट करेगी।`,
-    ];
+    return {
+      degraded: true,
+      paragraphs: [
+        item.summary,
+        `यह खबर ${item.source} द्वारा प्रकाशित की गई है। हमारी टीम पूरा विवरण जल्द अपडेट करेगी।`,
+      ],
+    };
   }
 }
 
@@ -360,10 +368,11 @@ export const getLiveNewsArticle = createServerFn({ method: "GET" })
     const minutesAgo = Math.max(1, Math.round((now - new Date(item.publishedAt).getTime()) / 60000));
     item = { ...item, minutesAgo, breaking: minutesAgo <= 60 };
     const cached = ARTICLE_CACHE.get(item.id);
-    if (cached && Date.now() - cached.at < ARTICLE_TTL_MS) {
+    const cachedTtl = cached?.degraded ? DEGRADED_TTL_MS : ARTICLE_TTL_MS;
+    if (cached && Date.now() - cached.at < cachedTtl) {
       return { item, paragraphs: cached.paragraphs };
     }
-    const paragraphs = await generateHindiArticle(item);
-    ARTICLE_CACHE.set(item.id, { at: Date.now(), paragraphs });
+    const { paragraphs, degraded } = await generateHindiArticle(item);
+    ARTICLE_CACHE.set(item.id, { at: Date.now(), paragraphs, degraded });
     return { item, paragraphs };
   });
