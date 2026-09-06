@@ -86,24 +86,6 @@ function HomePage() {
   return (
     <PageShell>
 
-      {/* 👁️ Kisan Lens Smart Eye — छोटा prominent banner (नया अलग feature) */}
-      <section className="border-b border-emerald-900/10 bg-gradient-to-r from-emerald-900 to-emerald-700 px-4 py-3">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 text-center sm:flex-row sm:justify-between sm:text-left">
-          <div>
-            <p className="text-sm font-bold text-white">👁️ Kisan Lens Smart Eye</p>
-            <p className="text-xs text-emerald-50/85">कैमरा दिखाएं और AI से खेती के बारे में पूछें</p>
-          </div>
-          <Link to="/smart-eye" className="w-full sm:w-auto">
-            <Button
-              size="sm"
-              className="w-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-400 font-bold text-emerald-950 sm:w-auto"
-            >
-              Smart Eye खोलें
-            </Button>
-          </Link>
-        </div>
-      </section>
-
       {/* 🌱 Kisan Soil Lens 🔍 — नया अलग feature */}
       <section className="border-b border-amber-900/10 bg-gradient-to-r from-amber-800 via-stone-700 to-amber-900 px-4 py-3">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 text-center sm:flex-row sm:justify-between sm:text-left">
