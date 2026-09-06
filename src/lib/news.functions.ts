@@ -300,9 +300,13 @@ export const getLiveAgriNews = createServerFn({ method: "GET" }).handler(async (
 
 // ===== Full article generation via Lovable AI Gateway =====
 
-type ArticleCacheEntry = { at: number; paragraphs: string[] };
+type ArticleCacheEntry = { at: number; paragraphs: string[]; degraded?: boolean };
 const ARTICLE_CACHE = new Map<string, ArticleCacheEntry>();
 const ARTICLE_TTL_MS = 24 * 60 * 60 * 1000;
+// A fallback (AI unavailable) is only cached briefly so the full article
+// appears as soon as the AI service works again.
+const DEGRADED_TTL_MS = 10 * 60 * 1000;
+
 
 async function generateHindiArticle(item: LiveNewsItem): Promise<string[]> {
   const apiKey = process.env.LOVABLE_API_KEY;
