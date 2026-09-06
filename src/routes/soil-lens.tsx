@@ -102,15 +102,23 @@ function SoilLensPage() {
   const galleryRef = useRef<HTMLInputElement>(null);
   const reportRef = useRef<HTMLInputElement>(null);
 
+  function clearInputs() {
+    if (cameraRef.current) cameraRef.current.value = "";
+    if (galleryRef.current) galleryRef.current.value = "";
+    if (reportRef.current) reportRef.current.value = "";
+  }
+
   async function handleFile(file: File | undefined, nextMode: "photo" | "report") {
+    clearInputs();
     if (!file) return;
-    if (file.size > 9_000_000) {
-      toast.error("फ़ाइल बहुत बड़ी है — 9MB से छोटी फ़ाइल चुनें।");
-      return;
-    }
     const isPdf = file.type === "application/pdf";
     if (nextMode === "photo" && isPdf) {
       toast.error("फोटो स्कैन के लिए इमेज चुनें।");
+      return;
+    }
+    // PDFs can't be compressed in the browser, so keep them under the server limit.
+    if (isPdf && file.size > 8_000_000) {
+      toast.error("रिपोर्ट बहुत बड़ी है — 8MB से छोटी PDF चुनें।");
       return;
     }
     setMode(nextMode);
@@ -118,7 +126,7 @@ function SoilLensPage() {
     setBusy(true);
     setFileLabel(file.name);
     try {
-      const dataUrl = await readAsDataUrl(file);
+      const dataUrl = isPdf ? await readAsDataUrl(file) : await compressImage(file);
       setPreview(isPdf ? null : dataUrl);
       const res = await withRateLimitRetry(
         () =>
@@ -147,7 +155,9 @@ function SoilLensPage() {
     setResult(null);
     setPreview(null);
     setFileLabel(null);
+    clearInputs();
   }
+
 
   return (
     <PageShell>
