@@ -152,6 +152,7 @@ export function PostCard({
         <Button
           variant="ghost"
           size="sm"
+          aria-label="लाइक"
           onClick={() => onToggleLike(post)}
           className={liked ? "text-red-600" : "text-muted-foreground"}
         >
@@ -161,13 +162,14 @@ export function PostCard({
         <Button
           variant="ghost"
           size="sm"
+          aria-label="कमेंट"
           onClick={() => setShowComments((v) => !v)}
           className="text-muted-foreground"
         >
           <MessageCircle className="mr-1.5 h-4 w-4" />
           {post.comment_count}
         </Button>
-        <Button variant="ghost" size="sm" onClick={share} className="ml-auto text-muted-foreground">
+        <Button variant="ghost" size="sm" aria-label="शेयर" onClick={share} className="ml-auto text-muted-foreground">
           <Share2 className="h-4 w-4" />
         </Button>
       </div>
