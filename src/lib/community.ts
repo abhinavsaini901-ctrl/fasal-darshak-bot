@@ -157,3 +157,22 @@ export async function ensureProfile(userId: string, email?: string | null) {
   if (error) throw new Error(error.message);
   return created as CommunityProfile;
 }
+
+/** Avatars are stored as storage paths; swap them for temporary viewable URLs. */
+export async function resolveAvatars(profiles: Record<string, CommunityProfile>) {
+  const paths = Object.values(profiles)
+    .map((p) => p.avatar_url)
+    .filter((u): u is string => !!u && !u.startsWith("http"));
+  if (!paths.length) return profiles;
+  const map = await signImageUrls(paths);
+  Object.values(profiles).forEach((p) => {
+    if (p.avatar_url && map[p.avatar_url]) p.avatar_url = map[p.avatar_url]!;
+  });
+  return profiles;
+}
+
+export async function resolveAvatar(profile: CommunityProfile): Promise<CommunityProfile> {
+  if (!profile.avatar_url || profile.avatar_url.startsWith("http")) return profile;
+  const map = await signImageUrls([profile.avatar_url]);
+  return { ...profile, avatar_url: map[profile.avatar_url] ?? null };
+}

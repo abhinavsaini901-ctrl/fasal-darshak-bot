@@ -14,6 +14,7 @@ import { Route as SoilLensRouteImport } from './routes/soil-lens'
 import { Route as SmartEyeRouteImport } from './routes/smart-eye'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ScannerRouteImport } from './routes/scanner'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PestControlRouteImport } from './routes/pest-control'
 import { Route as MarketPricesRouteImport } from './routes/market-prices'
@@ -64,6 +65,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ScannerRoute = ScannerRouteImport.update({
   id: '/scanner',
   path: '/scanner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -216,6 +222,7 @@ export interface FileRoutesByFullPath {
   '/market-prices': typeof MarketPricesRoute
   '/pest-control': typeof PestControlRoute
   '/privacy': typeof PrivacyRoute
+  '/profile': typeof ProfileRoute
   '/scanner': typeof ScannerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/smart-eye': typeof SmartEyeRoute
@@ -247,6 +254,7 @@ export interface FileRoutesByTo {
   '/market-prices': typeof MarketPricesRoute
   '/pest-control': typeof PestControlRoute
   '/privacy': typeof PrivacyRoute
+  '/profile': typeof ProfileRoute
   '/scanner': typeof ScannerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/smart-eye': typeof SmartEyeRoute
@@ -281,6 +289,7 @@ export interface FileRoutesById {
   '/market-prices': typeof MarketPricesRoute
   '/pest-control': typeof PestControlRoute
   '/privacy': typeof PrivacyRoute
+  '/profile': typeof ProfileRoute
   '/scanner': typeof ScannerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/smart-eye': typeof SmartEyeRoute
@@ -315,6 +324,7 @@ export interface FileRouteTypes {
     | '/market-prices'
     | '/pest-control'
     | '/privacy'
+    | '/profile'
     | '/scanner'
     | '/sitemap.xml'
     | '/smart-eye'
@@ -346,6 +356,7 @@ export interface FileRouteTypes {
     | '/market-prices'
     | '/pest-control'
     | '/privacy'
+    | '/profile'
     | '/scanner'
     | '/sitemap.xml'
     | '/smart-eye'
@@ -379,6 +390,7 @@ export interface FileRouteTypes {
     | '/market-prices'
     | '/pest-control'
     | '/privacy'
+    | '/profile'
     | '/scanner'
     | '/sitemap.xml'
     | '/smart-eye'
@@ -413,6 +425,7 @@ export interface RootRouteChildren {
   MarketPricesRoute: typeof MarketPricesRoute
   PestControlRoute: typeof PestControlRoute
   PrivacyRoute: typeof PrivacyRoute
+  ProfileRoute: typeof ProfileRoute
   ScannerRoute: typeof ScannerRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SmartEyeRoute: typeof SmartEyeRoute
@@ -459,6 +472,13 @@ declare module '@tanstack/react-router' {
       path: '/scanner'
       fullPath: '/scanner'
       preLoaderRoute: typeof ScannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -690,6 +710,7 @@ const rootRouteChildren: RootRouteChildren = {
   MarketPricesRoute: MarketPricesRoute,
   PestControlRoute: PestControlRoute,
   PrivacyRoute: PrivacyRoute,
+  ProfileRoute: ProfileRoute,
   ScannerRoute: ScannerRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SmartEyeRoute: SmartEyeRoute,
