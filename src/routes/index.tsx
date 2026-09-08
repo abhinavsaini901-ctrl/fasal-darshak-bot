@@ -123,9 +123,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* ❤️ Kisan Lens को Support करें */}
-      <SupportSection />
-
       {/* 📱 Android App Download — तीसरा section */}
       <AppDownloadSection />
 
