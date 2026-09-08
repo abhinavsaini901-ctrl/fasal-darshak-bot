@@ -8,7 +8,9 @@ const NAV = [
   { to: "/", label: "होम" },
   { to: "/smart-eye", label: "👁️ Smart Eye" },
   { to: "/soil-lens", label: "🌱 Soil Lens" },
+  { to: "/community", label: "👥 समुदाय" },
   { to: "/ebook", label: "ई-बुक" },
+
 
   { to: "/blog", label: "ब्लॉग" },
   { to: "/crop-diseases", label: "फसल रोग" },
