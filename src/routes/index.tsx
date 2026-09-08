@@ -18,7 +18,7 @@ import {
 
 import { PageShell } from "@/components/PageShell";
 import { LiveKisanNews } from "@/components/LiveKisanNews";
-import { SupportSection } from "@/components/SupportSection";
+
 import { AppDownloadSection } from "@/components/AppDownloadSection";
 import { LiveAiAssistant } from "@/components/LiveAiAssistant";
 import { QuickScanModal } from "@/components/QuickScanModal";
