@@ -30,14 +30,14 @@ function AuthPage() {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: window.location.origin + "/admin" },
+          options: { emailRedirectTo: window.location.origin + "/community" },
         });
         if (error) throw error;
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
       }
-      window.location.assign("/admin");
+      window.location.assign("/community");
     } catch (err: any) {
       setError(err?.message || "कुछ गलत हुआ");
     } finally {
