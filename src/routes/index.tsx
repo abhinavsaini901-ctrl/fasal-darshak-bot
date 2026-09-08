@@ -18,6 +18,7 @@ import {
 
 import { PageShell } from "@/components/PageShell";
 import { LiveKisanNews } from "@/components/LiveKisanNews";
+import { CommunityPreviewSection } from "@/components/CommunityPreviewSection";
 
 import { AppDownloadSection } from "@/components/AppDownloadSection";
 import { LiveAiAssistant } from "@/components/LiveAiAssistant";
