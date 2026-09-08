@@ -366,6 +366,9 @@ function HomePage() {
         </div>
       </section>
 
+      {/* 🌾 Kisan Lens Community — home page preview */}
+      <CommunityPreviewSection />
+
       {/* ताज़ा कृषि खबरें — हर घंटे अपडेट */}
       <LiveKisanNews />
 
