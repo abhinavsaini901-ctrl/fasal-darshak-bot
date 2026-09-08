@@ -18,6 +18,7 @@ import {
 
 import { PageShell } from "@/components/PageShell";
 import { LiveKisanNews } from "@/components/LiveKisanNews";
+import { CommunityPreviewSection } from "@/components/CommunityPreviewSection";
 
 import { AppDownloadSection } from "@/components/AppDownloadSection";
 import { LiveAiAssistant } from "@/components/LiveAiAssistant";
@@ -364,6 +365,9 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* 🌾 Kisan Lens Community — home page preview */}
+      <CommunityPreviewSection />
 
       {/* ताज़ा कृषि खबरें — हर घंटे अपडेट */}
       <LiveKisanNews />
