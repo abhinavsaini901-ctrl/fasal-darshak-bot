@@ -24,6 +24,7 @@ import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as DawaStoreRouteImport } from './routes/dawa-store'
 import { Route as CropDiseasesRouteImport } from './routes/crop-diseases'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CommunityRouteImport } from './routes/community'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as BeejStoreRouteImport } from './routes/beej-store'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -115,6 +116,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
@@ -199,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/beej-store': typeof BeejStoreRoute
   '/blog': typeof BlogRouteWithChildren
+  '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
   '/crop-diseases': typeof CropDiseasesRoute
   '/dawa-store': typeof DawaStoreRoute
@@ -229,6 +236,7 @@ export interface FileRoutesByTo {
   '/ai-camera': typeof AiCameraRoute
   '/auth': typeof AuthRoute
   '/beej-store': typeof BeejStoreRoute
+  '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
   '/crop-diseases': typeof CropDiseasesRoute
   '/dawa-store': typeof DawaStoreRoute
@@ -262,6 +270,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/beej-store': typeof BeejStoreRoute
   '/blog': typeof BlogRouteWithChildren
+  '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
   '/crop-diseases': typeof CropDiseasesRoute
   '/dawa-store': typeof DawaStoreRoute
@@ -295,6 +304,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/beej-store'
     | '/blog'
+    | '/community'
     | '/contact'
     | '/crop-diseases'
     | '/dawa-store'
@@ -325,6 +335,7 @@ export interface FileRouteTypes {
     | '/ai-camera'
     | '/auth'
     | '/beej-store'
+    | '/community'
     | '/contact'
     | '/crop-diseases'
     | '/dawa-store'
@@ -357,6 +368,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/beej-store'
     | '/blog'
+    | '/community'
     | '/contact'
     | '/crop-diseases'
     | '/dawa-store'
@@ -390,6 +402,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BeejStoreRoute: typeof BeejStoreRoute
   BlogRoute: typeof BlogRouteWithChildren
+  CommunityRoute: typeof CommunityRoute
   ContactRoute: typeof ContactRoute
   CropDiseasesRoute: typeof CropDiseasesRoute
   DawaStoreRoute: typeof DawaStoreRoute
@@ -516,6 +529,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog': {
@@ -659,6 +679,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BeejStoreRoute: BeejStoreRoute,
   BlogRoute: BlogRouteWithChildren,
+  CommunityRoute: CommunityRoute,
   ContactRoute: ContactRoute,
   CropDiseasesRoute: CropDiseasesRoute,
   DawaStoreRoute: DawaStoreRoute,
