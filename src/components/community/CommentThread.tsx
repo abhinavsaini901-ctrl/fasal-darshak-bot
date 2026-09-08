@@ -12,7 +12,7 @@ import {
   type CommunityProfile,
 } from "@/lib/community";
 
-async function fetchComments(postId: string) {
+async function fetchComments(postId: string, currentUserId: string | null) {
   const { data, error } = await supabase
     .from("community_comments")
     .select("*")
@@ -21,7 +21,7 @@ async function fetchComments(postId: string) {
   if (error) throw new Error(error.message);
   const rows = (data ?? []) as CommunityComment[];
   const ids = Array.from(new Set(rows.map((r) => r.user_id)));
-  let profiles: Record<string, CommunityProfile> = {};
+  const profiles: Record<string, CommunityProfile> = {};
   if (ids.length) {
     const { data: p } = await supabase
       .from("profiles")
@@ -31,16 +31,21 @@ async function fetchComments(postId: string) {
       profiles[row.id] = row as CommunityProfile;
     });
   }
-  const { data: likes } = await supabase
-    .from("community_comment_likes")
-    .select("comment_id")
-    .in("comment_id", rows.map((r) => r.id).length ? rows.map((r) => r.id) : ["00000000-0000-0000-0000-000000000000"]);
-  const myLikes = new Set((likes ?? []).map((l) => l.comment_id));
+  const myLikes = new Set<string>();
+  if (currentUserId && rows.length) {
+    const { data: likes } = await supabase
+      .from("community_comment_likes")
+      .select("comment_id")
+      .eq("user_id", currentUserId)
+      .in("comment_id", rows.map((r) => r.id));
+    (likes ?? []).forEach((l) => myLikes.add(l.comment_id));
+  }
   return {
     comments: rows.map((r) => ({ ...r, profiles: profiles[r.user_id] ?? null })),
     myLikes,
   };
 }
+
 
 type Props = {
   postId: string;
@@ -57,9 +62,10 @@ export function CommentThread({ postId, postOwnerId, currentUserId, onReport }: 
   const [editText, setEditText] = useState("");
 
   const { data, isLoading } = useQuery({
-    queryKey: ["community-comments", postId],
-    queryFn: () => fetchComments(postId),
+    queryKey: ["community-comments", postId, currentUserId],
+    queryFn: () => fetchComments(postId, currentUserId),
   });
+
 
   function refresh() {
     qc.invalidateQueries({ queryKey: ["community-comments", postId] });
