@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { Loader2, X } from "lucide-react";
 
 import { CameraCapture } from "@/components/CameraCapture";
-import { BiotechRecommendCard } from "@/components/BiotechRecommendCard";
 
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/hooks/use-language";
@@ -74,10 +73,6 @@ export function QuickScanModal({ onClose }: { onClose: () => void }) {
               {result.organicTreatment && <Row label="जैविक उपचार" value={result.organicTreatment} />}
               {result.chemicalTreatment && <Row label="रासायनिक उपचार" value={result.chemicalTreatment} />}
               {result.prevention && <Row label="बचाव" value={result.prevention} />}
-              {!result.isHealthy && (
-                <BiotechRecommendCard lang={lang} problem={result.disease} />
-              )}
-
             </div>
 
             <div className="mt-5 flex gap-2">
