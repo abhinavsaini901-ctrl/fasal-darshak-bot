@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import {
   initials,
+  resolveAvatars,
   timeAgo,
   type CommunityComment,
   type CommunityProfile,
@@ -30,6 +31,7 @@ async function fetchComments(postId: string, currentUserId: string | null) {
     (p ?? []).forEach((row) => {
       profiles[row.id] = row as CommunityProfile;
     });
+    await resolveAvatars(profiles);
   }
   const myLikes = new Set<string>();
   if (currentUserId && rows.length) {

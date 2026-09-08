@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { ensureProfile, type CommunityProfile } from "@/lib/community";
+import { ensureProfile, resolveAvatar, type CommunityProfile } from "@/lib/community";
 
 /** Tracks the signed-in user and makes sure they have a community profile. */
 export function useCommunityUser() {
@@ -20,7 +20,7 @@ export function useCommunityUser() {
         return;
       }
       try {
-        const p = await ensureProfile(id, email);
+        const p = await resolveAvatar(await ensureProfile(id, email));
         if (active) setProfile(p);
       } catch {
         /* profile can be created later */

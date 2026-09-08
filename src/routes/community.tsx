@@ -13,6 +13,7 @@ import { PostComposer } from "@/components/community/PostComposer";
 import { ReportDialog } from "@/components/community/ReportDialog";
 import {
   FILTERS,
+  resolveAvatars,
   signImageUrls,
   type CommunityPost,
   type CommunityProfile,
@@ -58,6 +59,7 @@ async function fetchFeed(currentUserId: string | null) {
     (p ?? []).forEach((row) => {
       profiles[row.id] = row as CommunityProfile;
     });
+    await resolveAvatars(profiles);
   }
 
   const myLikes = new Set<string>();

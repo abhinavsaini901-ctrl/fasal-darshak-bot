@@ -15,6 +15,7 @@ import {
   compressImage,
   initials,
   isAllowedImage,
+  resolveAvatar,
   signImageUrls,
   COMMUNITY_BUCKET,
   type CommunityPost,
@@ -110,16 +111,14 @@ function ProfilePage() {
       .from(COMMUNITY_BUCKET)
       .upload(path, blob, { contentType: "image/jpeg" });
     if (error) return toast.error(error.message);
-    const map = await signImageUrls([path]);
-    const url = map[path];
     const { data: updated, error: upErr } = await supabase
       .from("profiles")
-      .update({ avatar_url: url ?? null })
+      .update({ avatar_url: path })
       .eq("id", userId)
       .select("id, display_name, avatar_url, location")
       .single();
     if (upErr) return toast.error(upErr.message);
-    setProfile(updated as CommunityProfile);
+    setProfile(await resolveAvatar(updated as CommunityProfile));
     toast.success("प्रोफ़ाइल फोटो अपडेट हो गई");
   }
 
