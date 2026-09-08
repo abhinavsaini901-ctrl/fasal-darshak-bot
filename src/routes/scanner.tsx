@@ -33,7 +33,6 @@ import { LANG_NAME_FOR_AI, type LangCode } from "@/lib/i18n";
 import { scanCrop, chatCrop } from "@/lib/crop.functions";
 import { withRateLimitRetry } from "@/lib/retry";
 import { RefImageCard } from "@/components/RefImageCard";
-import { BiotechRecommendCard } from "@/components/BiotechRecommendCard";
 
 import { findDiseaseImage, findMedicineImage } from "@/lib/visual-library";
 
@@ -1077,9 +1076,6 @@ function ResultView({
             )}
             {result.chemicalTreatment && (
               <DetailCard label={lang === "en" ? "Chemical treatment" : "रासायनिक इलाज"} text={result.chemicalTreatment} accent="primary" />
-            )}
-            {!result.isHealthy && (
-              <BiotechRecommendCard lang={lang} problem={result.disease || result.primaryIssue} />
             )}
           </>
         )}

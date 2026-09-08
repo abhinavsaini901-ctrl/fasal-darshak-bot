@@ -13,6 +13,7 @@ import {
   Sparkles,
   Video,
   ScanLine,
+  Eye,
 } from "lucide-react";
 
 import { PageShell } from "@/components/PageShell";
@@ -99,6 +100,24 @@ function HomePage() {
               className="w-full rounded-full bg-gradient-to-r from-amber-300 to-amber-500 font-bold text-amber-950 sm:w-auto"
             >
               🌱 Kisan Soil Lens 🔍
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* 👁️ Kisan Lens Smart Eye — नया अलग feature */}
+      <section className="border-b border-emerald-900/10 bg-gradient-to-r from-emerald-700 via-green-700 to-teal-800 px-4 py-3">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 text-center sm:flex-row sm:justify-between sm:text-left">
+          <div>
+            <p className="text-sm font-bold text-white">👁️ Kisan Lens Smart Eye</p>
+            <p className="text-xs text-emerald-50/85">AI से देखें, बोलकर पूछें, तुरंत जानें</p>
+          </div>
+          <Link to="/smart-eye" className="w-full sm:w-auto">
+            <Button
+              size="sm"
+              className="w-full rounded-full bg-gradient-to-r from-lime-300 to-emerald-400 font-bold text-emerald-950 sm:w-auto"
+            >
+              <Eye className="mr-2 h-4 w-4" /> Smart Eye खोलें
             </Button>
           </Link>
         </div>
