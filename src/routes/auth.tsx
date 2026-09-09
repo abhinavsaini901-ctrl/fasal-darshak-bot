@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { PageShell } from "@/components/PageShell";
@@ -10,17 +10,35 @@ import { Card } from "@/components/ui/card";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
+  validateSearch: (search: Record<string, unknown>) => ({
+    redirect: typeof search.redirect === "string" && search.redirect.startsWith("/") && !search.redirect.startsWith("//")
+      ? search.redirect
+      : undefined,
+  }),
   head: () => ({
     meta: [{ title: "लॉगिन | किसान मित्र" }, { name: "robots", content: "noindex" }],
   }),
 });
 
 function AuthPage() {
+  const { redirect: redirectTo } = Route.useSearch();
+  const dest = redirectTo ?? "/community";
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // If the user already has a session (e.g. just returned from Google OAuth
+  // or an email confirmation link), send them straight to their destination.
+  useEffect(() => {
+    let active = true;
+    supabase.auth.getSession().then(({ data }) => {
+      if (active && data.session) window.location.assign(dest);
+    });
+    return () => { active = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -31,14 +49,14 @@ function AuthPage() {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: window.location.origin + "/community" },
+          options: { emailRedirectTo: window.location.origin + "/auth?redirect=" + encodeURIComponent(dest) },
         });
         if (error) throw error;
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
       }
-      window.location.assign("/community");
+      window.location.assign(dest);
     } catch (err: any) {
       setError(err?.message || "कुछ गलत हुआ");
     } finally {
@@ -51,7 +69,7 @@ function AuthPage() {
     setLoading(true);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin + "/community",
+        redirect_uri: window.location.origin + "/auth?redirect=" + encodeURIComponent(dest),
       });
       if (result.error) setError(result.error.message || "Google लॉगिन विफल");
     } catch (err: any) {

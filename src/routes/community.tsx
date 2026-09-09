@@ -195,7 +195,7 @@ function CommunityPage() {
         {!userId && (
           <p className="mt-2 text-center text-xs text-muted-foreground">
             पोस्ट या कमेंट करने के लिए{" "}
-            <Link to="/auth" className="font-semibold text-primary underline">
+            <Link to="/auth" search={{ redirect: "/community" }} className="font-semibold text-primary underline">
               लॉगिन करें
             </Link>
           </p>
