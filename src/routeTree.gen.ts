@@ -18,6 +18,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PestControlRouteImport } from './routes/pest-control'
 import { Route as MarketPricesRouteImport } from './routes/market-prices'
+import { Route as MandiBhavRouteImport } from './routes/mandi-bhav'
 import { Route as KrishiYantraRouteImport } from './routes/krishi-yantra'
 import { Route as GovernmentSchemesRouteImport } from './routes/government-schemes'
 import { Route as EbookRouteImport } from './routes/ebook'
@@ -85,6 +86,11 @@ const PestControlRoute = PestControlRouteImport.update({
 const MarketPricesRoute = MarketPricesRouteImport.update({
   id: '/market-prices',
   path: '/market-prices',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MandiBhavRoute = MandiBhavRouteImport.update({
+  id: '/mandi-bhav',
+  path: '/mandi-bhav',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KrishiYantraRoute = KrishiYantraRouteImport.update({
@@ -219,6 +225,7 @@ export interface FileRoutesByFullPath {
   '/ebook': typeof EbookRoute
   '/government-schemes': typeof GovernmentSchemesRoute
   '/krishi-yantra': typeof KrishiYantraRoute
+  '/mandi-bhav': typeof MandiBhavRoute
   '/market-prices': typeof MarketPricesRoute
   '/pest-control': typeof PestControlRoute
   '/privacy': typeof PrivacyRoute
@@ -251,6 +258,7 @@ export interface FileRoutesByTo {
   '/ebook': typeof EbookRoute
   '/government-schemes': typeof GovernmentSchemesRoute
   '/krishi-yantra': typeof KrishiYantraRoute
+  '/mandi-bhav': typeof MandiBhavRoute
   '/market-prices': typeof MarketPricesRoute
   '/pest-control': typeof PestControlRoute
   '/privacy': typeof PrivacyRoute
@@ -286,6 +294,7 @@ export interface FileRoutesById {
   '/ebook': typeof EbookRoute
   '/government-schemes': typeof GovernmentSchemesRoute
   '/krishi-yantra': typeof KrishiYantraRoute
+  '/mandi-bhav': typeof MandiBhavRoute
   '/market-prices': typeof MarketPricesRoute
   '/pest-control': typeof PestControlRoute
   '/privacy': typeof PrivacyRoute
@@ -321,6 +330,7 @@ export interface FileRouteTypes {
     | '/ebook'
     | '/government-schemes'
     | '/krishi-yantra'
+    | '/mandi-bhav'
     | '/market-prices'
     | '/pest-control'
     | '/privacy'
@@ -353,6 +363,7 @@ export interface FileRouteTypes {
     | '/ebook'
     | '/government-schemes'
     | '/krishi-yantra'
+    | '/mandi-bhav'
     | '/market-prices'
     | '/pest-control'
     | '/privacy'
@@ -387,6 +398,7 @@ export interface FileRouteTypes {
     | '/ebook'
     | '/government-schemes'
     | '/krishi-yantra'
+    | '/mandi-bhav'
     | '/market-prices'
     | '/pest-control'
     | '/privacy'
@@ -422,6 +434,7 @@ export interface RootRouteChildren {
   EbookRoute: typeof EbookRoute
   GovernmentSchemesRoute: typeof GovernmentSchemesRoute
   KrishiYantraRoute: typeof KrishiYantraRoute
+  MandiBhavRoute: typeof MandiBhavRoute
   MarketPricesRoute: typeof MarketPricesRoute
   PestControlRoute: typeof PestControlRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -500,6 +513,13 @@ declare module '@tanstack/react-router' {
       path: '/market-prices'
       fullPath: '/market-prices'
       preLoaderRoute: typeof MarketPricesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mandi-bhav': {
+      id: '/mandi-bhav'
+      path: '/mandi-bhav'
+      fullPath: '/mandi-bhav'
+      preLoaderRoute: typeof MandiBhavRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/krishi-yantra': {
@@ -707,6 +727,7 @@ const rootRouteChildren: RootRouteChildren = {
   EbookRoute: EbookRoute,
   GovernmentSchemesRoute: GovernmentSchemesRoute,
   KrishiYantraRoute: KrishiYantraRoute,
+  MandiBhavRoute: MandiBhavRoute,
   MarketPricesRoute: MarketPricesRoute,
   PestControlRoute: PestControlRoute,
   PrivacyRoute: PrivacyRoute,
