@@ -126,7 +126,7 @@ function ProfilePage() {
     await qc.cancelQueries();
     qc.clear();
     await supabase.auth.signOut();
-    navigate({ to: "/auth", replace: true });
+    navigate({ to: "/auth", search: { redirect: undefined }, replace: true });
   }
 
   if (!ready) {
@@ -147,7 +147,7 @@ function ProfilePage() {
           <p className="mt-2 text-[15px] text-muted-foreground">
             कम्युनिटी में पोस्ट, कमेंट और अपनी प्रोफ़ाइल देखने के लिए लॉगिन करें।
           </p>
-          <Link to="/auth">
+          <Link to="/auth" search={{ redirect: "/profile" }}>
             <Button className="mt-5 rounded-full bg-gradient-primary px-8 py-6 text-base font-bold">
               लॉगिन / नया अकाउंट
             </Button>
