@@ -10,12 +10,19 @@ import { Card } from "@/components/ui/card";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
+  validateSearch: (search: Record<string, unknown>) => ({
+    redirect: typeof search.redirect === "string" && search.redirect.startsWith("/") && !search.redirect.startsWith("//")
+      ? search.redirect
+      : undefined,
+  }),
   head: () => ({
     meta: [{ title: "लॉगिन | किसान मित्र" }, { name: "robots", content: "noindex" }],
   }),
 });
 
 function AuthPage() {
+  const { redirect: redirectTo } = Route.useSearch();
+  const dest = redirectTo ?? "/community";
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
