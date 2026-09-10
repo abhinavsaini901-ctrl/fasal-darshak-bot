@@ -15,7 +15,7 @@ const NAV = [
   { to: "/blog", label: "ब्लॉग" },
   { to: "/crop-diseases", label: "फसल रोग" },
   { to: "/pest-control", label: "कीट नियंत्रण" },
-  { to: "/mandi-bhav", label: "📊 मंडी भाव" },
+  
   { to: "/market-prices", label: "MSP जानकारी" },
   { to: "/government-schemes", label: "सरकारी योजनाएं" },
   { to: "/about", label: "हमारे बारे में" },

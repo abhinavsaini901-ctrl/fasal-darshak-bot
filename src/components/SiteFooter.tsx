@@ -40,7 +40,7 @@ export function SiteFooter() {
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
               <li><Link to="/crop-diseases" className="hover:text-primary">फसल रोग</Link></li>
               <li><Link to="/pest-control" className="hover:text-primary">कीट नियंत्रण</Link></li>
-              <li><Link to="/mandi-bhav" className="hover:text-primary">📊 मंडी भाव</Link></li>
+              
               <li><Link to="/market-prices" className="hover:text-primary">MSP जानकारी</Link></li>
               <li><Link to="/government-schemes" className="hover:text-primary">सरकारी योजनाएं</Link></li>
               <li><Link to="/blog" className="hover:text-primary">सभी लेख</Link></li>
