@@ -20,6 +20,7 @@ import { Route as PestControlRouteImport } from './routes/pest-control'
 import { Route as MarketPricesRouteImport } from './routes/market-prices'
 import { Route as KrishiYantraRouteImport } from './routes/krishi-yantra'
 import { Route as GovernmentSchemesRouteImport } from './routes/government-schemes'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as EbookRouteImport } from './routes/ebook'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as DawaStoreRouteImport } from './routes/dawa-store'
@@ -31,6 +32,7 @@ import { Route as BeejStoreRouteImport } from './routes/beej-store'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiCameraRouteImport } from './routes/ai-camera'
 import { Route as AdsDottxtRouteImport } from './routes/ads[.]txt'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
@@ -96,6 +98,11 @@ const GovernmentSchemesRoute = GovernmentSchemesRouteImport.update({
   path: '/government-schemes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EbookRoute = EbookRouteImport.update({
   id: '/ebook',
   path: '/ebook',
@@ -151,6 +158,11 @@ const AdsDottxtRoute = AdsDottxtRouteImport.update({
   path: '/ads.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -199,6 +211,7 @@ const ApiPublicHooksSendMorningPushRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/ai-camera': typeof AiCameraRoute
   '/auth': typeof AuthRoute
@@ -210,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/dawa-store': typeof DawaStoreRoute
   '/disclaimer': typeof DisclaimerRoute
   '/ebook': typeof EbookRoute
+  '/faq': typeof FaqRoute
   '/government-schemes': typeof GovernmentSchemesRoute
   '/krishi-yantra': typeof KrishiYantraRoute
   '/market-prices': typeof MarketPricesRoute
@@ -231,6 +245,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/ai-camera': typeof AiCameraRoute
   '/auth': typeof AuthRoute
@@ -241,6 +256,7 @@ export interface FileRoutesByTo {
   '/dawa-store': typeof DawaStoreRoute
   '/disclaimer': typeof DisclaimerRoute
   '/ebook': typeof EbookRoute
+  '/faq': typeof FaqRoute
   '/government-schemes': typeof GovernmentSchemesRoute
   '/krishi-yantra': typeof KrishiYantraRoute
   '/market-prices': typeof MarketPricesRoute
@@ -264,6 +280,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/ai-camera': typeof AiCameraRoute
   '/auth': typeof AuthRoute
@@ -275,6 +292,7 @@ export interface FileRoutesById {
   '/dawa-store': typeof DawaStoreRoute
   '/disclaimer': typeof DisclaimerRoute
   '/ebook': typeof EbookRoute
+  '/faq': typeof FaqRoute
   '/government-schemes': typeof GovernmentSchemesRoute
   '/krishi-yantra': typeof KrishiYantraRoute
   '/market-prices': typeof MarketPricesRoute
@@ -298,6 +316,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/ads.txt'
     | '/ai-camera'
     | '/auth'
@@ -309,6 +328,7 @@ export interface FileRouteTypes {
     | '/dawa-store'
     | '/disclaimer'
     | '/ebook'
+    | '/faq'
     | '/government-schemes'
     | '/krishi-yantra'
     | '/market-prices'
@@ -330,6 +350,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/ads.txt'
     | '/ai-camera'
     | '/auth'
@@ -340,6 +361,7 @@ export interface FileRouteTypes {
     | '/dawa-store'
     | '/disclaimer'
     | '/ebook'
+    | '/faq'
     | '/government-schemes'
     | '/krishi-yantra'
     | '/market-prices'
@@ -362,6 +384,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/about'
     | '/ads.txt'
     | '/ai-camera'
     | '/auth'
@@ -373,6 +396,7 @@ export interface FileRouteTypes {
     | '/dawa-store'
     | '/disclaimer'
     | '/ebook'
+    | '/faq'
     | '/government-schemes'
     | '/krishi-yantra'
     | '/market-prices'
@@ -396,6 +420,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AboutRoute: typeof AboutRoute
   AdsDottxtRoute: typeof AdsDottxtRoute
   AiCameraRoute: typeof AiCameraRoute
   AuthRoute: typeof AuthRoute
@@ -407,6 +432,7 @@ export interface RootRouteChildren {
   DawaStoreRoute: typeof DawaStoreRoute
   DisclaimerRoute: typeof DisclaimerRoute
   EbookRoute: typeof EbookRoute
+  FaqRoute: typeof FaqRoute
   GovernmentSchemesRoute: typeof GovernmentSchemesRoute
   KrishiYantraRoute: typeof KrishiYantraRoute
   MarketPricesRoute: typeof MarketPricesRoute
@@ -503,6 +529,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GovernmentSchemesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ebook': {
       id: '/ebook'
       path: '/ebook'
@@ -578,6 +611,13 @@ declare module '@tanstack/react-router' {
       path: '/ads.txt'
       fullPath: '/ads.txt'
       preLoaderRoute: typeof AdsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -673,6 +713,7 @@ const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  AboutRoute: AboutRoute,
   AdsDottxtRoute: AdsDottxtRoute,
   AiCameraRoute: AiCameraRoute,
   AuthRoute: AuthRoute,
@@ -684,6 +725,7 @@ const rootRouteChildren: RootRouteChildren = {
   DawaStoreRoute: DawaStoreRoute,
   DisclaimerRoute: DisclaimerRoute,
   EbookRoute: EbookRoute,
+  FaqRoute: FaqRoute,
   GovernmentSchemesRoute: GovernmentSchemesRoute,
   KrishiYantraRoute: KrishiYantraRoute,
   MarketPricesRoute: MarketPricesRoute,
