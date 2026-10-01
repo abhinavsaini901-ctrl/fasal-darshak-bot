@@ -31,7 +31,6 @@ import { Route as BeejStoreRouteImport } from './routes/beej-store'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiCameraRouteImport } from './routes/ai-camera'
 import { Route as AdsDottxtRouteImport } from './routes/ads[.]txt'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
@@ -152,11 +151,6 @@ const AdsDottxtRoute = AdsDottxtRouteImport.update({
   path: '/ads.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -205,7 +199,6 @@ const ApiPublicHooksSendMorningPushRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/ai-camera': typeof AiCameraRoute
   '/auth': typeof AuthRoute
@@ -238,7 +231,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/ai-camera': typeof AiCameraRoute
   '/auth': typeof AuthRoute
@@ -272,7 +264,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/ai-camera': typeof AiCameraRoute
   '/auth': typeof AuthRoute
@@ -307,7 +298,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/about'
     | '/ads.txt'
     | '/ai-camera'
     | '/auth'
@@ -340,7 +330,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/about'
     | '/ads.txt'
     | '/ai-camera'
     | '/auth'
@@ -373,7 +362,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
-    | '/about'
     | '/ads.txt'
     | '/ai-camera'
     | '/auth'
@@ -408,7 +396,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  AboutRoute: typeof AboutRoute
   AdsDottxtRoute: typeof AdsDottxtRoute
   AiCameraRoute: typeof AiCameraRoute
   AuthRoute: typeof AuthRoute
@@ -593,13 +580,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -693,7 +673,6 @@ const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
-  AboutRoute: AboutRoute,
   AdsDottxtRoute: AdsDottxtRoute,
   AiCameraRoute: AiCameraRoute,
   AuthRoute: AuthRoute,
