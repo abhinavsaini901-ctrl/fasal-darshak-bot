@@ -34,6 +34,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/dawa-store", changefreq: "monthly", priority: "0.7" },
           { path: "/about", changefreq: "monthly", priority: "0.5" },
           { path: "/contact", changefreq: "monthly", priority: "0.5" },
+          { path: "/faq", changefreq: "yearly", priority: "0.5" },
           { path: "/privacy", changefreq: "yearly", priority: "0.3" },
           { path: "/terms", changefreq: "yearly", priority: "0.3" },
           { path: "/disclaimer", changefreq: "yearly", priority: "0.3" },
