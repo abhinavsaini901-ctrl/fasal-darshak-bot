@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Leaf, Mail, Facebook, Twitter, Youtube, Instagram } from "lucide-react";
+import { Leaf, Mail, Youtube } from "lucide-react";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -20,17 +20,8 @@ export function SiteFooter() {
               योजनाओं की जानकारी एक ही जगह।
             </p>
             <div className="mt-4 flex gap-3">
-              <a href="#" aria-label="Facebook" className="text-muted-foreground hover:text-primary">
-                <Facebook className="h-4 w-4" />
-              </a>
-              <a href="#" aria-label="Twitter" className="text-muted-foreground hover:text-primary">
-                <Twitter className="h-4 w-4" />
-              </a>
               <a href="https://youtube.com/@kisanaidoc" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="text-muted-foreground hover:text-primary">
                 <Youtube className="h-4 w-4" />
-              </a>
-              <a href="#" aria-label="Instagram" className="text-muted-foreground hover:text-primary">
-                <Instagram className="h-4 w-4" />
               </a>
             </div>
           </div>
@@ -52,6 +43,7 @@ export function SiteFooter() {
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
               <li><Link to="/about" className="hover:text-primary">हमारे बारे में</Link></li>
               <li><Link to="/contact" className="hover:text-primary">संपर्क करें</Link></li>
+              <li><Link to="/faq" className="hover:text-primary">अक्सर पूछे जाने वाले प्रश्न</Link></li>
               <li><Link to="/scanner" className="hover:text-primary">AI फसल डॉक्टर</Link></li>
               <li><Link to="/ebook" className="hover:text-primary">ई-बुक</Link></li>
               <li><a href="/sitemap.xml" className="hover:text-primary">साइटमैप</a></li>
@@ -76,7 +68,7 @@ export function SiteFooter() {
 
         <div className="mt-8 border-t border-border pt-6 text-center text-xs text-muted-foreground">
           <p>© {year} किसान मित्र — सर्वाधिकार सुरक्षित। भारतीय किसानों के लिए बना, ❤️ के साथ।</p>
-          <p className="mt-1">किसान मित्र भारतीय किसानों के लिए विश्वसनीय कृषि जानकारी, मंडी भाव, मौसम अपडेट और सरकारी योजनाओं की समग्र जानकारी प्रदान करता है। किसी भी कृषि निर्णय से पहले स्थानीय कृषि विशेषज्ञ या कृषि विज्ञान केंद्र (KVK) से परामर्श अवश्य लें।</p>
+          <p className="mt-1">यह वेबसाइट सामान्य कृषि जानकारी और डिजिटल उपकरण उपलब्ध कराती है। AI के नतीजे संभावित जानकारी हैं, विशेषज्ञ सलाह नहीं। महत्वपूर्ण फैसलों से पहले आधिकारिक स्रोत या स्थानीय कृषि विशेषज्ञ से पुष्टि करें।</p>
         </div>
       </div>
     </footer>
